@@ -21,6 +21,7 @@
         const current  = wrap.querySelector('.cp-current');
         const duration = wrap.querySelector('.cp-duration');
         const fsBtn    = wrap.querySelector('.cp-fullscreen');
+        const muteBtn  = wrap.querySelector('.cp-mute');
         const src      = wrap.dataset.src;
 
         if (!media || !playBtn || !seek) return;
@@ -30,6 +31,8 @@
         function ensureLoaded() {
             if (!loaded) {
                 media.src = src;
+                media.muted = false;
+                if (volume) media.volume = parseFloat(volume.value);
                 loaded = true;
             }
         }
@@ -85,6 +88,20 @@
             volume.addEventListener('input', function () {
                 media.volume = parseFloat(volume.value);
                 media.muted  = media.volume === 0;
+            });
+        }
+
+        // Mute toggle
+        if (muteBtn) {
+            muteBtn.addEventListener('click', function () {
+                ensureLoaded();
+                media.muted = !media.muted;
+            });
+            media.addEventListener('volumechange', function () {
+                const isMuted = media.muted || media.volume === 0;
+                muteBtn.innerHTML = isMuted ? '&#128263;' : '&#128266;';
+                muteBtn.setAttribute('aria-label', isMuted ? 'Unmute' : 'Mute');
+                if (volume) volume.value = isMuted ? '0' : String(media.volume);
             });
         }
 
