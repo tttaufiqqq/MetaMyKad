@@ -116,3 +116,48 @@ Tell it exactly what is wrong. Example:
 > "Do not add React or invent fake data. The backend is already complete and passes real data
 > into the view. Keep this as PHP view markup and only improve the card layout, table readability,
 > and empty-state handling."
+
+---
+
+## Future Replica Prompt: `/students`
+
+If Huda is asked to implement the all-students gallery later, use this exact prompt:
+
+> "Build the missing `/students` page in the existing pure PHP app based on `docs/pages/browse/students.md`.
+> Keep it in the current architecture and visual system.
+>
+> Implement exactly these files:
+> - `config/routes.php` add `GET /students` with `auth` middleware
+> - `src/Controllers/StudentsController.php`
+> - `src/Models/Student.php` add `getAllWithPhoto(?string $query, ?string $studentType, ?string $badge): array`
+> - `src/Views/pages/students.php`
+> - `src/Views/layouts/main.php` add the sidebar nav item
+> - `public/assets/css/components.css` add the gallery/filter styles
+>
+> Exact behavior:
+> - page title `Students`
+> - page heading `All Students ({count})`
+> - show all students as cards with no pagination
+> - filters use query params `q`, `student_type`, and `badge`
+> - filter logic is additive
+> - card click goes to `/student-detail?id={id}`
+> - sidebar item label is `Students`
+> - use `public/assets/images/nav/profile.png` for the sidebar icon and placeholder avatar
+>
+> Exact data rules:
+> - latest photo only, based on the highest `file_metadata.id` where `file_type = 'photo'`
+> - return `id`, `full_name`, `ic_number`, `badge`, `student_type`, `photo_file_id`, `photo_path`
+> - infer `student_type` from `ic_number`:
+>   - `citizen` if it matches `^[0-9]{12}$`
+>   - `international` otherwise
+> - do not invent a new passport column
+>
+> Exact layout rules:
+> - 4 cards per row on desktop
+> - 3 then 2 on medium widths
+> - 1 on mobile
+> - circular avatar
+> - `Citizen` and `Intl` pills
+> - empty-state card with registration CTA
+>
+> Stay in PHP/CSS only. Do not add pagination, React, new frameworks, or schema changes."
