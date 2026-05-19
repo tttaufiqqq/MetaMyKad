@@ -15,3 +15,5 @@
 !/storage/uploads/audio/.gitkeep
 !/storage/uploads/pdf/.gitkeep
 !/storage/uploads/video/.gitkeep
+/storage/tmp/*
+!/storage/tmp/.gitkeep
