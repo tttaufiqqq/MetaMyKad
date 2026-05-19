@@ -1,28 +1,39 @@
+<?php
+/** @var array $rows */
+?>
 <section class="card">
     <h2>Registration History</h2>
-    <p class="muted">Render `registration_history` rows with filters and newest-first ordering.</p>
+    <p class="muted">All registration and re-registration events, newest first. Showing up to 50 entries.</p>
 </section>
 
 <section class="table-card">
     <h3>History Log</h3>
+    <?php if (empty($rows)): ?>
+        <p class="muted" style="padding:1rem;">No history records found.</p>
+    <?php else: ?>
     <table>
         <thead>
         <tr>
+            <th>Full Name</th>
             <th>IC Number</th>
-            <th>Timestamp</th>
             <th>Action</th>
+            <th>Registered At</th>
             <th>Files Uploaded</th>
-            <th>Badge</th>
+            <th>Badge At Time</th>
         </tr>
         </thead>
         <tbody>
+        <?php foreach ($rows as $row): ?>
         <tr>
-            <td>010101014321</td>
-            <td>2026-05-19 12:00:00</td>
-            <td>new</td>
-            <td>1</td>
-            <td>Pelajar</td>
+            <td><?= e($row['full_name'] ?? '—') ?></td>
+            <td><?= e($row['ic_number']) ?></td>
+            <td><?= e($row['action']) ?></td>
+            <td><?= e($row['registered_at']) ?></td>
+            <td><?= e((string) $row['files_uploaded']) ?></td>
+            <td><?= e($row['badge_at_time']) ?></td>
         </tr>
+        <?php endforeach; ?>
         </tbody>
     </table>
+    <?php endif; ?>
 </section>
