@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace MetaMyKad\Controllers;
 
+use MetaMyKad\Core\Auth;
+use MetaMyKad\Core\Validator;
 use MetaMyKad\Models\CbrMetadata;
 use MetaMyKad\Models\FileMetadata;
 use MetaMyKad\Models\RegistrationHistory;
+use MetaMyKad\Models\Student;
 use MetaMyKad\Models\StudentProfileSummaryView;
+use MetaMyKad\Services\MetadataExtractor;
+use MetaMyKad\Services\UploadService;
 
 final class StudentController extends BaseController
 {
@@ -54,5 +59,113 @@ final class StudentController extends BaseController
             'files'     => $files,
             'history'   => $history,
         ]);
+    }
+
+    public function update(): void
+    {
+        $loggedUser = Auth::user();
+        $studentId  = (int) ($_POST['student_id'] ?? 0);
+
+        // Ownership guard
+        if ($studentId < 1 || (int) $loggedUser['id'] !== $studentId) {
+            http_response_code(403);
+            require src_path('Views/errors/403.php');
+            exit;
+        }
+
+        // Validate required text fields
+        $errors = Validator::validate($_POST, [
+            'full_name' => ['required'],
+            'phone'     => ['required'],
+            'email'     => ['required', 'email'],
+        ]);
+
+        if ($errors !== []) {
+            $msgs = array_merge(...array_values($errors));
+            $this->flash('error', implode(' ', $msgs));
+            $this->redirect('/student-detail?id=' . $studentId);
+        }
+
+        $studentModel = new Student();
+
+        // Re-classify email in case it changed
+        $emailCategory = $studentModel->classifyEmail((string) $_POST['email']);
+
+        $studentModel->updateProfile($studentId, [
+            'full_name'      => trim((string) $_POST['full_name']),
+            'phone'          => trim((string) $_POST['phone']),
+            'email'          => trim((string) $_POST['email']),
+            'email_category' => $emailCategory,
+        ]);
+
+        // Optional password change
+        $newPassword     = (string) ($_POST['new_password'] ?? '');
+        $currentPassword = (string) ($_POST['current_password'] ?? '');
+
+        if ($newPassword !== '') {
+            $stored = $studentModel->find($studentId);
+            if ($stored === false || !password_verify($currentPassword, (string) $stored['password'])) {
+                $this->flash('error', 'Current password is incorrect. Profile info was saved, but password was not changed.');
+                $this->redirect('/student-detail?id=' . $studentId);
+            }
+            $studentModel->updatePassword($studentId, password_hash($newPassword, PASSWORD_DEFAULT));
+        }
+
+        // Optional per-type file replacement
+        $fileModel    = new FileMetadata();
+        $uploadService = new UploadService();
+        $extractor    = new MetadataExtractor();
+
+        try {
+            $uploads = $uploadService->processAll($studentId, $_FILES);
+        } catch (\RuntimeException $e) {
+            $this->flash('error', 'File upload error: ' . $e->getMessage());
+            $this->redirect('/student-detail?id=' . $studentId);
+        }
+
+        foreach ($uploads as $fileType => $uploadData) {
+            // Delete old file of this type if it exists
+            $oldFile = $fileModel->findByStudentIdAndType($studentId, $fileType);
+            if ($oldFile !== false) {
+                $absPath = base_path((string) $oldFile['file_path']);
+                if (file_exists($absPath)) {
+                    unlink($absPath);
+                }
+                try {
+                    $fileModel->callProcedure('sp_delete_file', [(int) $oldFile['id']]);
+                } catch (\Throwable) {
+                    $fileModel->delete((int) $oldFile['id']);
+                }
+            }
+
+            // Insert new file record
+            $fileId = $fileModel->insert([
+                'student_id'      => $studentId,
+                'file_type'       => $fileType,
+                'filename'        => $uploadData['filename'],
+                'stored_filename' => $uploadData['stored_filename'],
+                'file_path'       => $uploadData['file_path'],
+                'file_size'       => $uploadData['file_size'],
+                'mime_type'       => $uploadData['mime_type'],
+            ]);
+
+            try {
+                $extractor->extract($fileId, $fileType, base_path($uploadData['file_path']));
+            } catch (\Throwable $e) {
+                error_log("Metadata extraction failed for file {$fileId}: " . $e->getMessage());
+            }
+        }
+
+        // Recompute badge
+        (new Student())->callProcedure('sp_update_badge', [$studentId]);
+
+        // Update session name in case it changed
+        $user = Auth::user();
+        \MetaMyKad\Core\Session::put('user', array_merge($user, [
+            'full_name' => trim((string) $_POST['full_name']),
+        ]));
+
+        $this->flash('success', 'Profile updated successfully.');
+        $this->redirect('/student-detail?id=' . $studentId);
     }
 }
