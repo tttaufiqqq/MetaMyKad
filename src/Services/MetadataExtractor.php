@@ -47,6 +47,18 @@ final class MetadataExtractor
             'dominant_expression'   => 'neutral',
             'expression_confidence' => 0.5,
         ]);
+
+        // Extract original date from EXIF
+        $exif = @exif_read_data($path);
+        if ($exif !== false) {
+            $raw = $exif['DateTimeOriginal'] ?? $exif['DateTime'] ?? null;
+            if ($raw !== null) {
+                $dt = \DateTime::createFromFormat('Y:m:d H:i:s', (string) $raw);
+                if ($dt instanceof \DateTime) {
+                    (new FileMetadata())->updateOriginalDate($fileId, $dt->format('Y-m-d'));
+                }
+            }
+        }
     }
 
     private function sampleCorners(string $path, int $imgType): array
@@ -137,6 +149,20 @@ final class MetadataExtractor
             'audio_duration_tier' => $tier,
             'audio_bitrate'       => $bitrate,
         ]);
+
+        // Extract original date from audio tags via ffprobe
+        $tagOut = @shell_exec(
+            'ffprobe -v error -show_entries format_tags=date'
+            . ' -of default=noprint_wrappers=1 '
+            . escapeshellarg($path)
+            . ' 2>&1'
+        );
+        if ($tagOut !== null && preg_match('/TAG:date=(\S+)/', $tagOut, $m)) {
+            $dt = date_create($m[1]);
+            if ($dt instanceof \DateTime) {
+                (new FileMetadata())->updateOriginalDate($fileId, $dt->format('Y-m-d'));
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -188,6 +214,20 @@ final class MetadataExtractor
             'video_resolution_tier' => $resTier,
             'video_duration_sec'    => $durationSec,
         ]);
+
+        // Extract original date from video creation_time tag via ffprobe
+        $tagOut = @shell_exec(
+            'ffprobe -v error -show_entries format_tags=creation_time'
+            . ' -of default=noprint_wrappers=1 '
+            . escapeshellarg($path)
+            . ' 2>&1'
+        );
+        if ($tagOut !== null && preg_match('/TAG:creation_time=(\S+)/', $tagOut, $m)) {
+            $dt = date_create($m[1]);
+            if ($dt instanceof \DateTime) {
+                (new FileMetadata())->updateOriginalDate($fileId, $dt->format('Y-m-d'));
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -227,5 +267,14 @@ final class MetadataExtractor
         }
 
         (new FileMetadata())->updateExtractedText($fileId, $text);
+
+        // Extract original date from PDF metadata via pdfinfo
+        $infoOut = @shell_exec('pdfinfo ' . escapeshellarg($path) . ' 2>&1');
+        if ($infoOut !== null && preg_match('/CreationDate:\s+(.+)/i', $infoOut, $m)) {
+            $dt = date_create(trim($m[1]));
+            if ($dt instanceof \DateTime) {
+                (new FileMetadata())->updateOriginalDate($fileId, $dt->format('Y-m-d'));
+            }
+        }
     }
 }
