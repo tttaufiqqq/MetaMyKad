@@ -1,7 +1,7 @@
 :root {
-    --font-body: "Space Grotesk", "Segoe UI", sans-serif;
-    --font-heading: "Sora", "Segoe UI", sans-serif;
-    --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+    --font-body: "Outfit", "Inter", "Segoe UI", sans-serif;
+    --font-heading: "Outfit", "Inter", "Segoe UI", sans-serif;
+    --font-mono: "Inter", "Segoe UI", monospace;
     --color-bg: #050816;
     --color-bg-alt: #0c1631;
     --color-bg-deep: #071126;
