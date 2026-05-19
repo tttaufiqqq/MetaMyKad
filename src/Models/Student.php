@@ -62,6 +62,40 @@ final class Student extends BaseModel
         return $stmt->fetch();
     }
 
+    public function findByMatric(string $matric): array|false
+    {
+        $stmt = \MetaMyKad\Core\Database::connection()->prepare(
+            'SELECT * FROM students WHERE matric_number = :m LIMIT 1'
+        );
+        $stmt->execute(['m' => $matric]);
+        return $stmt->fetch();
+    }
+
+    public function updateProfile(int $id, array $data): void
+    {
+        $db = \MetaMyKad\Core\Database::connection();
+        $stmt = $db->prepare(
+            'UPDATE students SET full_name = :full_name, phone = :phone,
+             email = :email, email_category = :email_category
+             WHERE id = :id'
+        );
+        $stmt->execute([
+            'full_name'      => $data['full_name'],
+            'phone'          => $data['phone'],
+            'email'          => $data['email'],
+            'email_category' => $data['email_category'],
+            'id'             => $id,
+        ]);
+    }
+
+    public function updatePassword(int $id, string $newHash): void
+    {
+        $stmt = \MetaMyKad\Core\Database::connection()->prepare(
+            'UPDATE students SET password = :pw WHERE id = :id'
+        );
+        $stmt->execute(['pw' => $newHash, 'id' => $id]);
+    }
+
     private function resolveState(string $stateCode): string
     {
         $map = [
