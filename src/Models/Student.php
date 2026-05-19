@@ -53,25 +53,48 @@ final class Student extends BaseModel
         return 'work';
     }
 
+    public function findByIc(string $icNumber): array|false
+    {
+        $stmt = \MetaMyKad\Core\Database::connection()->prepare(
+            'SELECT * FROM students WHERE ic_number = :ic LIMIT 1'
+        );
+        $stmt->execute(['ic' => $icNumber]);
+        return $stmt->fetch();
+    }
+
     private function resolveState(string $stateCode): string
     {
         $map = [
-            '01' => 'Johor',
-            '02' => 'Kedah',
-            '03' => 'Kelantan',
-            '04' => 'Melaka',
-            '05' => 'Negeri Sembilan',
-            '06' => 'Pahang',
-            '07' => 'Pulau Pinang',
-            '08' => 'Perak',
-            '09' => 'Perlis',
-            '10' => 'Selangor',
-            '11' => 'Terengganu',
-            '12' => 'Sabah',
+            // Primary codes
+            '01' => 'Johor',                            '02' => 'Kedah',
+            '03' => 'Kelantan',                         '04' => 'Melaka',
+            '05' => 'Negeri Sembilan',                  '06' => 'Pahang',
+            '07' => 'Pulau Pinang',                     '08' => 'Perak',
+            '09' => 'Perlis',                           '10' => 'Selangor',
+            '11' => 'Terengganu',                       '12' => 'Sabah',
             '13' => 'Sarawak',
             '14' => 'Wilayah Persekutuan Kuala Lumpur',
             '15' => 'Wilayah Persekutuan Labuan',
             '16' => 'Wilayah Persekutuan Putrajaya',
+            // Secondary codes
+            '21' => 'Johor',        '22' => 'Johor',        '23' => 'Johor',        '24' => 'Johor',
+            '25' => 'Kedah',        '26' => 'Kedah',        '27' => 'Kedah',
+            '28' => 'Kelantan',     '29' => 'Kelantan',
+            '30' => 'Melaka',
+            '31' => 'Negeri Sembilan',                  '59' => 'Negeri Sembilan',
+            '32' => 'Pahang',       '33' => 'Pahang',
+            '34' => 'Pulau Pinang', '35' => 'Pulau Pinang',
+            '36' => 'Perak',        '37' => 'Perak',        '38' => 'Perak',        '39' => 'Perak',
+            '40' => 'Perlis',
+            '41' => 'Selangor',     '42' => 'Selangor',     '43' => 'Selangor',     '44' => 'Selangor',
+            '45' => 'Terengganu',   '46' => 'Terengganu',
+            '47' => 'Sabah',        '48' => 'Sabah',        '49' => 'Sabah',
+            '50' => 'Sarawak',      '51' => 'Sarawak',      '52' => 'Sarawak',      '53' => 'Sarawak',
+            '54' => 'Wilayah Persekutuan Kuala Lumpur',
+            '55' => 'Wilayah Persekutuan Kuala Lumpur',
+            '56' => 'Wilayah Persekutuan Kuala Lumpur',
+            '57' => 'Wilayah Persekutuan Kuala Lumpur',
+            '58' => 'Wilayah Persekutuan Labuan',
         ];
 
         return $map[$stateCode] ?? 'Unknown';
