@@ -66,4 +66,51 @@
             });
         }
     }
-})();
+
+    // ── Page spinner ──────────────────────────────────────
+    var spinner = document.getElementById('page-spinner');
+
+    function showSpinner() {
+        if (spinner) {
+            spinner.classList.add('is-active');
+            spinner.setAttribute('aria-hidden', 'false');
+        }
+    }
+
+    function hideSpinner() {
+        if (spinner) {
+            spinner.classList.remove('is-active');
+            spinner.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    document.addEventListener('submit', function (event) {
+        if (!event.defaultPrevented) {
+            showSpinner();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        var link = event.target.closest('a[href]');
+        if (!link) { return; }
+        var href = link.getAttribute('href') || '';
+        if (href === '' || href.charAt(0) === '#' || link.target || event.defaultPrevented) { return; }
+        showSpinner();
+    });
+
+    window.addEventListener('pageshow', hideSpinner);
+
+    // ── Auto-dismiss toasts after 5 s ────────────────────
+    document.addEventListener('DOMContentLoaded', function () {
+        var toasts = document.querySelectorAll('[data-toast]');
+        for (var i = 0; i < toasts.length; i += 1) {
+            (function (toast) {
+                setTimeout(function () {
+                    toast.style.transition = 'opacity 0.4s ease';
+                    toast.style.opacity = '0';
+                    setTimeout(function () { toast.remove(); }, 400);
+                }, 5000);
+            }(toasts[i]));
+        }
+    });
+}());
