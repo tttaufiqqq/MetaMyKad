@@ -608,6 +608,11 @@ select optgroup {
 }
 
 /* ── Custom Select Component ─────────────────────── */
+/* Lift the parent form-group above siblings when its dropdown is open */
+.form-group:has(.cs-wrap.is-open) {
+    z-index: 50;
+}
+
 .cs-wrap {
     position: relative;
     width: 100%;

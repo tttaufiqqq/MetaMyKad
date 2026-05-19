@@ -22,7 +22,19 @@
         </div>
         <div class="form-group">
             <label for="state_of_birth">State Of Birth</label>
-            <input id="state_of_birth" name="state_of_birth" type="text" value="<?= e($stateOfBirth ?? '') ?>" placeholder="e.g. Selangor">
+            <select id="state_of_birth" name="state_of_birth">
+                <option value="">Any</option>
+                <?php foreach ([
+                    'Johor', 'Kedah', 'Kelantan', 'Melaka', 'Negeri Sembilan',
+                    'Pahang', 'Pulau Pinang', 'Perak', 'Perlis', 'Selangor',
+                    'Terengganu', 'Sabah', 'Sarawak',
+                    'Wilayah Persekutuan Kuala Lumpur',
+                    'Wilayah Persekutuan Labuan',
+                    'Wilayah Persekutuan Putrajaya',
+                ] as $state): ?>
+                <option value="<?= e($state) ?>" <?= ($stateOfBirth ?? '') === $state ? 'selected' : '' ?>><?= e($state) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
         <div class="form-group">
             <label for="email_category">Email Category</label>
