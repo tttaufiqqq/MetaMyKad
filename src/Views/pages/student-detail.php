@@ -5,7 +5,7 @@
 
 use MetaMyKad\Core\Auth;
 
-$isOwner = Auth::check() && (int) Auth::user()['id'] === (int) $student['id'];
+$isOwner = Auth::check() && (int) Auth::user()['id'] === (int) $student['student_id'];
 
 $fileIcons = ['photo' => '🖼️', 'audio' => '🎵', 'pdf' => '📄', 'video' => '🎬'];
 
@@ -25,7 +25,7 @@ foreach ($files as $f) {
 <?php if ($isOwner): ?>
 <form action="<?= e(url('/student-update')) ?>" method="post" enctype="multipart/form-data">
     <?php require src_path('Views/partials/csrf.php'); ?>
-    <input type="hidden" name="student_id" value="<?= e((string) $student['id']) ?>">
+    <input type="hidden" name="student_id" value="<?= e((string) $student['student_id']) ?>">
 <?php endif; ?>
 
 <!-- ── Header card ─────────────────────────────────────── -->
