@@ -10,7 +10,20 @@
 | Insyirah | [task.md](./insyirah/task.md) | [Codex guide](./insyirah/codex-guide.md) | ABR and TBR search UI |
 | Mahirah | [task.md](./mahirah/task.md) | [Codex guide](./mahirah/codex-guide.md) | CBR search UI and shared styling |
 
-## Step 2 — Read Your Task File
+## Step 2 — Create Your Branch
+
+Before touching any files, create a branch named after yourself:
+
+```bash
+git checkout master
+git pull
+git checkout -b ammar
+```
+
+Replace `ammar` with your own name. All your work goes on this branch.
+Never commit directly to `master`.
+
+## Step 4 — Read Your Task File
 
 Open your `task.md`. It tells you:
 
@@ -20,7 +33,7 @@ Open your `task.md`. It tells you:
 - **Files You Will Mainly Touch** — so you know what not to break
 - **Done Means** — the acceptance criteria for your work
 
-## Step 3 — Use Your Codex Guide
+## Step 5 — Use Your Codex Guide
 
 Open your `codex-guide.md`. It gives you:
 
@@ -29,7 +42,7 @@ Open your `codex-guide.md`. It gives you:
 - A checklist to verify Codex output before accepting it
 - Common mistakes Codex makes and how to correct them
 
-## Step 4 — After You Finish
+## Step 6 — After You Finish
 
 ```bash
 # stage only your own files
