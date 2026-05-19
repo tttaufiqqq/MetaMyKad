@@ -5,93 +5,48 @@
 
 ---
 
-## Full Flow
+## Files to Paste into Codex
 
-```text
-PULL THE REPO
-     |
-     v
-Read docs/README.md  ->  find your task file
-     |
-     v
-Read task.md
-  - role
-  - current state
-  - what to do now
-     |
-     v
-Open Codex
-     |
-     v
-+------------------------------------------------------+
-| STEP 1 - Paste these files into Codex               |
-|                                                      |
-| docs/pages/browse/search-content.md                  |
-| docs/pages/_shared/design-system.md                 |
-| docs/pages/_shared/notes-for-all-members.md         |
-| docs/pages/_shared/template-audit.md                |
-| docs/planning/frontend-template-integration-plan.md |
-| src/Views/layouts/main.php                          |
-| src/Views/pages/search-content.php                  |
-| public/assets/css/tokens.css                        |
-| public/assets/css/base.css                          |
-| public/assets/css/components.css                    |
-| public/assets/css/utilities.css                     |
-+---------------------------+--------------------------+
-                            |
-                            v
-+------------------------------------------------------+
-| STEP 2 - Paste the implementation prompt            |
-|                                                      |
-| "Review and polish the CBR page and audit shared   |
-|  UI consistency across all frontend pages.          |
-|  The CBR page is already built and wired to live    |
-|  backend data. Do not rebuild it from scratch.      |
-|                                                      |
-|  The backend is complete. Do not change backend     |
-|  files, routes, controllers, or SQL.                |
-|                                                      |
-|  For search-content.php:                            |
-|  - Verify CBR filters match backend (file_type,     |
-|    photo_category, audio_duration_tier,             |
-|    video_resolution_tier)                           |
-|  - Filter values must persist after a search        |
-|  - Empty results state must be visible and clear   |
-|  - Results table should show relevant metadata      |
-|    per file type                                    |
-|                                                      |
-|  For shared UI:                                     |
-|  - Check buttons, cards, forms, tables are          |
-|    visually consistent across all pages             |
-|  - Keep changes incremental — do not redesign       |
-|                                                      |
-|  Edit only when necessary:                          |
-|  - src/Views/pages/search-content.php               |
-|  - public/assets/css/tokens.css                     |
-|  - public/assets/css/base.css                       |
-|  - public/assets/css/components.css                 |
-|  - public/assets/css/utilities.css                  |
-|                                                      |
-|  Do not replace the shared shell. Do not change     |
-|  backend contracts, variable names, or routes.      |
-|  The existing PHP variables are correct."           |
-+---------------------------+--------------------------+
-                            |
-                            v
-Codex generates updated PHP view file and optional shared CSS refinement
-     |
-     v
-VERIFY before copying the code
-     |
-     v
-Copy code into repo files
-     |
-     v
-Open the PHP app and check CBR page plus overall styling consistency
-     |
-     v
-git add -> git commit -> push your branch
 ```
+docs/pages/browse/search-content.md
+docs/pages/_shared/design-system.md
+docs/pages/_shared/notes-for-all-members.md
+docs/pages/_shared/template-audit.md
+docs/planning/frontend-template-integration-plan.md
+src/Views/layouts/main.php
+src/Views/pages/search-content.php
+public/assets/css/tokens.css
+public/assets/css/base.css
+public/assets/css/components.css
+public/assets/css/utilities.css
+```
+
+## Prompt
+
+> "Review and polish the CBR page and audit shared UI consistency across all frontend pages.
+> The CBR page is already built and wired to live backend data. Do not rebuild it from scratch.
+>
+> The backend is complete. Do not change backend files, routes, controllers, or SQL.
+>
+> For search-content.php:
+> - Verify CBR filters match backend (file_type, photo_category, audio_duration_tier, video_resolution_tier)
+> - Filter values must persist after a search
+> - Empty results state must be visible and clear
+> - Results table should show relevant metadata per file type
+>
+> For shared UI:
+> - Check buttons, cards, forms, tables are visually consistent across all pages
+> - Keep changes incremental — do not redesign
+>
+> Edit only when necessary:
+> - src/Views/pages/search-content.php
+> - public/assets/css/tokens.css
+> - public/assets/css/base.css
+> - public/assets/css/components.css
+> - public/assets/css/utilities.css
+>
+> Do not replace the shared shell. Do not change backend contracts, variable names, or routes.
+> The existing PHP variables are correct."
 
 ---
 

@@ -5,96 +5,52 @@
 
 ---
 
-## Full Flow
+## Files to Paste into Codex
 
-```text
-PULL THE REPO
-     |
-     v
-Read docs/README.md  ->  find your task file
-     |
-     v
-Read task.md
-  - role
-  - current state
-  - what to do now
-     |
-     v
-Open Codex
-     |
-     v
-+------------------------------------------------------+
-| STEP 1 - Paste these files into Codex               |
-|                                                      |
-| docs/pages/registration/registration-form.md        |
-| docs/pages/registration/re-registration.md          |
-| docs/pages/_shared/design-system.md                 |
-| docs/pages/_shared/notes-for-all-members.md         |
-| docs/pages/_shared/feedback-and-dialogs.md          |
-| src/Views/layouts/main.php                          |
-| src/Views/partials/csrf.php                         |
-| src/Views/partials/toast.php                        |
-| src/Views/pages/register.php                        |
-| src/Views/pages/re-register.php                     |
-| public/assets/css/tokens.css                        |
-| public/assets/css/components.css                    |
-+---------------------------+--------------------------+
-                            |
-                            v
-+------------------------------------------------------+
-| STEP 2 - Paste the implementation prompt            |
-|                                                      |
-| "Build the PHP view for register.php and            |
-|  re-register.php. Both are currently stubs with     |
-|  only a card heading and no form. Replace them      |
-|  with complete working forms.                       |
-|                                                      |
-|  The backend is already complete. Write views that  |
-|  connect to it exactly as-is. Do not change any    |
-|  backend files, routes, or field names.             |
-|                                                      |
-|  For register.php:                                  |
-|  - POST action="/register" method="post"            |
-|  - Include CSRF: <?php include partial('csrf'); ?>  |
-|  - Fields: ic_number, full_name, phone, email,      |
-|    matric_number, password                          |
-|  - Optional file inputs: photo, audio, pdf, video   |
-|  - Repopulate fields from $_SESSION['_old'] on      |
-|    validation failure                               |
-|  - Show flash error at top if present               |
-|                                                      |
-|  For re-register.php:                               |
-|  - Same form but add hidden: name=mode value=update |
-|  - No matric_number or password fields              |
-|  - Prefill ic_number from $_GET['ic'] if present    |
-|                                                      |
-|  Keep project pure PHP. Reuse existing CSS classes. |
-|  Do not introduce React, Vite, or Node.             |
-|                                                      |
-|  Edit only:                                         |
-|  - src/Views/pages/register.php                     |
-|  - src/Views/pages/re-register.php                  |
-|  - public/assets/css/components.css if truly needed |
-|                                                      |
-|  Do not touch: backend files, routes, controllers,  |
-|  student-detail.php (already done)."                |
-+---------------------------+--------------------------+
-                            |
-                            v
-Codex generates the PHP view files and optional CSS refinement
-     |
-     v
-VERIFY before copying the code
-     |
-     v
-Copy code into repo files
-     |
-     v
-Open the PHP app and test register and re-register pages end to end
-     |
-     v
-git add -> git commit -> push your branch
 ```
+docs/pages/registration/registration-form.md
+docs/pages/registration/re-registration.md
+docs/pages/_shared/design-system.md
+docs/pages/_shared/notes-for-all-members.md
+docs/pages/_shared/feedback-and-dialogs.md
+src/Views/layouts/main.php
+src/Views/partials/csrf.php
+src/Views/partials/toast.php
+src/Views/pages/register.php
+src/Views/pages/re-register.php
+public/assets/css/tokens.css
+public/assets/css/components.css
+```
+
+## Prompt
+
+> "Build the PHP view for register.php and re-register.php. Both are currently stubs with only
+> a card heading and no form. Replace them with complete working forms.
+>
+> The backend is already complete. Write views that connect to it exactly as-is.
+> Do not change any backend files, routes, or field names.
+>
+> For register.php:
+> - POST action="/register" method="post"
+> - Include CSRF: `<?php include partial('csrf'); ?>`
+> - Fields: ic_number, full_name, phone, email, matric_number, password
+> - Optional file inputs: photo, audio, pdf, video
+> - Repopulate fields from `$_SESSION['_old']` on validation failure
+> - Show flash error at top if present
+>
+> For re-register.php:
+> - Same form but add hidden: name=mode value=update
+> - No matric_number or password fields
+> - Prefill ic_number from `$_GET['ic']` if present
+>
+> Keep project pure PHP. Reuse existing CSS classes. Do not introduce React, Vite, or Node.
+>
+> Edit only:
+> - src/Views/pages/register.php
+> - src/Views/pages/re-register.php
+> - public/assets/css/components.css if truly needed
+>
+> Do not touch: backend files, routes, controllers, student-detail.php (already done)."
 
 ---
 

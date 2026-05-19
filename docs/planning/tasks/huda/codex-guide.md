@@ -5,84 +5,43 @@
 
 ---
 
-## Full Flow
+## Files to Paste into Codex
 
-```text
-PULL THE REPO
-     |
-     v
-Read docs/README.md  ->  find your task file
-     |
-     v
-Read task.md
-  - role
-  - current state
-  - what to do now
-     |
-     v
-Open Codex
-     |
-     v
-+------------------------------------------------------+
-| STEP 1 - Paste these files into Codex               |
-|                                                      |
-| docs/pages/browse/dashboard.md                        |
-| docs/pages/browse/history.md                          |
-| docs/pages/_shared/design-system.md                  |
-| docs/pages/_shared/notes-for-all-members.md          |
-| docs/pages/_shared/template-audit.md                 |
-| docs/planning/frontend-template-integration-plan.md  |
-| src/Views/layouts/main.php                           |
-| src/Views/pages/dashboard.php                        |
-| src/Views/pages/history.php                          |
-| public/assets/css/tokens.css                         |
-| public/assets/css/components.css                     |
-+---------------------------+--------------------------+
-                            |
-                            v
-+------------------------------------------------------+
-| STEP 2 - Paste the implementation prompt            |
-|                                                      |
-| "Review and polish the dashboard and history pages. |
-|  Both are already built and wired to live backend   |
-|  data. Do not rebuild them from scratch.            |
-|                                                      |
-|  The backend is complete. Do not change backend     |
-|  files, routes, controllers, or SQL.                |
-|                                                      |
-|  Focus on:                                          |
-|  - stronger metric card hierarchy                   |
-|  - better table readability                         |
-|  - clearer recent activity / history presentation   |
-|  - empty-state handling (no data yet shown clearly) |
-|  - mobile-friendly spacing                          |
-|                                                      |
-|  Edit only:                                         |
-|  - src/Views/pages/dashboard.php                    |
-|  - src/Views/pages/history.php                      |
-|  - public/assets/css/components.css if needed       |
-|                                                      |
-|  Do not change variable names, backend contracts,   |
-|  route names, or SQL expectations. The existing     |
-|  PHP variables passed to the view are correct —     |
-|  only improve how they are displayed."              |
-+---------------------------+--------------------------+
-                            |
-                            v
-Codex generates updated PHP view files and optional CSS refinement
-     |
-     v
-VERIFY before copying the code
-     |
-     v
-Copy code into repo files
-     |
-     v
-Open the PHP app and check dashboard and history pages
-     |
-     v
-git add -> git commit -> push your branch
 ```
+docs/pages/browse/dashboard.md
+docs/pages/browse/history.md
+docs/pages/_shared/design-system.md
+docs/pages/_shared/notes-for-all-members.md
+docs/pages/_shared/template-audit.md
+docs/planning/frontend-template-integration-plan.md
+src/Views/layouts/main.php
+src/Views/pages/dashboard.php
+src/Views/pages/history.php
+public/assets/css/tokens.css
+public/assets/css/components.css
+```
+
+## Prompt
+
+> "Review and polish the dashboard and history pages. Both are already built and wired to live
+> backend data. Do not rebuild them from scratch.
+>
+> The backend is complete. Do not change backend files, routes, controllers, or SQL.
+>
+> Focus on:
+> - stronger metric card hierarchy
+> - better table readability
+> - clearer recent activity / history presentation
+> - empty-state handling (no data yet shown clearly)
+> - mobile-friendly spacing
+>
+> Edit only:
+> - src/Views/pages/dashboard.php
+> - src/Views/pages/history.php
+> - public/assets/css/components.css if needed
+>
+> Do not change variable names, backend contracts, route names, or SQL expectations.
+> The existing PHP variables passed to the view are correct — only improve how they are displayed."
 
 ---
 
