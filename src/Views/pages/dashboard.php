@@ -1,43 +1,96 @@
+<?php
+/** @var int   $totalStudents */
+/** @var array $fileCounts */
+/** @var array $badgeRows */
+/** @var array $recentRows */
+?>
 <section class="card">
     <h2>Staff Dashboard</h2>
-    <p class="muted">System overview, badge distribution, and recent registry activity will appear here.</p>
+    <p class="muted">System overview, badge distribution, and recent registry activity.</p>
 </section>
 
 <section class="metric-grid">
     <article>
-        <h3 class="mb-2">Registry Capacity</h3>
-        <p class="metric-value">0</p>
-        <p class="text-dim">Total students in active registry</p>
+        <h3 class="mb-2">Total Students</h3>
+        <p class="metric-value"><?= e((string) $totalStudents) ?></p>
+        <p class="text-dim">Registered in the system</p>
     </article>
     <article>
-        <h3 class="mb-2">Multimedia Files</h3>
-        <p class="metric-value">0</p>
-        <p class="text-dim">All stored media records across file types</p>
+        <h3 class="mb-2">Photos</h3>
+        <p class="metric-value"><?= e((string) $fileCounts['photo']) ?></p>
+        <p class="text-dim">Photo files stored</p>
     </article>
     <article>
-        <h3 class="mb-2">PDF Search Index</h3>
-        <p class="metric-value">0</p>
-        <p class="text-dim">Documents ready for full-text retrieval</p>
+        <h3 class="mb-2">Audio</h3>
+        <p class="metric-value"><?= e((string) $fileCounts['audio']) ?></p>
+        <p class="text-dim">Audio files stored</p>
     </article>
     <article>
-        <h3 class="mb-2">Top Badge Count</h3>
-        <p class="metric-value">0</p>
-        <p class="text-dim">Students currently holding the Cemerlang badge</p>
+        <h3 class="mb-2">PDFs</h3>
+        <p class="metric-value"><?= e((string) $fileCounts['pdf']) ?></p>
+        <p class="text-dim">Documents indexed for text search</p>
+    </article>
+    <article>
+        <h3 class="mb-2">Videos</h3>
+        <p class="metric-value"><?= e((string) $fileCounts['video']) ?></p>
+        <p class="text-dim">Video files stored</p>
     </article>
 </section>
 
-<section class="table-card">
-    <h3>Multimedia Extraction Dashboard</h3>
-    <div class="metadata-grid mt-4">
-        <div class="file-card">
-            <div class="file-preview">🖼️</div>
-            <div class="file-name">sample_photo.png</div>
-            <div class="file-data">Type: image/png<br>Size: 842 KB<br>Date: 19/05/2026</div>
-        </div>
-        <div class="file-card">
-            <div class="file-preview">📄</div>
-            <div class="file-name">sample_document.pdf</div>
-            <div class="file-data">Type: application/pdf<br>Text: indexed<br>Date: 19/05/2026</div>
-        </div>
-    </div>
-</section>
+<div style="display:grid; grid-template-columns:1fr 2fr; gap:var(--space-2); margin-bottom:var(--space-3);">
+    <section class="table-card" style="margin-bottom:0;">
+        <h3>Badge Distribution</h3>
+        <?php if (empty($badgeRows)): ?>
+            <p class="muted" style="padding:1rem;">No data yet.</p>
+        <?php else: ?>
+        <table>
+            <thead>
+            <tr>
+                <th>Badge</th>
+                <th>Students</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($badgeRows as $row): ?>
+            <tr>
+                <td><?= e($row['badge']) ?></td>
+                <td><?= e((string) $row['cnt']) ?></td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php endif; ?>
+    </section>
+
+    <section class="table-card" style="margin-bottom:0;">
+        <h3>Recent Registrations</h3>
+        <?php if (empty($recentRows)): ?>
+            <p class="muted" style="padding:1rem;">No students registered yet.</p>
+        <?php else: ?>
+        <table>
+            <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Badge</th>
+                <th>Files</th>
+                <th>Registered At</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($recentRows as $row): ?>
+            <tr>
+                <td><?= e($row['full_name']) ?></td>
+                <td><?= e($row['badge']) ?></td>
+                <td><?= e((string) $row['total_files']) ?></td>
+                <td><?= e($row['created_at']) ?></td>
+                <td>
+                    <a class="button" href="<?= e(url('/student-detail?id=' . $row['id'])) ?>">View</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php endif; ?>
+    </section>
+</div>
