@@ -1458,3 +1458,36 @@ tbody tr:hover {
 .register-cancel:hover {
     color: var(--color-text);
 }
+
+/* ── Page loading spinner ─────────────────────────────── */
+.page-spinner {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 9, 21, 0.65);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
+}
+
+.page-spinner.is-active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.page-spinner__ring {
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 3px solid rgba(57, 197, 255, 0.18);
+    border-top-color: var(--color-brand);
+    border-radius: 50%;
+    animation: spinner-spin 0.75s linear infinite;
+}
+
+@keyframes spinner-spin {
+    to { transform: rotate(360deg); }
+}
