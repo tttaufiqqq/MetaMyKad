@@ -1,0 +1,6 @@
+{
+  "name": "MetaMyKad",
+  "description": "A multimedia student registry system featuring MyKad data extraction, email classification, and multimedia file metadata analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

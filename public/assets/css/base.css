@@ -1,0 +1,148 @@
+body {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--color-text);
+    background: radial-gradient(circle at top right, var(--color-bg-alt) 0%, var(--color-bg) 42%);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+}
+
+code {
+    background: rgba(2, 6, 23, 0.95);
+    padding: 0.15rem 0.35rem;
+    border-radius: 6px;
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    width: 248px;
+    flex-shrink: 0;
+    background: var(--color-sidebar);
+    border-right: 1px solid var(--color-line);
+    padding: var(--space-4) 1.25rem;
+}
+
+.main-content {
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-header {
+    padding: 0 2rem;
+    height: 72px;
+    border-bottom: 1px solid var(--color-line);
+    background: rgba(13, 30, 38, 0.92);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.content {
+    max-width: 1320px;
+    width: 100%;
+    margin: 0;
+    padding: var(--space-4);
+    padding-bottom: calc(var(--space-5) + 1rem);
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+}
+
+.muted {
+    color: var(--color-muted);
+}
+
+.status-footer {
+    height: 32px;
+    background: #020617;
+    border-top: 1px solid var(--color-line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px;
+    color: var(--color-dim);
+    position: fixed;
+    bottom: 0;
+    left: 248px;
+    right: 0;
+    z-index: 30;
+}
+
+.status-online {
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    background-image:
+        linear-gradient(rgba(8, 145, 178, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8, 145, 178, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+    animation: rotate-grid 240s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate-grid {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 760px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: var(--space-2);
+    }
+
+    .site-header,
+    .content,
+    .status-footer {
+        padding: var(--space-2);
+    }
+
+    .site-header {
+        height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .status-footer {
+        position: static;
+        height: auto;
+        min-height: 32px;
+        left: auto;
+        right: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

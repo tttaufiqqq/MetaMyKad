@@ -1,0 +1,31 @@
+.hidden {
+    display: none !important;
+}
+
+.full-span {
+    grid-column: 1 / -1;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-cyan {
+    color: var(--color-brand-bright);
+}
+
+.text-emerald {
+    color: var(--color-secondary);
+}
+
+.text-dim {
+    color: var(--color-dim);
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}

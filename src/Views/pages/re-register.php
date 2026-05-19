@@ -1,0 +1,64 @@
+<section class="card">
+    <h2>Re-Registration</h2>
+    <p class="muted">Update the existing record for an IC number and replace selected files.</p>
+</section>
+
+<form class="form-grid two-col" action="<?= e(url('/register')) ?>" method="post" enctype="multipart/form-data" data-validate>
+    <?php require src_path('Views/partials/csrf.php'); ?>
+    <input type="hidden" name="mode" value="update">
+    <div class="form-card-layout full-span">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="ic_number">Existing IC Number</label>
+                <input id="ic_number" name="ic_number" type="text" maxlength="12" required>
+            </div>
+            <div class="feedback-box">
+                Re-registration updates the existing student row. It must not create a second record
+                for the same IC number.
+            </div>
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input id="full_name" name="full_name" type="text">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="text">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email">
+            </div>
+        </div>
+        <div class="upload-panel">
+            <p class="mb-2"><strong>Replace Selected Files</strong></p>
+            <p class="muted">Leave a file type empty if the current stored file should remain unchanged.</p>
+            <div class="upload-grid">
+                <label class="upload-box" for="photo">
+                    <span class="upload-icon">🖼️</span>
+                    <span>Replace Photo</span>
+                    <small>JPEG / PNG</small>
+                </label>
+                <label class="upload-box" for="audio">
+                    <span class="upload-icon">🎵</span>
+                    <span>Replace Audio</span>
+                    <small>MP3 / WAV</small>
+                </label>
+                <label class="upload-box" for="pdf">
+                    <span class="upload-icon">📄</span>
+                    <span>Replace PDF</span>
+                    <small>Searchable Text</small>
+                </label>
+                <label class="upload-box" for="video">
+                    <span class="upload-icon">🎬</span>
+                    <span>Replace Video</span>
+                    <small>MP4 / MOV / AVI</small>
+                </label>
+            </div>
+            <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png" class="hidden">
+            <input id="audio" name="audio" type="file" accept=".mp3,.wav" class="hidden">
+            <input id="pdf" name="pdf" type="file" accept=".pdf" class="hidden">
+            <input id="video" name="video" type="file" accept=".mp4,.mov,.avi" class="hidden">
+            <button class="button" type="submit">Update Registration</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,17 @@
+/vendor/
+/storage/cache/*
+/storage/logs/app.log
+/storage/uploads/*
+/storage/uploads/photo/*
+/storage/uploads/audio/*
+/storage/uploads/pdf/*
+/storage/uploads/video/*
+/.env
+/storage/logs/*.log
+!/storage/logs/.gitkeep
+!/storage/cache/.gitkeep
+!/storage/uploads/.gitkeep
+!/storage/uploads/photo/.gitkeep
+!/storage/uploads/audio/.gitkeep
+!/storage/uploads/pdf/.gitkeep
+!/storage/uploads/video/.gitkeep

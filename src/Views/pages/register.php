@@ -1,0 +1,69 @@
+<section class="card">
+    <h2>Student Registration</h2>
+    <p class="muted">Collect student identity details and optional multimedia uploads.</p>
+</section>
+
+<form class="form-grid two-col" action="<?= e(url('/register')) ?>" method="post" enctype="multipart/form-data" data-validate>
+    <?php require src_path('Views/partials/csrf.php'); ?>
+    <div class="form-card-layout full-span">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="full_name">Full Name (as per IC)</label>
+                <input id="full_name" name="full_name" type="text" required value="<?= e((string) old('full_name')) ?>">
+            </div>
+            <div class="form-group">
+                <label for="ic_number">Malaysian IC Number (12 Digits)</label>
+                <input id="ic_number" name="ic_number" type="text" maxlength="12" required value="<?= e((string) old('ic_number')) ?>">
+            </div>
+            <div class="feedback-box">
+                The backend will derive date of birth, gender, state of birth, and age from the IC number.
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="text" required value="<?= e((string) old('phone')) ?>">
+            </div>
+            <div class="form-group">
+                <label for="email">Institutional Or Personal Email</label>
+                <input id="email" name="email" type="email" required value="<?= e((string) old('email')) ?>">
+            </div>
+            <div class="feedback-box">
+                The backend will classify the email as <span class="text-emerald">personal</span>,
+                <span class="text-emerald">student</span>, or <span class="text-emerald">work</span>.
+            </div>
+        </div>
+        <div class="upload-panel">
+            <p class="mb-2"><strong>Multimedia Uploads</strong></p>
+            <p class="muted">Optional uploads. Files are stored on the server filesystem and indexed in MySQL.</p>
+            <div class="upload-grid">
+                <label class="upload-box" for="photo">
+                    <span class="upload-icon">🖼️</span>
+                    <span>Profile Photo</span>
+                    <small>JPEG / PNG</small>
+                </label>
+                <label class="upload-box" for="audio">
+                    <span class="upload-icon">🎵</span>
+                    <span>Audio Clip</span>
+                    <small>MP3 / WAV</small>
+                </label>
+                <label class="upload-box" for="pdf">
+                    <span class="upload-icon">📄</span>
+                    <span>PDF Document</span>
+                    <small>Searchable OCR / Text</small>
+                </label>
+                <label class="upload-box" for="video">
+                    <span class="upload-icon">🎬</span>
+                    <span>Video Intro</span>
+                    <small>MP4 / MOV / AVI</small>
+                </label>
+            </div>
+            <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png" class="hidden">
+            <input id="audio" name="audio" type="file" accept=".mp3,.wav" class="hidden">
+            <input id="pdf" name="pdf" type="file" accept=".pdf" class="hidden">
+            <input id="video" name="video" type="file" accept=".mp4,.mov,.avi" class="hidden">
+            <div class="hint-box">
+                Badge level is recomputed automatically based on how many file types are uploaded.
+            </div>
+            <button class="button" type="submit">Complete Registration</button>
+        </div>
+    </div>
+</form>
