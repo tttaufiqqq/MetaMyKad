@@ -25,6 +25,11 @@ final class Validator
                 if ($rule === 'ic' && ($value === '' || !preg_match('/^\d{12}$/', $value))) {
                     $errors[$field][] = 'IC number must contain exactly 12 digits.';
                 }
+
+                if ($rule === 'phone' && $value !== ''
+                    && !preg_match('/^(\+?60|0)[0-9\-\s]{7,11}$/', $value)) {
+                    $errors[$field][] = 'Please enter a valid Malaysian phone number (e.g., 012-3456789).';
+                }
             }
         }
 

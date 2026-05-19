@@ -76,7 +76,7 @@ final class StudentController extends BaseController
         // Validate required text fields
         $errors = Validator::validate($_POST, [
             'full_name' => ['required'],
-            'phone'     => ['required'],
+            'phone'     => ['required', 'phone'],
             'email'     => ['required', 'email'],
         ]);
 

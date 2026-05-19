@@ -33,7 +33,7 @@ final class RegistrationController extends BaseController
 
         $errors = Validator::validate($_POST, array_merge($idRules, [
             'full_name' => ['required'],
-            'phone'     => ['required'],
+            'phone'     => ['required', 'phone'],
             'email'     => ['required', 'email'],
         ]));
 
