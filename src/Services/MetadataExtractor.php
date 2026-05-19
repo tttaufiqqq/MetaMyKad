@@ -198,6 +198,14 @@ final class MetadataExtractor
             $durationSec = (int) $m[1];
         }
 
+        // Heuristic fallback: estimate from file size at ~1500 kbps when ffprobe unavailable
+        if ($durationSec === 0) {
+            $fileSizeBytes = filesize($path) ?: 0;
+            if ($fileSizeBytes > 0) {
+                $durationSec = (int) (($fileSizeBytes * 8) / (1500 * 1000));
+            }
+        }
+
         if ($width > 0 && $height > 0) {
             $resolution = "{$width}x{$height}";
             $resTier    = match (true) {
@@ -239,7 +247,9 @@ final class MetadataExtractor
 
         // Try pdftotext (Poppler)
         $out = @shell_exec('pdftotext ' . escapeshellarg($path) . ' - 2>&1');
-        if ($out !== null && !str_starts_with(ltrim($out), 'Error')) {
+        if ($out !== null
+            && !str_starts_with(ltrim($out), 'Error')
+            && !str_contains($out, 'is not recognized')) {
             $text = trim($out);
         }
 
