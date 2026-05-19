@@ -1,15 +1,25 @@
-<section class="card">
-    <h2>Student Registration</h2>
-    <p class="muted">Collect student identity details and optional multimedia uploads.</p>
-</section>
+<div class="register-card">
+    <h1 class="register-title">Student Registration</h1>
 
-<form class="form-grid two-col" action="<?= e(url('/register')) ?>" method="post" enctype="multipart/form-data" data-validate>
-    <?php require src_path('Views/partials/csrf.php'); ?>
-    <div class="form-card-layout full-span">
-        <div class="form-grid">
+    <form action="<?= e(url('/register')) ?>" method="post" enctype="multipart/form-data" data-validate>
+        <?php require src_path('Views/partials/csrf.php'); ?>
+
+        <div class="form-grid two-col">
             <div class="form-group">
                 <label for="full_name">Full Name (as per IC)</label>
                 <input id="full_name" name="full_name" type="text" required value="<?= e((string) old('full_name')) ?>">
+            </div>
+            <div class="form-group">
+                <label for="matric_number">Matric Number</label>
+                <input id="matric_number" name="matric_number" type="text" required value="<?= e((string) old('matric_number')) ?>">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" type="text" required value="<?= e((string) old('phone')) ?>">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" required value="<?= e((string) old('email')) ?>">
             </div>
             <div class="form-group">
                 <label for="ic_number">Malaysian IC Number (12 Digits)</label>
@@ -21,62 +31,46 @@
                 <input id="passport_number" name="passport_number" type="text" value="<?= e((string) old('passport_number')) ?>">
             </div>
             <div class="form-group">
-                <label for="matric_number">Matric Number</label>
-                <input id="matric_number" name="matric_number" type="text" required value="<?= e((string) old('matric_number')) ?>">
-            </div>
-            <div class="form-group">
                 <label for="password">Password</label>
                 <input id="password" name="password" type="password" required minlength="8">
             </div>
             <div class="feedback-box">
-                The backend will derive date of birth, gender, state of birth, and age from the IC number.
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone</label>
-                <input id="phone" name="phone" type="text" required value="<?= e((string) old('phone')) ?>">
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" required value="<?= e((string) old('email')) ?>">
-            </div>
-            <div class="feedback-box">
-                The backend will classify the email as <span class="text-emerald">personal</span>,
-                <span class="text-emerald">student</span>, or <span class="text-emerald">work</span>.
+                DOB, gender, state of birth, and age are derived from the IC number automatically.
+                Email is classified as personal, student, or work.
             </div>
         </div>
-        <div class="upload-panel">
-            <p class="mb-2"><strong>Multimedia Uploads</strong></p>
-            <p class="muted">Optional uploads. Files are stored on the server filesystem and indexed in MySQL.</p>
-            <div class="upload-grid">
-                <label class="upload-box" for="photo">
-                    <span class="upload-icon">🖼️</span>
-                    <span>Profile Photo</span>
-                    <small>JPEG / PNG</small>
-                </label>
-                <label class="upload-box" for="audio">
-                    <span class="upload-icon">🎵</span>
-                    <span>Audio Clip</span>
-                    <small>MP3 / WAV</small>
-                </label>
-                <label class="upload-box" for="pdf">
-                    <span class="upload-icon">📄</span>
-                    <span>PDF Document</span>
-                    <small>Searchable OCR / Text</small>
-                </label>
-                <label class="upload-box" for="video">
-                    <span class="upload-icon">🎬</span>
-                    <span>Video Intro</span>
-                    <small>MP4 / MOV / AVI</small>
-                </label>
+
+        <hr class="register-divider">
+
+        <div class="upload-card-grid">
+            <div class="upload-card">
+                <span class="upload-card-label">Photo (Image):</span>
+                <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png">
+                <span class="upload-card-date-label">Original Created Date:</span>
+                <input type="date" name="photo_date" value="<?= e((string) old('photo_date')) ?>">
             </div>
-            <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png" class="hidden">
-            <input id="audio" name="audio" type="file" accept=".mp3,.wav" class="hidden">
-            <input id="pdf" name="pdf" type="file" accept=".pdf" class="hidden">
-            <input id="video" name="video" type="file" accept=".mp4,.mov,.avi" class="hidden">
-            <div class="hint-box">
-                Badge level is recomputed automatically based on how many file types are uploaded.
+            <div class="upload-card">
+                <span class="upload-card-label">Document (PDF):</span>
+                <input id="pdf" name="pdf" type="file" accept=".pdf">
+                <span class="upload-card-date-label">Original Created Date:</span>
+                <input type="date" name="pdf_date" value="<?= e((string) old('pdf_date')) ?>">
             </div>
-            <button class="button" type="submit">Complete Registration</button>
+            <div class="upload-card">
+                <span class="upload-card-label">Audio (MP3):</span>
+                <input id="audio" name="audio" type="file" accept=".mp3,.wav">
+                <span class="upload-card-date-label">Original Created Date:</span>
+                <input type="date" name="audio_date" value="<?= e((string) old('audio_date')) ?>">
+            </div>
+            <div class="upload-card">
+                <span class="upload-card-label">Video (MP4):</span>
+                <input id="video" name="video" type="file" accept=".mp4,.mov,.avi">
+                <span class="upload-card-date-label">Original Created Date:</span>
+                <input type="date" name="video_date" value="<?= e((string) old('video_date')) ?>">
+            </div>
         </div>
-    </div>
-</form>
+
+        <button class="register-submit-btn" type="submit">Register Student</button>
+    </form>
+
+    <a class="register-cancel" href="<?= e(url('/')) ?>">&#8592; Cancel and Back to Home</a>
+</div>
