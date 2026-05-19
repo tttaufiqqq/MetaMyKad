@@ -5,6 +5,24 @@ course. The system registers student information using Malaysian IC data, stores
 multimedia uploads, derives metadata automatically, and supports attribute-based, text-based,
 and content-based retrieval.
 
+## Find Your Task
+
+Already set up? Jump straight to your task file:
+
+| Member | Task file | Codex guide |
+|---|---|---|
+| Ammar | [docs/planning/tasks/ammar/task.md](./docs/planning/tasks/ammar/task.md) | [ammar/codex-guide.md](./docs/planning/tasks/ammar/codex-guide.md) |
+| Huda | [docs/planning/tasks/huda/task.md](./docs/planning/tasks/huda/task.md) | [huda/codex-guide.md](./docs/planning/tasks/huda/codex-guide.md) |
+| Insyirah | [docs/planning/tasks/insyirah/task.md](./docs/planning/tasks/insyirah/task.md) | [insyirah/codex-guide.md](./docs/planning/tasks/insyirah/codex-guide.md) |
+| Mahirah | [docs/planning/tasks/mahirah/task.md](./docs/planning/tasks/mahirah/task.md) | [mahirah/codex-guide.md](./docs/planning/tasks/mahirah/codex-guide.md) |
+
+Your `task.md` tells you what to build and what is already done.
+Your `codex-guide.md` gives you the exact prompt to paste into Codex.
+
+**First time on this machine?** Complete the setup below first, then come back here.
+
+---
+
 ## Tech Stack
 
 - PHP 8.2+
