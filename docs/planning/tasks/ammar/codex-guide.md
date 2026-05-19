@@ -132,3 +132,34 @@ Tell it exactly what is wrong. Example:
 > "Keep this as a PHP view, not React. Do not change the form action or backend fields.
 > The backend is already complete — I only need the view layer. Do not add JS validation logic;
 > server validation is already handled. Just build the form markup and repopulate from _old."
+
+---
+
+## Future Replica Prompt: `/register` and `/re-register`
+
+If Ammar needs to rebuild these forms from scratch in a new Codex session, use this exact prompt:
+
+> "Build the registration and re-registration forms in the existing pure PHP app based on
+> `docs/pages/registration/registration-form.md` and `docs/pages/registration/re-registration.md`.
+> Keep it in the current architecture and visual system.
+>
+> Implement exactly these files:
+> - `src/Views/pages/register.php` — replace the current stub with a complete form
+> - `src/Views/pages/re-register.php` — replace the current stub with a complete form
+>
+> Exact behavior for register.php:
+> - `<form action="/register" method="post">`
+> - Include CSRF: `<?php include partial('csrf'); ?>`
+> - Fields: ic_number, full_name, phone, email, matric_number, password
+> - Optional file inputs: photo, audio, pdf, video
+> - Repopulate every field from `$_SESSION['_old']` on validation failure
+> - Show flash error at the top if present
+>
+> Exact behavior for re-register.php:
+> - Same form but with `<input type="hidden" name="mode" value="update">`
+> - Omit matric_number and password fields
+> - Prefill ic_number from `$_GET['ic']` if present
+> - POST to the same `/register` route
+>
+> Stay in PHP/CSS only. Do not add React, new frameworks, or backend changes.
+> Do not change any backend files, routes, controllers, or field names."

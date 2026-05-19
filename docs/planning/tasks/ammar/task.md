@@ -51,6 +51,33 @@ The backend is fully complete. You can integrate directly — no waiting.
 - `src/Views/pages/re-register.php`
 - shared CSS files in `public/assets/css/` if needed
 
+## Pending Build Spec: `/register` and `/re-register`
+
+These views are currently stubs. When Ammar builds them, the output should match the last approved Codex draft exactly.
+
+- Route: already exists — `POST /register` in `config/routes.php`
+- Controller: already exists — `RegistrationController@store`
+- Views to replace: `src/Views/pages/register.php`, `src/Views/pages/re-register.php`
+
+Exact behavior for `register.php`:
+- `<form action="/register" method="post">`
+- Include CSRF: `<?php include partial('csrf'); ?>`
+- Fields: `ic_number`, `full_name`, `phone`, `email`, `matric_number`, `password`
+- Optional file inputs: `photo`, `audio`, `pdf`, `video` (each with accepted MIME hint)
+- Repopulate every field from `$_SESSION['_old']` on validation failure
+- Show flash error at the top if present
+
+Exact behavior for `re-register.php`:
+- Same form structure but add `<input type="hidden" name="mode" value="update">`
+- Omit `matric_number` and `password` fields (backend skips them in update mode)
+- Prefill `ic_number` from `$_GET['ic']` if present in the query string
+
+Important:
+- Do not change `action="/register"` — the route name is fixed
+- Do not invent new backend fields or validation logic
+- Do not add JS validation — server already validates, just display the flash and repopulate
+- Keep the implementation in pure PHP views, matching the current architecture
+
 ## Done Means
 
 - registration form submits correctly and shows field errors on failure
