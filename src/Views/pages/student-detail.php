@@ -15,6 +15,11 @@ function fmt_bytes(int $bytes): string {
     return $bytes . ' B';
 }
 
+function fmt_seconds(int $s): string {
+    $m = intdiv($s, 60);
+    return $m . ':' . str_pad((string) ($s % 60), 2, '0', STR_PAD_LEFT);
+}
+
 // Index files by type for easy lookup in edit form
 $filesByType = [];
 foreach ($files as $f) {
@@ -139,6 +144,7 @@ foreach ($files as $f) {
                     <span class="cp-current">0:00</span>
                     <input class="cp-seek" type="range" value="0" min="0" max="100" step="0.01">
                     <span class="cp-duration">--:--</span>
+                    <button class="cp-mute" type="button" aria-label="Mute">&#128266;</button>
                     <input class="cp-volume" type="range" value="1" min="0" max="1" step="0.05">
                     <audio preload="none"></audio>
                 </div>
@@ -152,6 +158,7 @@ foreach ($files as $f) {
                         <span class="cp-current">0:00</span>
                         <input class="cp-seek" type="range" value="0" min="0" max="100" step="0.01">
                         <span class="cp-duration">--:--</span>
+                        <button class="cp-mute" type="button" aria-label="Mute">&#128266;</button>
                         <input class="cp-volume" type="range" value="1" min="0" max="1" step="0.05">
                         <button class="cp-fullscreen" type="button" aria-label="Fullscreen">&#x26F6;</button>
                     </div>
@@ -165,6 +172,9 @@ foreach ($files as $f) {
                 Type: <?= e($file['mime_type']) ?><br>
                 Size: <?= e(fmt_bytes((int) $file['file_size'])) ?><br>
                 Date: <?= e($file['upload_date']) ?>
+                <?php if (!empty($file['original_date'])): ?>
+                <br><?= $file['file_type'] === 'photo' ? 'Captured' : 'Original Date' ?>: <?= e($file['original_date']) ?>
+                <?php endif; ?>
 
                 <?php if ($file['file_type'] === 'photo' && $cbr !== []): ?>
                     <br><br>Category: <?= e($cbr['photo_category'] ?? '—') ?>
@@ -178,16 +188,20 @@ foreach ($files as $f) {
                     <?php endif; ?>
                     <?= e($cbr['dominant_bg_color'] ?? '—') ?>
                 <?php elseif ($file['file_type'] === 'audio' && $cbr !== []): ?>
-                    <br><br>Duration: <?= e((string) ($cbr['audio_duration_sec'] ?? '—')) ?>s
+                    <br><br>Duration: <?= e(fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0))) ?>
                     (<?= e($cbr['audio_duration_tier'] ?? '—') ?>)
                     <br>Bitrate: <?= e((string) ($cbr['audio_bitrate'] ?? '—')) ?> kbps
                 <?php elseif ($file['file_type'] === 'video' && $cbr !== []): ?>
                     <br><br>Resolution: <?= e($cbr['video_resolution'] ?? '—') ?>
                     (<?= e($cbr['video_resolution_tier'] ?? '—') ?>)
-                    <br>Duration: <?= e((string) ($cbr['video_duration_sec'] ?? '—')) ?>s
+                    <br>Duration: <?= ($cbr['video_duration_sec'] ?? 0) > 0 ? e(fmt_seconds((int) $cbr['video_duration_sec'])) : '—' ?>
                 <?php elseif ($file['file_type'] === 'pdf'): ?>
-                    <?php if (!empty($file['extracted_text'])): ?>
-                        <br><br>Text preview: <?= e(mb_strimwidth((string) $file['extracted_text'], 0, 200, '…')) ?>
+                    <?php
+                    $safeText = !empty($file['extracted_text']) && !str_contains((string) $file['extracted_text'], 'is not recognized')
+                        ? (string) $file['extracted_text'] : '';
+                    ?>
+                    <?php if ($safeText !== ''): ?>
+                        <br><br>Text preview: <?= e(mb_strimwidth($safeText, 0, 200, '…')) ?>
                     <?php else: ?>
                         <br><br>Text: not extracted
                     <?php endif; ?>
