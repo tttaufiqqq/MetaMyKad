@@ -23,7 +23,7 @@ foreach ($files as $f) {
 ?>
 
 <?php if ($isOwner): ?>
-<form action="<?= e(url('/student-update')) ?>" method="post" enctype="multipart/form-data">
+<form id="student-update-form" action="<?= e(url('/student-update')) ?>" method="post" enctype="multipart/form-data">
     <?php require src_path('Views/partials/csrf.php'); ?>
     <input type="hidden" name="student_id" value="<?= e((string) $student['student_id']) ?>">
 <?php endif; ?>
@@ -55,16 +55,16 @@ foreach ($files as $f) {
         <h3>Identity</h3>
         <?php if ($isOwner): ?>
             <div class="form-group" style="margin-bottom:0.75rem;">
-                <input type="text" id="full_name" name="full_name" value="<?= e($student['full_name']) ?>" required>
+                <input type="text" id="full_name" name="full_name" value="<?= e($student['full_name']) ?>" form="student-update-form" required>
                 <label for="full_name">Full Name</label>
             </div>
             <p>IC Number: <?= e($student['ic_number']) ?></p>
             <div class="form-group" style="margin-bottom:0.75rem; margin-top:0.5rem;">
-                <input type="text" id="phone" name="phone" value="<?= e($student['phone']) ?>" required>
+                <input type="text" id="phone" name="phone" value="<?= e($student['phone']) ?>" form="student-update-form" required>
                 <label for="phone">Phone</label>
             </div>
             <div class="form-group" style="margin-bottom:0.75rem;">
-                <input type="email" id="email" name="email" value="<?= e($student['email']) ?>" required>
+                <input type="email" id="email" name="email" value="<?= e($student['email']) ?>" form="student-update-form" required>
                 <label for="email">Email</label>
             </div>
         <?php else: ?>
@@ -99,11 +99,11 @@ foreach ($files as $f) {
     <h3>Change Password <span class="muted" style="font-size:0.8rem; font-weight:400;">(optional — leave blank to keep current)</span></h3>
     <div class="form-grid two-col" style="margin-top:1rem;">
         <div class="form-group">
-            <input type="password" id="current_password" name="current_password" autocomplete="current-password">
+            <input type="password" id="current_password" name="current_password" form="student-update-form" autocomplete="current-password">
             <label for="current_password">Current Password</label>
         </div>
         <div class="form-group">
-            <input type="password" id="new_password" name="new_password" autocomplete="new-password">
+            <input type="password" id="new_password" name="new_password" form="student-update-form" autocomplete="new-password">
             <label for="new_password">New Password</label>
         </div>
     </div>
@@ -205,7 +205,7 @@ foreach ($files as $f) {
                 <!-- File replacement input (edit mode) -->
                 <label class="file-replace-label">
                     Replace <?= e($file['file_type']) ?> file
-                    <input type="file" name="<?= e($file['file_type']) ?>" style="display:block;margin-top:0.3rem;width:100%;font-size:0.8rem;">
+                    <input type="file" name="<?= e($file['file_type']) ?>" form="student-update-form" style="display:block;margin-top:0.3rem;width:100%;font-size:0.8rem;">
                 </label>
             <?php else: ?>
                 <!-- Delete (non-edit read-only: hidden; only owner can delete) -->
@@ -243,7 +243,7 @@ if (!empty($missingTypes)): ?>
         <div class="upload-box">
             <span style="font-size:1.5rem;"><?= $fileIcons[$type] ?? '📁' ?></span>
             <p><?= ucfirst($type) ?></p>
-            <input type="file" name="<?= e($type) ?>" style="margin-top:0.5rem;">
+            <input type="file" name="<?= e($type) ?>" form="student-update-form" style="margin-top:0.5rem;">
         </div>
         <?php endforeach; ?>
     </div>
@@ -252,7 +252,7 @@ if (!empty($missingTypes)): ?>
 
 <!-- ── Save All Changes button ────────────────────────── -->
 <section class="card" style="text-align:center;">
-    <button type="submit" class="button" style="min-width:220px; font-size:1rem;">
+    <button type="submit" form="student-update-form" class="button" style="min-width:220px; font-size:1rem;">
         Save All Changes
     </button>
 </section>
