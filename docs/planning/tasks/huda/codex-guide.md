@@ -23,25 +23,46 @@ public/assets/css/components.css
 
 ## Prompt
 
-> "Review and polish the dashboard and history pages. Both are already built and wired to live
-> backend data. Do not rebuild them from scratch.
+> "Make the following specific improvements to dashboard.php and history.php.
+> The backend is already complete — do not change any backend files, routes, controllers, or SQL.
+> Do not change variable names. The PHP variables passed to the views are correct.
 >
-> The backend is complete. Do not change backend files, routes, controllers, or SQL.
+> In dashboard.php:
 >
-> Focus on:
-> - stronger metric card hierarchy
-> - better table readability
-> - clearer recent activity / history presentation
-> - empty-state handling (no data yet shown clearly)
-> - mobile-friendly spacing
+> 1. The `.dashboard-grid` class does not exist in components.css. Replace it with a two-column
+>    layout using two `.table-card` sections inside a wrapping div styled inline or using an
+>    existing layout class. Both the badge table and recent table should sit side-by-side on
+>    desktop and stack on mobile.
+>
+> 2. In the Recent Registrations table, add the badge as a styled pill. Apply the existing
+>    `.tag-pill` CSS class to each badge value instead of displaying it as plain text.
+>
+> 3. In the Badge Distribution table, add a link on each badge row that goes to
+>    `/search-attribute?badge={badge}&_search=1` so staff can click a badge to see those students.
+>
+> 4. Add a result count to the Recent Registrations heading:
+>    `Recent Registrations (<?= count($recentRows) ?>)`.
+>
+> 5. Remove all `style="padding:1rem;"` inline styles. Replace with a `p` that uses the existing
+>    `.text-dim` class, or wrap in a `<div class="card">`.
+>
+> In history.php:
+>
+> 6. Add a "View" link column at the end of each history row. Link to
+>    `/search-attribute?_search=1&ic_number=<?= urlencode($row['ic_number']) ?>` so staff can
+>    look up that student. Use the existing `.button` class, styled small.
+>
+> 7. Replace the plain `<p class="muted" style="padding:1rem;">` empty state with a proper
+>    styled card: a `<div class="card">` containing a heading and a short message.
+>
+> 8. Add a result count to the History Log heading: `History Log (<?= count($rows) ?> entries)`.
 >
 > Edit only:
 > - src/Views/pages/dashboard.php
 > - src/Views/pages/history.php
-> - public/assets/css/components.css if needed
+> - public/assets/css/components.css only if a needed class is truly missing
 >
-> Do not change variable names, backend contracts, route names, or SQL expectations.
-> The existing PHP variables passed to the view are correct — only improve how they are displayed."
+> Do not rebuild either page from scratch. Make only the changes listed above."
 
 ---
 

@@ -23,30 +23,36 @@ public/assets/css/utilities.css
 
 ## Prompt
 
-> "Review and polish the CBR page and audit shared UI consistency across all frontend pages.
-> The CBR page is already built and wired to live backend data. Do not rebuild it from scratch.
+> "Make the following specific improvements to search-content.php.
+> The backend is already complete — do not change any backend files, routes, controllers, or SQL.
+> Do not change variable names. The PHP variables passed to the view are correct.
 >
-> The backend is complete. Do not change backend files, routes, controllers, or SQL.
+> 1. The `.filter-summary` CSS class does not exist. Replace the active filters block with
+>    individual `.tag-pill` spans — one pill per active filter — instead of a plain text string.
+>    Example: `<span class="tag-pill">photo_category = formal</span>`. Add a "Clear" link next
+>    to the pills that goes to `/search-content` with no query string.
 >
-> For search-content.php:
-> - Verify CBR filters match backend (file_type, photo_category, audio_duration_tier, video_resolution_tier)
-> - Filter values must persist after a search
-> - Empty results state must be visible and clear
-> - Results table should show relevant metadata per file type
+> 2. The form button uses `class="form-actions full-span"` but `.full-span` does not exist in
+>    components.css. Add this rule to components.css:
+>    `.full-span { grid-column: 1 / -1; }`
 >
-> For shared UI:
-> - Check buttons, cards, forms, tables are visually consistent across all pages
-> - Keep changes incremental — do not redesign
+> 3. Add a result count to the Results heading when results are present:
+>    `Results (<?= count($results) ?> found)`.
 >
-> Edit only when necessary:
+> 4. The results table currently shows all CBR columns (photo_category, expression, audio tier,
+>    video tier) for every row regardless of file type, with `—` for non-applicable fields.
+>    Instead, show only the columns that are relevant to the rows in the current result set.
+>    If all results are photos, hide the audio and video columns. If results are mixed, keep
+>    all columns but use `.text-dim` on the `—` cells to visually de-emphasise them.
+>
+> 5. Replace the plain `<p class="muted" style="padding:1rem;">` empty states with a
+>    `<div class="card">` containing a short message. Remove all inline `style=` attributes.
+>
+> Edit only:
 > - src/Views/pages/search-content.php
-> - public/assets/css/tokens.css
-> - public/assets/css/base.css
-> - public/assets/css/components.css
-> - public/assets/css/utilities.css
+> - public/assets/css/components.css for the `.full-span` rule only
 >
-> Do not replace the shared shell. Do not change backend contracts, variable names, or routes.
-> The existing PHP variables are correct."
+> Do not rebuild the page from scratch. Make only the changes listed above."
 
 ---
 

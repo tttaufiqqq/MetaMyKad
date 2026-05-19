@@ -22,26 +22,42 @@ public/assets/css/components.css
 
 ## Prompt
 
-> "Review and polish the ABR and TBR search pages. Both are already built and wired to live
-> backend data. Do not rebuild them from scratch.
+> "Make the following specific improvements to search-attribute.php and search-text.php.
+> The backend is already complete — do not change any backend files, routes, controllers, or SQL.
+> Do not change variable names. The PHP variables passed to the views are correct.
 >
-> The backend is complete. Do not change backend files, routes, controllers, or SQL.
+> In search-attribute.php:
 >
-> Focus on:
-> - clearer filter grouping and labelling
-> - stronger visual distinction between filters and results area
-> - filter values must persist in the form after a search (do not wipe inputs on submit)
-> - empty results state must be visible and clear
-> - compact, readable result tables
-> - filter-state friendliness on mobile
+> 1. The `.filter-summary` CSS class does not exist. Replace the active filters block with
+>    individual `.tag-pill` spans — one pill per active filter — instead of a plain text string.
+>    Example: `<span class="tag-pill">gender = M</span>`. Add a "Clear" link next to the pills
+>    that goes to `/search-attribute` with no query string.
+>
+> 2. Add a result count to the Results heading when results are present:
+>    `Results (<?= count($results) ?> found)`.
+>
+> 3. In the results table, wrap each badge value in `<span class="tag-pill">` instead of
+>    displaying it as plain text.
+>
+> 4. Remove all inline `style=` attributes. Replace with appropriate existing CSS classes
+>    (`.text-dim`, `.card`, padding from `.table-card`).
+>
+> In search-text.php:
+>
+> 5. The TBR page has no active filter summary at all. Add one below the form: when `$keyword`
+>    is not empty after submit, show it as a `.tag-pill` with a "Clear" link to `/search-text`.
+>
+> 6. Add a result count to the Results heading when results are present:
+>    `Results (<?= count($results) ?> found)`.
+>
+> 7. Remove any inline `style=` attributes from both files.
 >
 > Edit only:
 > - src/Views/pages/search-attribute.php
 > - src/Views/pages/search-text.php
-> - public/assets/css/components.css if needed
+> - public/assets/css/components.css only if a needed class is truly missing
 >
-> Do not invent new search fields beyond the docs. Do not change routes, backend expectations,
-> or move search logic into JavaScript. The existing PHP variables are correct — only improve display."
+> Do not rebuild either page from scratch. Make only the changes listed above."
 
 ---
 
