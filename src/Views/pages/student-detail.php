@@ -3,6 +3,10 @@
 /** @var array $files */
 /** @var array $history */
 
+use MetaMyKad\Core\Auth;
+
+$isOwner = Auth::check() && (int) Auth::user()['id'] === (int) $student['id'];
+
 $fileIcons = ['photo' => '🖼️', 'audio' => '🎵', 'pdf' => '📄', 'video' => '🎬'];
 
 function fmt_bytes(int $bytes): string {
@@ -10,26 +14,66 @@ function fmt_bytes(int $bytes): string {
     if ($bytes >= 1024)    return round($bytes / 1024, 1) . ' KB';
     return $bytes . ' B';
 }
+
+// Index files by type for easy lookup in edit form
+$filesByType = [];
+foreach ($files as $f) {
+    $filesByType[$f['file_type']] = $f;
+}
 ?>
 
+<?php if ($isOwner): ?>
+<form action="<?= e(url('/student-update')) ?>" method="post" enctype="multipart/form-data">
+    <?php require src_path('Views/partials/csrf.php'); ?>
+    <input type="hidden" name="student_id" value="<?= e((string) $student['id']) ?>">
+<?php endif; ?>
+
+<!-- ── Header card ─────────────────────────────────────── -->
 <section class="card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
         <div>
             <h2><?= e($student['full_name']) ?></h2>
             <p class="muted">IC: <?= e($student['ic_number']) ?> &nbsp;|&nbsp; Badge: <strong><?= e($student['stored_badge']) ?></strong></p>
         </div>
-        <a class="button secondary" href="<?= e(url('/re-register')) ?>">Re-Register</a>
+        <div class="owner-actions">
+            <?php if ($isOwner): ?>
+                <form action="<?= e(url('/logout')) ?>" method="post" style="margin:0;">
+                    <?php require src_path('Views/partials/csrf.php'); ?>
+                    <button type="submit" class="button secondary">Sign Out</button>
+                </form>
+            <?php else: ?>
+                <a class="button secondary" href="<?= e(url('/re-register')) ?>">Re-Register</a>
+                <a class="button" href="<?= e(url('/login')) ?>">Login to Edit</a>
+            <?php endif; ?>
+        </div>
     </div>
 </section>
 
+<!-- ── Identity + Derived + Files summary ─────────────── -->
 <section class="detail-grid">
     <article>
         <h3>Identity</h3>
-        <p>Full Name: <strong><?= e($student['full_name']) ?></strong></p>
-        <p>IC Number: <?= e($student['ic_number']) ?></p>
-        <p>Phone: <?= e($student['phone']) ?></p>
-        <p>Email: <?= e($student['email']) ?></p>
-        <p>Email Type: <?= e($student['email_category']) ?></p>
+        <?php if ($isOwner): ?>
+            <div class="form-group" style="margin-bottom:0.75rem;">
+                <input type="text" id="full_name" name="full_name" value="<?= e($student['full_name']) ?>" required>
+                <label for="full_name">Full Name</label>
+            </div>
+            <p>IC Number: <?= e($student['ic_number']) ?></p>
+            <div class="form-group" style="margin-bottom:0.75rem; margin-top:0.5rem;">
+                <input type="text" id="phone" name="phone" value="<?= e($student['phone']) ?>" required>
+                <label for="phone">Phone</label>
+            </div>
+            <div class="form-group" style="margin-bottom:0.75rem;">
+                <input type="email" id="email" name="email" value="<?= e($student['email']) ?>" required>
+                <label for="email">Email</label>
+            </div>
+        <?php else: ?>
+            <p>Full Name: <strong><?= e($student['full_name']) ?></strong></p>
+            <p>IC Number: <?= e($student['ic_number']) ?></p>
+            <p>Phone: <?= e($student['phone']) ?></p>
+            <p>Email: <?= e($student['email']) ?></p>
+            <p>Email Type: <?= e($student['email_category']) ?></p>
+        <?php endif; ?>
     </article>
     <article>
         <h3>Derived Attributes</h3>
@@ -49,9 +93,27 @@ function fmt_bytes(int $bytes): string {
     </article>
 </section>
 
+<?php if ($isOwner): ?>
+<!-- ── Password change (edit mode only) ───────────────── -->
+<section class="card">
+    <h3>Change Password <span class="muted" style="font-size:0.8rem; font-weight:400;">(optional — leave blank to keep current)</span></h3>
+    <div class="form-grid two-col" style="margin-top:1rem;">
+        <div class="form-group">
+            <input type="password" id="current_password" name="current_password" autocomplete="current-password">
+            <label for="current_password">Current Password</label>
+        </div>
+        <div class="form-group">
+            <input type="password" id="new_password" name="new_password" autocomplete="new-password">
+            <label for="new_password">New Password</label>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- ── Uploaded files ─────────────────────────────────── -->
 <?php if (empty($files)): ?>
 <section class="card">
-    <p class="muted">No files uploaded for this student.</p>
+    <p class="muted">No files uploaded for this student.<?= $isOwner ? ' Use the fields below to upload files.' : '' ?></p>
 </section>
 <?php else: ?>
 <section class="table-card">
@@ -60,7 +122,44 @@ function fmt_bytes(int $bytes): string {
     <?php foreach ($files as $file): ?>
         <?php $cbr = $file['cbr'] ?? []; $tags = $file['tags'] ?? []; ?>
         <div class="file-card">
-            <div class="file-preview"><?= $fileIcons[$file['file_type']] ?? '📁' ?></div>
+
+            <?php if ($file['file_type'] === 'photo'): ?>
+                <!-- Photo thumbnail -->
+                <img
+                    class="file-photo-thumb"
+                    src="<?= e(url('/file?id=' . $file['id'])) ?>"
+                    alt="<?= e($file['filename']) ?>"
+                    loading="lazy"
+                >
+            <?php elseif ($file['file_type'] === 'audio'): ?>
+                <!-- Custom audio player -->
+                <div class="custom-player custom-player--audio"
+                     data-src="<?= e(url('/file?id=' . $file['id'])) ?>">
+                    <button class="cp-play" type="button" aria-label="Play">&#9654;</button>
+                    <span class="cp-current">0:00</span>
+                    <input class="cp-seek" type="range" value="0" min="0" max="100" step="0.01">
+                    <span class="cp-duration">--:--</span>
+                    <input class="cp-volume" type="range" value="1" min="0" max="1" step="0.05">
+                    <audio preload="none"></audio>
+                </div>
+            <?php elseif ($file['file_type'] === 'video'): ?>
+                <!-- Custom video player -->
+                <div class="custom-player custom-player--video"
+                     data-src="<?= e(url('/file?id=' . $file['id'])) ?>">
+                    <video preload="none"></video>
+                    <div class="cp-controls">
+                        <button class="cp-play" type="button" aria-label="Play">&#9654;</button>
+                        <span class="cp-current">0:00</span>
+                        <input class="cp-seek" type="range" value="0" min="0" max="100" step="0.01">
+                        <span class="cp-duration">--:--</span>
+                        <input class="cp-volume" type="range" value="1" min="0" max="1" step="0.05">
+                        <button class="cp-fullscreen" type="button" aria-label="Fullscreen">&#x26F6;</button>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="file-preview"><?= $fileIcons[$file['file_type']] ?? '📁' ?></div>
+            <?php endif; ?>
+
             <div class="file-name"><?= e($file['filename']) ?></div>
             <div class="file-data">
                 Type: <?= e($file['mime_type']) ?><br>
@@ -73,7 +172,11 @@ function fmt_bytes(int $bytes): string {
                     <?php if (isset($cbr['expression_confidence'])): ?>
                         (<?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%)
                     <?php endif; ?>
-                    <br>BG Color: <?= e($cbr['dominant_bg_color'] ?? '—') ?>
+                    <br>BG Color:
+                    <?php if (!empty($cbr['dominant_bg_color'])): ?>
+                        <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:<?= e($cbr['dominant_bg_color']) ?>;vertical-align:middle;margin-right:4px;"></span>
+                    <?php endif; ?>
+                    <?= e($cbr['dominant_bg_color'] ?? '—') ?>
                 <?php elseif ($file['file_type'] === 'audio' && $cbr !== []): ?>
                     <br><br>Duration: <?= e((string) ($cbr['audio_duration_sec'] ?? '—')) ?>s
                     (<?= e($cbr['audio_duration_tier'] ?? '—') ?>)
@@ -98,22 +201,66 @@ function fmt_bytes(int $bytes): string {
                 <?php endif; ?>
             </div>
 
-            <form action="<?= e(url('/delete-file')) ?>" method="post" style="margin-top:0.75rem;">
-                <?php require src_path('Views/partials/csrf.php'); ?>
-                <input type="hidden" name="file_id" value="<?= e((string) $file['id']) ?>">
-                <button class="button secondary"
-                        type="submit"
-                        data-confirm="Delete this <?= e($file['file_type']) ?> file? This cannot be undone."
-                        style="width:100%; font-size:0.76rem; padding:0.5rem 0.75rem;">
-                    Delete
-                </button>
-            </form>
+            <?php if ($isOwner): ?>
+                <!-- File replacement input (edit mode) -->
+                <label class="file-replace-label">
+                    Replace <?= e($file['file_type']) ?> file
+                    <input type="file" name="<?= e($file['file_type']) ?>" style="display:block;margin-top:0.3rem;width:100%;font-size:0.8rem;">
+                </label>
+            <?php else: ?>
+                <!-- Delete (non-edit read-only: hidden; only owner can delete) -->
+            <?php endif; ?>
+
+            <?php if ($isOwner): ?>
+                <form action="<?= e(url('/delete-file')) ?>" method="post" style="margin-top:0.75rem;">
+                    <?php require src_path('Views/partials/csrf.php'); ?>
+                    <input type="hidden" name="file_id" value="<?= e((string) $file['id']) ?>">
+                    <button class="button secondary"
+                            type="submit"
+                            data-confirm="Delete this <?= e($file['file_type']) ?> file? This cannot be undone."
+                            style="width:100%; font-size:0.76rem; padding:0.5rem 0.75rem;">
+                        Delete
+                    </button>
+                </form>
+            <?php endif; ?>
+
         </div>
     <?php endforeach; ?>
     </div>
 </section>
 <?php endif; ?>
 
+<?php if ($isOwner): ?>
+<!-- ── Upload new file types not yet uploaded ─────────── -->
+<?php
+$missingTypes = array_diff(['photo', 'audio', 'pdf', 'video'], array_keys($filesByType));
+if (!empty($missingTypes)): ?>
+<section class="card">
+    <h3>Upload Missing Files</h3>
+    <p class="muted" style="margin-bottom:1rem;">These file types have not been uploaded yet.</p>
+    <div class="upload-grid">
+        <?php foreach ($missingTypes as $type): ?>
+        <div class="upload-box">
+            <span style="font-size:1.5rem;"><?= $fileIcons[$type] ?? '📁' ?></span>
+            <p><?= ucfirst($type) ?></p>
+            <input type="file" name="<?= e($type) ?>" style="margin-top:0.5rem;">
+        </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- ── Save All Changes button ────────────────────────── -->
+<section class="card" style="text-align:center;">
+    <button type="submit" class="button" style="min-width:220px; font-size:1rem;">
+        Save All Changes
+    </button>
+</section>
+
+</form><!-- end edit form -->
+<?php endif; ?>
+
+<!-- ── Registration history ───────────────────────────── -->
 <?php if (!empty($history)): ?>
 <section class="table-card">
     <h3>Registration History</h3>
