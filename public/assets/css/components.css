@@ -1073,8 +1073,8 @@ tbody tr:hover {
 }
 
 .cp-volume {
-    flex: 0 1 72px;
-    min-width: 48px;
+    flex: 0 1 90px;
+    min-width: 60px;
 }
 
 .cp-seek,
@@ -1142,6 +1142,29 @@ tbody tr:hover {
 
 .cp-fullscreen:hover,
 .cp-fullscreen.is-fullscreen {
+    color: var(--color-brand-cyan, #39c5ff);
+    border-color: var(--color-brand-cyan, #39c5ff);
+}
+
+/* Mute button */
+.cp-mute {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 6px;
+    border: 1px solid rgba(57,197,255,0.3);
+    background: transparent;
+    color: var(--color-text-muted, rgba(255,255,255,0.45));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.cp-mute:hover {
     color: var(--color-brand-cyan, #39c5ff);
     border-color: var(--color-brand-cyan, #39c5ff);
 }
