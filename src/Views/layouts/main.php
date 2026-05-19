@@ -124,6 +124,9 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
     </div>
 </div>
 <?php require src_path('Views/partials/confirm-dialog.php'); ?>
+<div class="page-spinner" id="page-spinner" aria-hidden="true" role="status" aria-label="Loading">
+    <div class="page-spinner__ring"></div>
+</div>
 <script src="<?= e(asset('js/fetch.js')) ?>"></script>
 <script src="<?= e(asset('js/validate.js')) ?>"></script>
 <script src="<?= e(asset('js/app.js')) ?>"></script>
