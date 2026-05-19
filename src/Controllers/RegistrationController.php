@@ -20,12 +20,22 @@ final class RegistrationController extends BaseController
         $mode = ($_POST['mode'] ?? 'create') === 'update' ? 'update' : 'create';
 
         // --- 1. Base validation ---
-        $errors = Validator::validate($_POST, [
-            'ic_number' => ['required', 'ic'],
-            'full_name'  => ['required'],
-            'phone'      => ['required'],
-            'email'      => ['required', 'email'],
-        ]);
+        $icProvided       = trim((string) ($_POST['ic_number'] ?? '')) !== '';
+        $passportProvided = trim((string) ($_POST['passport_number'] ?? '')) !== '';
+
+        $idRules = [];
+        if ($icProvided || !$passportProvided) {
+            $idRules['ic_number'] = ['required', 'ic'];
+        }
+        if ($passportProvided && !$icProvided) {
+            $idRules['passport_number'] = ['required'];
+        }
+
+        $errors = Validator::validate($_POST, array_merge($idRules, [
+            'full_name' => ['required'],
+            'phone'     => ['required'],
+            'email'     => ['required', 'email'],
+        ]));
 
         if ($mode === 'create') {
             $errors += Validator::validate($_POST, [
@@ -42,16 +52,19 @@ final class RegistrationController extends BaseController
 
         // --- 2. IC parse ---
         $student = new Student();
-        try {
-            $derived = $student->deriveFromIc((string) $_POST['ic_number']);
-        } catch (InvalidArgumentException $e) {
-            $this->flash('error', $e->getMessage());
-            $this->redirect($mode === 'update' ? '/re-register' : '/register');
+        $derived = null;
+        if ($icProvided) {
+            try {
+                $derived = $student->deriveFromIc((string) $_POST['ic_number']);
+            } catch (InvalidArgumentException $e) {
+                $this->flash('error', $e->getMessage());
+                $this->redirect($mode === 'update' ? '/re-register' : '/register');
+            }
         }
         $emailCategory = $student->classifyEmail((string) $_POST['email']);
 
         // --- 3. Detect existing student ---
-        $existing = $student->findByIc((string) $_POST['ic_number']);
+        $existing = $icProvided ? $student->findByIc((string) $_POST['ic_number']) : false;
 
         if ($mode === 'update' && $existing === false) {
             $this->flash('error', 'IC number not found. Please register first.');
@@ -77,17 +90,17 @@ final class RegistrationController extends BaseController
             : password_hash((string) $_POST['password'], PASSWORD_DEFAULT);
 
         $result = (new Student())->callProcedure('sp_register_student', [
-            $_POST['ic_number'],
+            $_POST['ic_number'] ?? '',
             $existing !== false ? null : $_POST['matric_number'],
             $existing !== false ? null : $passwordHash,
             $_POST['full_name'],
             $_POST['phone'],
             $_POST['email'],
             $emailCategory,
-            $derived['date_of_birth'],
-            $derived['gender'],
-            $derived['state_of_birth'],
-            $derived['age'],
+            $derived['date_of_birth'] ?? null,
+            $derived['gender'] ?? null,
+            $derived['state_of_birth'] ?? null,
+            $derived['age'] ?? null,
         ]);
 
         $studentId = (int) ($result[0]['student_id'] ?? 0);
