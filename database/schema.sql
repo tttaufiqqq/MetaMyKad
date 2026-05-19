@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS file_metadata (
     file_size BIGINT NOT NULL,
     mime_type VARCHAR(100) NOT NULL,
     upload_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    original_date DATE NULL,
     extracted_text LONGTEXT NULL,
     FULLTEXT INDEX ft_file_metadata_extracted_text (extracted_text),
     INDEX idx_file_metadata_student_file_type (student_id, file_type),
