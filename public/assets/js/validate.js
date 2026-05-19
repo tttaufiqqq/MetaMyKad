@@ -24,6 +24,9 @@ function getValidationMessage(field) {
     }
 
     if (field.validity.patternMismatch) {
+        if (field.name === 'phone') {
+            return 'Please enter a valid Malaysian phone number (e.g., 012-3456789).';
+        }
         return 'Please match the requested format.';
     }
 

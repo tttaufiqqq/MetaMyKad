@@ -22,7 +22,10 @@
             </div>
             <div class="form-group">
                 <label for="phone">Phone</label>
-                <input id="phone" name="phone" type="text">
+                <input id="phone" name="phone" type="tel" required
+                       pattern="(\+?60|0)[0-9\-\s]{7,11}"
+                       maxlength="16"
+                       title="Malaysian phone number, e.g. 012-3456789">
             </div>
             <div class="form-group">
                 <label for="email">Email</label>

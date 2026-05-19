@@ -65,13 +65,20 @@ foreach ($files as $f) {
             </div>
             <p>IC Number: <?= e($student['ic_number']) ?></p>
             <div class="form-group" style="margin-bottom:0.75rem; margin-top:0.5rem;">
-                <input type="text" id="phone" name="phone" value="<?= e($student['phone']) ?>" form="student-update-form" required>
+                <input type="tel" id="phone" name="phone" value="<?= e($student['phone']) ?>"
+                       form="student-update-form" required
+                       pattern="(\+?60|0)[0-9\-\s]{7,11}"
+                       maxlength="16"
+                       title="Malaysian phone number, e.g. 012-3456789">
                 <label for="phone">Phone</label>
             </div>
             <div class="form-group" style="margin-bottom:0.75rem;">
                 <input type="email" id="email" name="email" value="<?= e($student['email']) ?>" form="student-update-form" required>
                 <label for="email">Email</label>
             </div>
+            <p style="font-size:0.8rem; color:var(--color-muted); margin-top:-0.25rem; margin-bottom:0.75rem;">
+                Email type: <span class="tag-pill"><?= e($student['email_category']) ?></span>
+            </p>
         <?php else: ?>
             <p>Full Name: <strong><?= e($student['full_name']) ?></strong></p>
             <p>IC Number: <?= e($student['ic_number']) ?></p>
@@ -177,16 +184,14 @@ foreach ($files as $f) {
                 <?php endif; ?>
 
                 <?php if ($file['file_type'] === 'photo' && $cbr !== []): ?>
-                    <br><br>Category: <?= e($cbr['photo_category'] ?? '—') ?>
-                    <br>Expression: <?= e($cbr['dominant_expression'] ?? '—') ?>
-                    <?php if (isset($cbr['expression_confidence'])): ?>
-                        (<?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%)
-                    <?php endif; ?>
-                    <br>BG Color:
+                    <br>
+                    <span class="tag-pill"><?= e($cbr['photo_category'] ?? '—') ?></span>
+                    <span class="tag-pill"><?= e($cbr['dominant_expression'] ?? '—') ?><?php if (isset($cbr['expression_confidence'])): ?> <?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%<?php endif; ?></span>
                     <?php if (!empty($cbr['dominant_bg_color'])): ?>
-                        <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:<?= e($cbr['dominant_bg_color']) ?>;vertical-align:middle;margin-right:4px;"></span>
+                    <span class="tag-pill" style="display:inline-flex;align-items:center;gap:0.3rem;">
+                        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:<?= e($cbr['dominant_bg_color']) ?>;flex-shrink:0;"></span><?= e($cbr['dominant_bg_color']) ?>
+                    </span>
                     <?php endif; ?>
-                    <?= e($cbr['dominant_bg_color'] ?? '—') ?>
                 <?php elseif ($file['file_type'] === 'audio' && $cbr !== []): ?>
                     <br><br>Duration: <?= e(fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0))) ?>
                     (<?= e($cbr['audio_duration_tier'] ?? '—') ?>)
