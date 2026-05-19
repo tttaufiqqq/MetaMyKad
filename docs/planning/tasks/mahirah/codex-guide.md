@@ -127,3 +127,32 @@ Tell it exactly what is wrong. Example:
 > "Do not redesign the whole shell or introduce new frameworks. The backend is already complete
 > and passes real data into the view. Only refine the CBR page display, ensure filter values
 > persist after submit, and keep shared CSS consistent across all pages."
+
+---
+
+## Future Replica Prompt: `/search-content`
+
+If Mahirah needs to rebuild the CBR page from scratch in a new Codex session, use this exact prompt:
+
+> "Build the CBR search page in the existing pure PHP app based on
+> `docs/pages/browse/search-content.md` and
+> `docs/implementation/system-design/06-retrieval-and-search-contracts.md`.
+> Keep it in the current architecture and visual system.
+>
+> Implement exactly this file:
+> - `src/Views/pages/search-content.php`
+>
+> Exact behavior:
+> - GET form with CBR filters: file_type, photo_category, audio_duration_tier, video_resolution_tier
+> - Show only the filters that are relevant to the selected file_type
+> - Filter values must persist in the form after submit
+> - Results table shows relevant metadata columns per file type
+> - Empty results state must be visible and not a blank table
+>
+> Exact shared UI rules:
+> - Buttons, cards, forms, and tables must be visually consistent with all other pages
+> - Do not redesign the shared shell or navigation
+> - Keep CSS changes incremental — only add what is needed for the CBR page
+>
+> Stay in PHP/CSS only. Do not add pagination, React, new frameworks, or schema changes.
+> Do not change routes, backend contracts, variable names, or the shared shell in main.php."
