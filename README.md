@@ -34,10 +34,13 @@ Make sure you have all three installed before starting:
 ### 1. Clone and install
 
 ```bash
-git clone <repo-url>
-cd metamykad
+git clone https://github.com/tttaufiqqq/MetaMyKad.git
+cd MetaMyKad
 composer install
 ```
+
+> `composer install` generates the `vendor/` folder which is required to boot the app.
+> The server will crash with a fatal error if you skip this step.
 
 ### 2. Create your `.env`
 
@@ -185,8 +188,8 @@ All requests go through `public/index.php` and are dispatched via `config/routes
 
 ## Troubleshooting
 
-**`Class not found` error on boot**
-Make sure you ran `composer install`. The autoloader must exist at `vendor/autoload.php`.
+**`Failed to open stream: vendor/autoload.php` or `Class not found` on boot**
+Run `composer install` first. This generates the `vendor/` folder — the app cannot start without it.
 
 **`Connection refused` or DB error**
 - Confirm MySQL Server is running
