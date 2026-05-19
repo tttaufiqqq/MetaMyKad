@@ -13,8 +13,9 @@
             </div>
             <div class="form-group">
                 <label for="ic_number">Malaysian IC Number (12 Digits)</label>
-                <input id="ic_number" name="ic_number" type="text" maxlength="12" required value="<?= e((string) old('ic_number')) ?>">
+                <input id="ic_number" name="ic_number" type="text" maxlength="12" value="<?= e((string) old('ic_number')) ?>">
             </div>
+            <div class="id-or-divider">or</div>
             <div class="form-group">
                 <label for="passport_number">Passport Number (International Student)</label>
                 <input id="passport_number" name="passport_number" type="text" value="<?= e((string) old('passport_number')) ?>">
