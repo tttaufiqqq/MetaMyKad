@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     ic_number VARCHAR(12) NOT NULL UNIQUE,
+    matric_number VARCHAR(20) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     full_name VARCHAR(100) NOT NULL,
     phone VARCHAR(15) NOT NULL,
     email VARCHAR(100) NOT NULL,
