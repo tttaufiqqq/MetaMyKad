@@ -25,49 +25,49 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                 <ul class="nav-list">
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/' ? 'is-active' : '' ?>" href="<?= e(url('/')) ?>">
-                            <span class="nav-icon">🏠</span><span class="nav-text">Home</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/home.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Home</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/dashboard' ? 'is-active' : '' ?>" href="<?= e(url('/dashboard')) ?>">
-                            <span class="nav-icon">📊</span><span class="nav-text">Dashboard</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/dashboard.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/register' ? 'is-active' : '' ?>" href="<?= e(url('/register')) ?>">
-                            <span class="nav-icon">📝</span><span class="nav-text">Registration</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/register.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Registration</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/re-register' ? 'is-active' : '' ?>" href="<?= e(url('/re-register')) ?>">
-                            <span class="nav-icon">♻️</span><span class="nav-text">Re-Registration</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/reregister.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Re-Registration</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/search-attribute' ? 'is-active' : '' ?>" href="<?= e(url('/search-attribute')) ?>">
-                            <span class="nav-icon">🧭</span><span class="nav-text">ABR Search</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/abr.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">ABR Search</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/search-text' ? 'is-active' : '' ?>" href="<?= e(url('/search-text')) ?>">
-                            <span class="nav-icon">📄</span><span class="nav-text">TBR Search</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/tbr.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">TBR Search</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/search-content' ? 'is-active' : '' ?>" href="<?= e(url('/search-content')) ?>">
-                            <span class="nav-icon">🎞️</span><span class="nav-text">CBR Search</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/cbr.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">CBR Search</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/history' ? 'is-active' : '' ?>" href="<?= e(url('/history')) ?>">
-                            <span class="nav-icon">📜</span><span class="nav-text">History</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/history.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">History</span>
                         </a>
                     </li>
                     <?php if (\MetaMyKad\Core\Auth::check()): ?>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/student-detail' ? 'is-active' : '' ?>"
                            href="<?= e(url('/student-detail?id=' . \MetaMyKad\Core\Auth::user()['id'])) ?>">
-                            <span class="nav-icon">👤</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/profile.png')) ?>" alt="" aria-hidden="true"></span>
                             <span class="nav-text"><?= e(\MetaMyKad\Core\Auth::user()['full_name']) ?></span>
                         </a>
                     </li>
@@ -75,14 +75,14 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                         <form action="<?= e(url('/logout')) ?>" method="post" style="margin:0;">
                             <?php require src_path('Views/partials/csrf.php'); ?>
                             <button type="submit" class="nav-link" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;color:var(--color-danger-text,#ff6b6b);">
-                                <span class="nav-icon">🚪</span><span class="nav-text">Sign Out</span>
+                                <span class="nav-icon"><img src="<?= e(asset('images/nav/signout.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Sign Out</span>
                             </button>
                         </form>
                     </li>
                     <?php else: ?>
                     <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/login' ? 'is-active' : '' ?>" href="<?= e(url('/login')) ?>">
-                            <span class="nav-icon">🔑</span><span class="nav-text">Student Login</span>
+                            <span class="nav-icon"><img src="<?= e(asset('images/nav/profile.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Student Login</span>
                         </a>
                     </li>
                     <?php endif; ?>
@@ -122,6 +122,7 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
 </div>
 <script src="<?= e(asset('js/fetch.js')) ?>"></script>
 <script src="<?= e(asset('js/validate.js')) ?>"></script>
+<script src="<?= e(asset('js/file-input.js')) ?>"></script>
 <script src="<?= e(asset('js/app.js')) ?>"></script>
 <script src="<?= e(asset('js/player.js')) ?>"></script>
 <script src="<?= e(asset('js/select.js')) ?>"></script>

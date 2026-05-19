@@ -25,7 +25,7 @@
             >
         <?php else: ?>
             <div class="home-hero__placeholder">
-                <span style="font-size:2.5rem;">&#x1F4F8;</span>
+                <img src="<?= e(asset('images/nav/camera.png')) ?>" alt="" aria-hidden="true" class="home-hero__placeholder-icon">
                 <span>Group photo</span>
                 <code>public/assets/img/group-photo.jpg</code>
             </div>
@@ -38,25 +38,35 @@
     <div class="home-features__grid">
 
         <a href="<?= e(url('/register')) ?>" class="home-feature-card">
-            <span class="home-feature-card__icon">&#x1F4DD;</span>
+            <span class="home-feature-card__icon">
+                <img src="<?= e(asset('images/nav/register.png')) ?>" alt="" aria-hidden="true">
+            </span>
             <h3>Registration</h3>
             <p>Register a new student or update existing records with multimedia uploads.</p>
         </a>
 
         <a href="<?= e(url('/search-attribute')) ?>" class="home-feature-card">
-            <span class="home-feature-card__icon">&#x1F50D;</span>
+            <span class="home-feature-card__icon home-feature-card__icon--group">
+                <img src="<?= e(asset('images/nav/abr.png')) ?>" alt="" aria-hidden="true">
+                <img src="<?= e(asset('images/nav/tbr.png')) ?>" alt="" aria-hidden="true">
+                <img src="<?= e(asset('images/nav/cbr.png')) ?>" alt="" aria-hidden="true">
+            </span>
             <h3>Search Hub</h3>
             <p>ABR, TBR &amp; CBR retrieval &mdash; find students by attribute, text, or content.</p>
         </a>
 
         <a href="<?= e(url('/dashboard')) ?>" class="home-feature-card">
-            <span class="home-feature-card__icon">&#x1F4CA;</span>
+            <span class="home-feature-card__icon">
+                <img src="<?= e(asset('images/nav/dashboard.png')) ?>" alt="" aria-hidden="true">
+            </span>
             <h3>Dashboard</h3>
             <p>System metrics, badge distribution, and recent registration activity.</p>
         </a>
 
         <a href="<?= e(url('/history')) ?>" class="home-feature-card">
-            <span class="home-feature-card__icon">&#x1F4DC;</span>
+            <span class="home-feature-card__icon">
+                <img src="<?= e(asset('images/nav/history.png')) ?>" alt="" aria-hidden="true">
+            </span>
             <h3>History</h3>
             <p>Full audit log of all student registration events over time.</p>
         </a>

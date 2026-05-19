@@ -61,6 +61,7 @@
                 panel.hidden = false;
                 trigger.setAttribute('aria-expanded', 'true');
                 wrap.classList.add('is-open');
+                scrollSelectedIntoView(panel);
             }
         });
 
@@ -91,11 +92,17 @@
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 var next = allOpts[idx + 1] || allOpts[0];
-                if (next) next.focus();
+                if (next) {
+                    next.focus();
+                    next.scrollIntoView({ block: 'nearest' });
+                }
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
                 var prev = allOpts[idx - 1] || allOpts[allOpts.length - 1];
-                if (prev) prev.focus();
+                if (prev) {
+                    prev.focus();
+                    prev.scrollIntoView({ block: 'nearest' });
+                }
             } else if (e.key === 'Enter') {
                 e.preventDefault();
                 if (focused) pickOption(wrap, select, valueSpan, focused);
@@ -132,6 +139,13 @@
             wrap.querySelector('.cs-trigger').setAttribute('aria-expanded', 'false');
             wrap.classList.remove('is-open');
         });
+    }
+
+    function scrollSelectedIntoView(panel) {
+        var selected = panel.querySelector('.cs-option.is-selected');
+        if (selected) {
+            selected.scrollIntoView({ block: 'nearest' });
+        }
     }
 
     // Close on outside click

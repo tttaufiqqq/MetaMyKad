@@ -37,22 +37,30 @@
             <p class="muted">Leave a file type empty if the current stored file should remain unchanged.</p>
             <div class="upload-grid">
                 <label class="upload-box" for="photo">
-                    <span class="upload-icon">🖼️</span>
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-image.png')) ?>" alt="" aria-hidden="true">
+                    </span>
                     <span>Replace Photo</span>
                     <small>JPEG / PNG</small>
                 </label>
                 <label class="upload-box" for="audio">
-                    <span class="upload-icon">🎵</span>
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-audio.png')) ?>" alt="" aria-hidden="true">
+                    </span>
                     <span>Replace Audio</span>
                     <small>MP3 / WAV</small>
                 </label>
                 <label class="upload-box" for="pdf">
-                    <span class="upload-icon">📄</span>
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-pdf.png')) ?>" alt="" aria-hidden="true">
+                    </span>
                     <span>Replace PDF</span>
                     <small>Searchable Text</small>
                 </label>
                 <label class="upload-box" for="video">
-                    <span class="upload-icon">🎬</span>
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-video.png')) ?>" alt="" aria-hidden="true">
+                    </span>
                     <span>Replace Video</span>
                     <small>MP4 / MOV / AVI</small>
                 </label>

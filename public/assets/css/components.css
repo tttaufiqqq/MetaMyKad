@@ -140,16 +140,17 @@
 }
 
 .nav-icon {
-    width: 2.25rem;
-    height: 2.25rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    font-size: 1rem;
     flex-shrink: 0;
+}
+
+.nav-icon img {
+    width: 1.4rem;
+    height: 1.4rem;
+    object-fit: contain;
+    display: block;
 }
 
 .nav-text {
@@ -162,12 +163,6 @@
     border-color: rgba(100, 223, 255, 0.24);
     color: #fff;
     transform: translateX(3px);
-}
-
-.nav-link:hover .nav-icon,
-.nav-link.is-active .nav-icon {
-    background: rgba(143, 235, 255, 0.12);
-    border-color: rgba(143, 235, 255, 0.14);
 }
 
 .page-title {
@@ -250,6 +245,24 @@
     margin-bottom: var(--space-3);
     position: relative;
     overflow: hidden;
+}
+
+.hero:has(.cs-wrap.is-open),
+.card:has(.cs-wrap.is-open),
+.search-panel:has(.cs-wrap.is-open),
+.table-card:has(.cs-wrap.is-open) {
+    overflow: visible;
+    z-index: 40;
+}
+
+.form-grid,
+.form-card-layout {
+    position: relative;
+}
+
+.form-grid:has(.cs-wrap.is-open),
+.form-card-layout:has(.cs-wrap.is-open) {
+    z-index: 30;
 }
 
 .hero,
@@ -474,6 +487,10 @@ textarea::placeholder {
     color: rgba(157, 176, 211, 0.65);
 }
 
+input[type="file"] {
+    min-height: auto;
+}
+
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -608,9 +625,9 @@ select optgroup {
 }
 
 /* ── Custom Select Component ─────────────────────── */
-/* Lift the parent form-group above siblings when its dropdown is open */
+/* Lift overlay-bearing form containers above neighboring cards when open */
 .form-group:has(.cs-wrap.is-open) {
-    z-index: 50;
+    z-index: 60;
 }
 
 .cs-wrap {
@@ -659,7 +676,31 @@ select optgroup {
         0 0 0 1px rgba(57, 197, 255, 0.06);
     backdrop-filter: blur(24px);
     animation: cs-open 0.14s ease;
-    overflow: hidden;
+    max-height: min(18rem, calc(100vh - 8rem));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 223, 255, 0.5) rgba(9, 18, 40, 0.9);
+}
+
+.cs-panel::-webkit-scrollbar {
+    width: 0.6rem;
+}
+
+.cs-panel::-webkit-scrollbar-track {
+    background: rgba(9, 18, 40, 0.9);
+    border-radius: 999px;
+}
+
+.cs-panel::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(100, 223, 255, 0.62), rgba(57, 197, 255, 0.38));
+    border-radius: 999px;
+    border: 2px solid rgba(9, 18, 40, 0.9);
+}
+
+.cs-panel::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(143, 235, 255, 0.78), rgba(57, 197, 255, 0.5));
 }
 
 @keyframes cs-open {
@@ -694,6 +735,83 @@ select optgroup {
     background: rgba(57, 197, 255, 0.14);
     color: var(--color-brand-bright);
     font-weight: 600;
+}
+
+/* ── Custom File Input Component ──────────────────── */
+.cf-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 3.35rem;
+    padding: 0.5rem 0.55rem;
+    border: 1px solid rgba(100, 223, 255, 0.18);
+    border-radius: 16px;
+    background: var(--color-input);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.cf-wrap:hover,
+.cf-wrap.is-focus {
+    border-color: rgba(143, 235, 255, 0.42);
+    background: rgba(7, 12, 28, 0.98);
+    box-shadow: 0 0 0 4px rgba(57, 197, 255, 0.1);
+}
+
+.cf-wrap.has-file .cf-name {
+    color: var(--color-text);
+}
+
+.cf-trigger {
+    flex-shrink: 0;
+    min-height: 2.3rem;
+    padding: 0.55rem 0.95rem;
+    border: 1px solid rgba(143, 235, 255, 0.18);
+    border-radius: 12px;
+    background:
+        linear-gradient(180deg, rgba(143, 235, 255, 0.14), rgba(57, 197, 255, 0.1)),
+        rgba(9, 15, 34, 0.92);
+    color: #eef8ff;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.cf-trigger:hover {
+    border-color: rgba(143, 235, 255, 0.34);
+    background:
+        linear-gradient(180deg, rgba(143, 235, 255, 0.18), rgba(57, 197, 255, 0.14)),
+        rgba(9, 15, 34, 0.96);
+    transform: translateY(-1px);
+}
+
+.cf-name {
+    min-width: 0;
+    flex: 1;
+    color: var(--color-muted);
+    font-size: 0.92rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cf-native {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    white-space: nowrap !important;
 }
 
 input:focus,
@@ -758,7 +876,16 @@ textarea:focus {
 }
 
 .upload-icon {
-    font-size: 1.45rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-icon img {
+    width: 1.8rem;
+    height: 1.8rem;
+    object-fit: contain;
+    display: block;
 }
 
 .upload-box small {
@@ -837,6 +964,13 @@ textarea:focus {
     justify-content: center;
     font-size: 1.45rem;
     margin-bottom: 0.75rem;
+}
+
+.file-preview img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+    display: block;
 }
 
 .file-name {
@@ -1498,11 +1632,17 @@ tbody tr:hover {
     font-size: 0.8rem;
     color: var(--color-muted);
     min-height: auto;
-    padding: 0;
-    border: none;
-    background: transparent;
-    box-shadow: none;
     width: auto;
+}
+
+.upload-card .cf-wrap,
+.upload-box .cf-wrap,
+.file-replace-label .cf-wrap {
+    margin-top: 0.35rem;
+}
+
+.upload-box .cf-wrap {
+    background: rgba(4, 10, 24, 0.72);
 }
 
 .upload-card-date-label {
@@ -1749,6 +1889,19 @@ tbody tr:hover {
     transition: color 0.14s, background 0.14s;
 }
 
+.topnav__dropdown-link--icon {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.topnav__dropdown-icon {
+    width: 1.05rem;
+    height: 1.05rem;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 .topnav__dropdown-link:hover {
     color: #fff;
     background: rgba(57, 197, 255, 0.1);
@@ -1929,6 +2082,13 @@ tbody tr:hover {
     padding: 2rem;
 }
 
+.home-hero__placeholder-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: contain;
+    display: block;
+}
+
 /* ── Feature cards ──────────────────────────────────────── */
 
 .home-features {
@@ -1982,8 +2142,22 @@ tbody tr:hover {
 }
 
 .home-feature-card__icon {
-    font-size: 1.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     line-height: 1;
+}
+
+.home-feature-card__icon img {
+    width: 1.85rem;
+    height: 1.85rem;
+    object-fit: contain;
+    display: block;
+}
+
+.home-feature-card__icon--group img {
+    width: 1.45rem;
+    height: 1.45rem;
 }
 
 .home-feature-card h3 {

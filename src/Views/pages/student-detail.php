@@ -7,7 +7,12 @@ use MetaMyKad\Core\Auth;
 
 $isOwner = Auth::check() && (int) Auth::user()['id'] === (int) $student['student_id'];
 
-$fileIcons = ['photo' => '🖼️', 'audio' => '🎵', 'pdf' => '📄', 'video' => '🎬'];
+$fileIcons = [
+    'photo' => asset('images/nav/replace-image.png'),
+    'audio' => asset('images/nav/replace-audio.png'),
+    'pdf'   => asset('images/nav/replace-pdf.png'),
+    'video' => asset('images/nav/replace-video.png'),
+];
 
 function fmt_bytes(int $bytes): string {
     if ($bytes >= 1048576) return round($bytes / 1048576, 1) . ' MB';
@@ -171,7 +176,13 @@ foreach ($files as $f) {
                     </div>
                 </div>
             <?php else: ?>
-                <div class="file-preview"><?= $fileIcons[$file['file_type']] ?? '📁' ?></div>
+                <div class="file-preview">
+                    <?php if (!empty($fileIcons[$file['file_type']])): ?>
+                        <img src="<?= e($fileIcons[$file['file_type']]) ?>" alt="" aria-hidden="true">
+                    <?php else: ?>
+                        <span>FILE</span>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
 
             <div class="file-name"><?= e($file['filename']) ?></div>
@@ -260,7 +271,13 @@ if (!empty($missingTypes)): ?>
     <div class="upload-grid">
         <?php foreach ($missingTypes as $type): ?>
         <div class="upload-box">
-            <span style="font-size:1.5rem;"><?= $fileIcons[$type] ?? '📁' ?></span>
+            <span class="upload-icon">
+                <?php if (!empty($fileIcons[$type])): ?>
+                    <img src="<?= e($fileIcons[$type]) ?>" alt="" aria-hidden="true">
+                <?php else: ?>
+                    <span>FILE</span>
+                <?php endif; ?>
+            </span>
             <p><?= ucfirst($type) ?></p>
             <input type="file" name="<?= e($type) ?>" form="student-update-form" style="margin-top:0.5rem;">
         </div>

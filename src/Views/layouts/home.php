@@ -27,9 +27,24 @@ $currentPath = current_path();
                     Search <span class="topnav__caret">&#x25BE;</span>
                 </button>
                 <ul class="topnav__dropdown" id="topnav-search-dd">
-                    <li><a href="<?= e(url('/search-attribute')) ?>" class="topnav__dropdown-link">&#x1F9ED; ABR Search</a></li>
-                    <li><a href="<?= e(url('/search-text')) ?>" class="topnav__dropdown-link">&#x1F4C4; TBR Search</a></li>
-                    <li><a href="<?= e(url('/search-content')) ?>" class="topnav__dropdown-link">&#x1F39E; CBR Search</a></li>
+                    <li>
+                        <a href="<?= e(url('/search-attribute')) ?>" class="topnav__dropdown-link topnav__dropdown-link--icon">
+                            <img src="<?= e(asset('images/nav/abr.png')) ?>" alt="" aria-hidden="true" class="topnav__dropdown-icon">
+                            <span>ABR Search</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?= e(url('/search-text')) ?>" class="topnav__dropdown-link topnav__dropdown-link--icon">
+                            <img src="<?= e(asset('images/nav/tbr.png')) ?>" alt="" aria-hidden="true" class="topnav__dropdown-icon">
+                            <span>TBR Search</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?= e(url('/search-content')) ?>" class="topnav__dropdown-link topnav__dropdown-link--icon">
+                            <img src="<?= e(asset('images/nav/cbr.png')) ?>" alt="" aria-hidden="true" class="topnav__dropdown-icon">
+                            <span>CBR Search</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li><a href="<?= e(url('/history')) ?>" class="topnav__link">History</a></li>
@@ -74,6 +89,7 @@ $currentPath = current_path();
 </div>
 <script src="<?= e(asset('js/fetch.js')) ?>"></script>
 <script src="<?= e(asset('js/validate.js')) ?>"></script>
+<script src="<?= e(asset('js/file-input.js')) ?>"></script>
 <script src="<?= e(asset('js/app.js')) ?>"></script>
 <script>
 (function () {
