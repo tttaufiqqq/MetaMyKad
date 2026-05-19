@@ -11,7 +11,7 @@
     <h2>Content-Based Retrieval</h2>
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-content')) ?>">
         <input type="hidden" name="_search" value="1">
-        <div>
+        <div class="form-group">
             <label for="photo_category">Photo Category</label>
             <select id="photo_category" name="photo_category">
                 <option value="">Any</option>
@@ -19,7 +19,7 @@
                 <option value="non_formal" <?= ($photoCategory ?? '') === 'non_formal' ? 'selected' : '' ?>>Non-formal</option>
             </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="dominant_expression">Dominant Expression</label>
             <select id="dominant_expression" name="dominant_expression">
                 <option value="">Any</option>
@@ -32,7 +32,7 @@
                 <option value="disgusted" <?= ($dominantExpression ?? '') === 'disgusted' ? 'selected' : '' ?>>Disgusted</option>
             </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="audio_duration_tier">Audio Duration Tier</label>
             <select id="audio_duration_tier" name="audio_duration_tier">
                 <option value="">Any</option>
@@ -41,7 +41,7 @@
                 <option value="long"   <?= ($audioDurationTier ?? '') === 'long'   ? 'selected' : '' ?>>Long</option>
             </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="video_resolution_tier">Video Resolution Tier</label>
             <select id="video_resolution_tier" name="video_resolution_tier">
                 <option value="">Any</option>
@@ -51,14 +51,14 @@
                 <option value="UHD" <?= ($videoResolutionTier ?? '') === 'UHD' ? 'selected' : '' ?>>UHD</option>
             </select>
         </div>
-        <div class="full-span">
+        <div class="form-actions full-span">
             <button class="button" type="submit">Search Content</button>
         </div>
     </form>
 </section>
 
 <?php if (!empty($activeFilters)): ?>
-<div class="card" style="padding:0.75rem 1rem; margin-bottom:var(--space-2);">
+<div class="card filter-summary">
     <p class="text-dim" style="font-size:0.78rem;">
         Active filters:
         <strong><?= e(implode(', ', array_map(fn($k, $v) => "$k = $v", array_keys($activeFilters), array_values($activeFilters)))) ?></strong>

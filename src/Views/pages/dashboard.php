@@ -37,8 +37,8 @@
     </article>
 </section>
 
-<div style="display:grid; grid-template-columns:1fr 2fr; gap:var(--space-2); margin-bottom:var(--space-3);">
-    <section class="table-card" style="margin-bottom:0;">
+<div class="dashboard-grid">
+    <section class="table-card">
         <h3>Badge Distribution</h3>
         <?php if (empty($badgeRows)): ?>
             <p class="muted" style="padding:1rem;">No data yet.</p>
@@ -62,7 +62,7 @@
         <?php endif; ?>
     </section>
 
-    <section class="table-card" style="margin-bottom:0;">
+    <section class="table-card">
         <h3>Recent Registrations</h3>
         <?php if (empty($recentRows)): ?>
             <p class="muted" style="padding:1rem;">No students registered yet.</p>

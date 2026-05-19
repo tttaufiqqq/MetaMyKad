@@ -1,10 +1,10 @@
 <section class="hero">
     <p class="eyebrow">System Overview</p>
-    <h2>MetaMyKad now uses the template visual language inside the PHP frontend.</h2>
+    <h2>MetaMyKad now runs with a custom registry console built for search-heavy coursework.</h2>
     <p>
         Requests now enter through <code>public/index.php</code>, resolve through
         <code>config/routes.php</code>, then render views from <code>src/Views</code> with the
-        dark teal dashboard style ported from the template.
+        shared UI shell that ties registration, retrieval, and monitoring into one visual system.
     </p>
     <div class="hero-actions">
         <a class="button" href="<?= e(url('/register')) ?>">Open registration form</a>

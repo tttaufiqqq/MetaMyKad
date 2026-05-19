@@ -16,6 +16,10 @@
                 <input id="ic_number" name="ic_number" type="text" maxlength="12" required value="<?= e((string) old('ic_number')) ?>">
             </div>
             <div class="form-group">
+                <label for="passport_number">Passport Number (International Student)</label>
+                <input id="passport_number" name="passport_number" type="text" value="<?= e((string) old('passport_number')) ?>">
+            </div>
+            <div class="form-group">
                 <label for="matric_number">Matric Number</label>
                 <input id="matric_number" name="matric_number" type="text" required value="<?= e((string) old('matric_number')) ?>">
             </div>
@@ -31,7 +35,7 @@
                 <input id="phone" name="phone" type="text" required value="<?= e((string) old('phone')) ?>">
             </div>
             <div class="form-group">
-                <label for="email">Institutional Or Personal Email</label>
+                <label for="email">Email</label>
                 <input id="email" name="email" type="email" required value="<?= e((string) old('email')) ?>">
             </div>
             <div class="feedback-box">

@@ -12,7 +12,7 @@
     <h2>Attribute-Based Retrieval</h2>
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-attribute')) ?>">
         <input type="hidden" name="_search" value="1">
-        <div>
+        <div class="form-group">
             <label for="gender">Gender</label>
             <select id="gender" name="gender">
                 <option value="">Any</option>
@@ -20,11 +20,11 @@
                 <option value="F" <?= ($gender ?? '') === 'F' ? 'selected' : '' ?>>Female</option>
             </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="state_of_birth">State Of Birth</label>
             <input id="state_of_birth" name="state_of_birth" type="text" value="<?= e($stateOfBirth ?? '') ?>" placeholder="e.g. Selangor">
         </div>
-        <div>
+        <div class="form-group">
             <label for="email_category">Email Category</label>
             <select id="email_category" name="email_category">
                 <option value="">Any</option>
@@ -33,7 +33,7 @@
                 <option value="work"     <?= ($emailCategory ?? '') === 'work'     ? 'selected' : '' ?>>Work</option>
             </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="badge">Badge</label>
             <select id="badge" name="badge">
                 <option value="">Any</option>
@@ -44,7 +44,7 @@
                 <option value="Cemerlang" <?= ($badge ?? '') === 'Cemerlang' ? 'selected' : '' ?>>Cemerlang</option>
             </select>
         </div>
-        <div>
+        <div class="form-group">
             <label for="file_type">File Type</label>
             <select id="file_type" name="file_type">
                 <option value="">Any</option>
@@ -54,14 +54,14 @@
                 <option value="video" <?= ($fileType ?? '') === 'video' ? 'selected' : '' ?>>Video</option>
             </select>
         </div>
-        <div style="display:flex; align-items:flex-end;">
+        <div class="form-actions">
             <button class="button" type="submit">Search</button>
         </div>
     </form>
 </section>
 
 <?php if (!empty($activeFilters)): ?>
-<div class="card" style="padding:0.75rem 1rem; margin-bottom:var(--space-2);">
+<div class="card filter-summary">
     <p class="text-dim" style="font-size:0.78rem;">
         Active filters:
         <strong><?= e(implode(', ', array_map(fn($k, $v) => "$k = $v", array_keys($activeFilters), array_values($activeFilters)))) ?></strong>
