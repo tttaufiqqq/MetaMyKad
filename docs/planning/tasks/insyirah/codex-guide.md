@@ -121,3 +121,34 @@ Tell it exactly what is wrong. Example:
 > The backend is already complete and passes real results into the view.
 > Only improve the filter layout, result table presentation, and make sure filter
 > values repopulate after submit."
+
+---
+
+## Future Replica Prompt: `/search-attribute` and `/search-text`
+
+If Insyirah needs to rebuild these pages from scratch in a new Codex session, use this exact prompt:
+
+> "Build the ABR and TBR search pages in the existing pure PHP app based on
+> `docs/pages/browse/search-attribute.md`, `docs/pages/browse/search-text.md`,
+> and `docs/implementation/system-design/06-retrieval-and-search-contracts.md`.
+> Keep it in the current architecture and visual system.
+>
+> Implement exactly these files:
+> - `src/Views/pages/search-attribute.php`
+> - `src/Views/pages/search-text.php`
+>
+> Exact behavior for search-attribute.php:
+> - GET form with filters: gender, state, age range, file type present
+> - Filter values must persist in the form after submit
+> - Results table shows: full name, IC number, state, gender, badge, file types present
+> - Empty results state must be visible and not a blank table
+>
+> Exact behavior for search-text.php:
+> - GET form with: keyword input, optional tag filter
+> - MATCH AGAINST fulltext search is handled by backend — do not replicate it in JS
+> - Filter values must persist in the form after submit
+> - Results table shows: file name, student name, file type, extracted text excerpt
+> - Empty results state must be visible
+>
+> Stay in PHP/CSS only. Do not move search logic into JavaScript.
+> Do not change routes, backend expectations, or PHP variable names."
