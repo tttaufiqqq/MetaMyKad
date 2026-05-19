@@ -488,6 +488,20 @@ textarea::placeholder {
     color: rgba(157, 176, 211, 0.65);
 }
 
+input:not([type="password"]):not([type="file"]):not([type="date"]):not([type="email"]),
+textarea {
+    text-transform: uppercase;
+}
+
+input:not([type="password"]):not([type="file"]):not([type="date"]):not([type="email"])::placeholder,
+textarea::placeholder {
+    text-transform: uppercase;
+}
+
+.cs-value {
+    text-transform: uppercase;
+}
+
 input[type="file"] {
     min-height: auto;
 }
