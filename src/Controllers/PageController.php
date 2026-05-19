@@ -8,7 +8,7 @@ final class PageController extends BaseController
 {
     public function home(): void
     {
-        $this->render('home', ['pageTitle' => 'Home']);
+        $this->render('home', ['pageTitle' => 'Home', 'layout' => 'home']);
     }
 
     public function register(): void

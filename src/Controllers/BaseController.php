@@ -11,8 +11,10 @@ abstract class BaseController
     protected function render(string $view, array $data = []): void
     {
         $contentView = src_path('Views/pages/' . $view . '.php');
+        $layout = $data['layout'] ?? 'main';
+        unset($data['layout']);
         extract($data, EXTR_SKIP);
-        require src_path('Views/layouts/main.php');
+        require src_path('Views/layouts/' . $layout . '.php');
     }
 
     protected function redirect(string $path): never
