@@ -102,13 +102,6 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                 <p class="eyebrow">BITP3353 Multimedia Database</p>
                 <h1 class="page-title"><?= e($pageTitle) ?></h1>
             </div>
-            <div class="header-meta">
-                <span class="status-chip">Live Console</span>
-                <div class="badge-display">
-                    <span class="badge-label">Current Rank</span>
-                    <span class="current-badge"><?= e((string) $currentBadge) ?></span>
-                </div>
-            </div>
         </header>
         <main class="content">
             <?php require src_path('Views/partials/toast.php'); ?>
