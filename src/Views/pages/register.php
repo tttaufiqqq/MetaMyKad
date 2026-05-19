@@ -46,26 +46,18 @@
             <div class="upload-card">
                 <span class="upload-card-label">Photo (Image):</span>
                 <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png">
-                <span class="upload-card-date-label">Original Created Date:</span>
-                <input type="date" name="photo_date" value="<?= e((string) old('photo_date')) ?>">
             </div>
             <div class="upload-card">
                 <span class="upload-card-label">Document (PDF):</span>
                 <input id="pdf" name="pdf" type="file" accept=".pdf">
-                <span class="upload-card-date-label">Original Created Date:</span>
-                <input type="date" name="pdf_date" value="<?= e((string) old('pdf_date')) ?>">
             </div>
             <div class="upload-card">
                 <span class="upload-card-label">Audio (MP3):</span>
                 <input id="audio" name="audio" type="file" accept=".mp3,.wav">
-                <span class="upload-card-date-label">Original Created Date:</span>
-                <input type="date" name="audio_date" value="<?= e((string) old('audio_date')) ?>">
             </div>
             <div class="upload-card">
                 <span class="upload-card-label">Video (MP4):</span>
                 <input id="video" name="video" type="file" accept=".mp4,.mov,.avi">
-                <span class="upload-card-date-label">Original Created Date:</span>
-                <input type="date" name="video_date" value="<?= e((string) old('video_date')) ?>">
             </div>
         </div>
 
