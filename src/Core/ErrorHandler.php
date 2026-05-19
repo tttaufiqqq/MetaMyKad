@@ -19,14 +19,24 @@ final class ErrorHandler
     public static function handleException(Throwable $exception): void
     {
         $logPath = storage_path('logs/app.log');
-        $line = sprintf(
-            "[%s] %s in %s:%d\n",
+        $entry   = sprintf(
+            "[%s] [%s] %s in %s:%d\nStack trace:\n%s\n---\n",
             date('Y-m-d H:i:s'),
+            get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),
-            $exception->getLine()
+            $exception->getLine(),
+            $exception->getTraceAsString()
         );
-        file_put_contents($logPath, $line, FILE_APPEND);
+
+        $logsDir = storage_path('logs');
+        if (!is_dir($logsDir)) {
+            mkdir($logsDir, 0755, true);
+        }
+        file_put_contents($logPath, $entry, FILE_APPEND);
+
+        $debug     = (bool) filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $errorCode = $exception->getCode();
 
         http_response_code(500);
         require src_path('Views/errors/500.php');
