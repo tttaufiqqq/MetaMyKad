@@ -40,4 +40,12 @@ final class FileMetadata extends BaseModel
         );
         $stmt->execute(['text' => $text, 'id' => $id]);
     }
+
+    public function updateOriginalDate(int $id, string $date): void
+    {
+        $stmt = Database::connection()->prepare(
+            'UPDATE file_metadata SET original_date = :date WHERE id = :id'
+        );
+        $stmt->execute(['date' => $date, 'id' => $id]);
+    }
 }
