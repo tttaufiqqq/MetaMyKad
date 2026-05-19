@@ -15,6 +15,14 @@
                 <label for="ic_number">Malaysian IC Number (12 Digits)</label>
                 <input id="ic_number" name="ic_number" type="text" maxlength="12" required value="<?= e((string) old('ic_number')) ?>">
             </div>
+            <div class="form-group">
+                <label for="matric_number">Matric Number</label>
+                <input id="matric_number" name="matric_number" type="text" required value="<?= e((string) old('matric_number')) ?>">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" required minlength="8">
+            </div>
             <div class="feedback-box">
                 The backend will derive date of birth, gender, state of birth, and age from the IC number.
             </div>
