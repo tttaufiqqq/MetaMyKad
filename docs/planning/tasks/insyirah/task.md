@@ -7,25 +7,36 @@
 - [TBR page spec](../../../pages/browse/search-text.md)
 - [Retrieval contracts](../../../implementation/system-design/06-retrieval-and-search-contracts.md)
 
-Status: Draft  
+Status: Active
 Type: Ownership guide
 
 ## Role
 
 You own the frontend pages for:
 
-- attribute-based retrieval
-- text-based retrieval
+- attribute-based retrieval (ABR)
+- text-based retrieval (TBR)
 
-## Wait Rule
+## Current State
 
-Do not do real backend integration until Taufiq Phase 3 is complete.
+Both pages are already built and wired to live backend data:
 
-Before that, you may:
+- `src/Views/pages/search-attribute.php` — real: ABR filter form + results table
+- `src/Views/pages/search-text.php` — real: TBR keyword form + results table
 
-- refine search form layouts
-- refine results table layouts
-- make filter state and empty state clear
+## What To Do Now
+
+The backend is fully complete. Your job is to review and polish these pages.
+
+- Verify all ABR filter fields match what the backend accepts (gender, state, age range, file type)
+- Verify TBR keyword input and optional tag filter work correctly
+- Check that results tables show the right columns clearly
+- Ensure empty results state (no matches found) is handled and not blank or broken
+- Check that filter values are preserved in the form after a search (no wiping inputs on submit)
+- Read the page specs and retrieval contracts to confirm nothing is missing:
+  - `docs/pages/browse/search-attribute.md`
+  - `docs/pages/browse/search-text.md`
+  - `docs/implementation/system-design/06-retrieval-and-search-contracts.md`
 
 ## Files You Will Mainly Touch
 
@@ -35,6 +46,8 @@ Before that, you may:
 
 ## Done Means
 
-- filters are understandable
-- results layout can handle real result sets
+- filters are understandable and labelled clearly
+- filter values persist in the form after a search
+- results layout handles real result sets including many rows
+- empty state is visible and not just a blank table
 - page structure matches the backend search contract without reinvention

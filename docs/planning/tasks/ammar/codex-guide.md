@@ -14,10 +14,10 @@ PULL THE REPO
 Read docs/README.md  ->  find your task file
      |
      v
-Read ammar-frontend-registration-and-detail-pages.md
+Read task.md
   - role
-  - wait rule
-  - files you mainly touch
+  - current state
+  - what to do now
      |
      v
 Open Codex
@@ -26,52 +26,62 @@ Open Codex
 +------------------------------------------------------+
 | STEP 1 - Paste these files into Codex               |
 |                                                      |
-| docs/pages/registration/registration-form.md               |
-| docs/pages/registration/re-registration.md                 |
-| docs/pages/browse/student-detail.md                   |
-| docs/pages/_shared/design-system.md                  |
-| docs/pages/_shared/notes-for-all-members.md          |
-| docs/pages/_shared/template-audit.md                 |
-| docs/planning/frontend-template-integration-plan.md  |
-| src/Views/layouts/main.php                           |
-| src/Views/pages/register.php                         |
-| src/Views/pages/re-register.php                      |
-| src/Views/pages/student-detail.php                   |
-| public/assets/css/tokens.css                         |
-| public/assets/css/components.css                     |
+| docs/pages/registration/registration-form.md        |
+| docs/pages/registration/re-registration.md          |
+| docs/pages/_shared/design-system.md                 |
+| docs/pages/_shared/notes-for-all-members.md         |
+| docs/pages/_shared/feedback-and-dialogs.md          |
+| src/Views/layouts/main.php                          |
+| src/Views/partials/csrf.php                         |
+| src/Views/partials/toast.php                        |
+| src/Views/pages/register.php                        |
+| src/Views/pages/re-register.php                     |
+| public/assets/css/tokens.css                        |
+| public/assets/css/components.css                    |
 +---------------------------+--------------------------+
                             |
                             v
 +------------------------------------------------------+
 | STEP 2 - Paste the implementation prompt            |
 |                                                      |
-| "Update only the PHP frontend pages for             |
-|  registration, re-registration, and student detail. |
-|  Keep the project pure PHP. Reuse the imported      |
-|  template style already present in public/assets/css |
-|  and do not introduce React, Vite, Node, or backend |
-|  changes.                                           |
+| "Build the PHP view for register.php and            |
+|  re-register.php. Both are currently stubs with     |
+|  only a card heading and no form. Replace them      |
+|  with complete working forms.                       |
 |                                                      |
-|  Focus on:                                          |
-|  - clearer form grouping                            |
-|  - better upload tile presentation                  |
-|  - cleaner derived-feedback areas                   |
-|  - stronger metadata-card layout on detail page     |
-|  - mobile-friendly spacing                          |
+|  The backend is already complete. Write views that  |
+|  connect to it exactly as-is. Do not change any    |
+|  backend files, routes, or field names.             |
+|                                                      |
+|  For register.php:                                  |
+|  - POST action="/register" method="post"            |
+|  - Include CSRF: <?php include partial('csrf'); ?>  |
+|  - Fields: ic_number, full_name, phone, email,      |
+|    matric_number, password                          |
+|  - Optional file inputs: photo, audio, pdf, video   |
+|  - Repopulate fields from $_SESSION['_old'] on      |
+|    validation failure                               |
+|  - Show flash error at top if present               |
+|                                                      |
+|  For re-register.php:                               |
+|  - Same form but add hidden: name=mode value=update |
+|  - No matric_number or password fields              |
+|  - Prefill ic_number from $_GET['ic'] if present    |
+|                                                      |
+|  Keep project pure PHP. Reuse existing CSS classes. |
+|  Do not introduce React, Vite, or Node.             |
 |                                                      |
 |  Edit only:                                         |
 |  - src/Views/pages/register.php                     |
 |  - src/Views/pages/re-register.php                  |
-|  - src/Views/pages/student-detail.php               |
-|  - public/assets/css/components.css if needed       |
+|  - public/assets/css/components.css if truly needed |
 |                                                      |
-|  Do not touch backend files. Do not rename routes.  |
-|  Do not change form actions. Do not invent new      |
-|  backend fields. Update existing files only."       |
+|  Do not touch: backend files, routes, controllers,  |
+|  student-detail.php (already done)."                |
 +---------------------------+--------------------------+
                             |
                             v
-Codex generates updated PHP view files and optional CSS refinement
+Codex generates the PHP view files and optional CSS refinement
      |
      v
 VERIFY before copying the code
@@ -80,7 +90,7 @@ VERIFY before copying the code
 Copy code into repo files
      |
      v
-Open the PHP app and check register, re-register, and detail pages
+Open the PHP app and test register and re-register pages end to end
      |
      v
 git add -> git commit -> push your branch
@@ -90,12 +100,15 @@ git add -> git commit -> push your branch
 
 ## Verify Before Accepting Codex Output
 
-- `register.php`, `re-register.php`, and `student-detail.php` stay in PHP view format
+- `register.php` and `re-register.php` are PHP views with real working forms, not stubs
+- CSRF partial is included in both forms
+- form action is `action="/register"` — not changed, not invented
+- `register.php` includes: ic_number, full_name, phone, email, matric_number, password, and file inputs
+- `re-register.php` has hidden `mode=update`, no matric_number or password fields
+- fields repopulate from `$_SESSION['_old']` on validation failure
 - no React, JSX, TSX, or Vite code appears anywhere
-- form actions stay exactly as they are now
 - no backend file under `src/Core/`, `src/Models/`, `database/`, or `config/` is changed
-- upload boxes remain visual only unless Taufiq has already provided real upload behavior
-- detail page still supports delete confirmation flow without changing the backend route
+- `student-detail.php` is not touched (it is already done)
 
 ---
 
@@ -104,8 +117,9 @@ git add -> git commit -> push your branch
 | Codex default | Must be |
 |---|---|
 | Rebuild page in React | Stay in `src/Views/pages/*.php` |
-| Add frontend-only fake business logic | Backend truth belongs to Taufiq |
-| Rename routes or form actions | Keep current PHP routes exactly |
+| Invent new backend fields or routes | Use only what the backend already expects |
+| Rename routes or form actions | `action="/register"` — exactly as-is |
+| Build modal/JS validation instead of server-side | Server already validates; just display flash + repopulate |
 | Replace the shared shell | Build inside the current shared shell |
 | Add Node dependencies | Forbidden |
 
@@ -116,4 +130,5 @@ git add -> git commit -> push your branch
 Tell it exactly what is wrong. Example:
 
 > "Keep this as a PHP view, not React. Do not change the form action or backend fields.
-> Please only improve the layout and reuse the current template-based CSS direction."
+> The backend is already complete — I only need the view layer. Do not add JS validation logic;
+> server validation is already handled. Just build the form markup and repopulate from _old."

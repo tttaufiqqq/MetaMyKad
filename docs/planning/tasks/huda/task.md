@@ -6,7 +6,7 @@
 - [Dashboard page spec](../../../pages/browse/dashboard.md)
 - [History page spec](../../../pages/browse/history.md)
 
-Status: Draft  
+Status: Active
 Type: Ownership guide
 
 ## Role
@@ -16,15 +16,25 @@ You own the frontend pages for:
 - dashboard
 - registration history
 
-## Wait Rule
+## Current State
 
-Do not do real backend integration until Taufiq Phase 3 is complete.
+Both pages are already built and wired to live backend data:
 
-Before that, you may:
+- `src/Views/pages/dashboard.php` — real: metric cards, badge distribution table, recent registrations
+- `src/Views/pages/history.php` — real: registration history table with student name join
 
-- improve card layout
-- improve table layout
-- prepare empty and no-data states
+## What To Do Now
+
+The backend is fully complete. Your job is to review and polish these pages.
+
+- Verify metric cards display correctly with real data
+- Check that the badge distribution table is easy to read
+- Check that history rows are readable and the table handles many rows well
+- Ensure empty states (no registrations yet, no history) are handled gracefully
+- Check mobile/narrow layout if applicable
+- Read the page specs to confirm nothing is missing from the design:
+  - `docs/pages/browse/dashboard.md`
+  - `docs/pages/browse/history.md`
 
 ## Files You Will Mainly Touch
 
@@ -36,4 +46,5 @@ Before that, you may:
 
 - dashboard metrics are easy to scan
 - history rows are readable on desktop and mobile
-- both pages can consume real backend-backed data without structural rewrites
+- empty/no-data states are handled and not blank or broken
+- pages match the spec without inventing new backend behavior

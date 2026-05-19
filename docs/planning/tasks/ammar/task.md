@@ -7,7 +7,7 @@
 - [Re-registration page spec](../../../pages/registration/re-registration.md)
 - [Student detail page spec](../../../pages/browse/student-detail.md)
 
-Status: Draft  
+Status: Active
 Type: Ownership guide
 
 ## Role
@@ -18,29 +18,42 @@ You own the frontend pages for:
 - re-registration
 - student detail
 
-## Wait Rule
+## Current State
 
-Do not do real backend integration until:
+- `src/Views/pages/register.php` — **STUB** (card heading only, no form) — your main task
+- `src/Views/pages/re-register.php` — **STUB** (card heading only, no form) — your second task
+- `src/Views/pages/student-detail.php` — already real and wired to live data, no rebuild needed
 
-- Taufiq Phase 1 is complete for registration and re-registration
-- Taufiq Phase 3 is complete for student detail data
+## What To Do Now
 
-Before that, you may:
+The backend is fully complete. You can integrate directly — no waiting.
 
-- improve page layout
-- improve form grouping
-- improve validation presentation
-- prepare non-destructive UI polish
+**For `register.php`:**
+- Build the full registration form (POST to `/register`)
+- Fields: `ic_number`, `full_name`, `phone`, `email`, `matric_number`, `password`, plus optional file inputs for `photo`, `audio`, `pdf`, `video`
+- Include the CSRF partial: `<?php include partial('csrf'); ?>`
+- Show flash error messages at the top of the form
+- Repopulate fields from `$_SESSION['_old']` on validation failure (the backend sets this automatically)
+- Read the page spec: `docs/pages/registration/registration-form.md`
+
+**For `re-register.php`:**
+- Same form structure but with `<input type="hidden" name="mode" value="update">`
+- POST also goes to `/register` (same route, backend detects mode)
+- No `matric_number` or `password` fields needed (backend skips them in update mode)
+- Read the page spec: `docs/pages/registration/re-registration.md`
+
+**For `student-detail.php`:**
+- Already done. Review it for UI consistency only if needed.
 
 ## Files You Will Mainly Touch
 
 - `src/Views/pages/register.php`
 - `src/Views/pages/re-register.php`
-- `src/Views/pages/student-detail.php`
 - shared CSS files in `public/assets/css/` if needed
 
 ## Done Means
 
-- forms are clear and usable
-- derived result messages fit the backend behavior
-- detail page can show identity, derived metadata, files, and delete actions cleanly
+- registration form submits correctly and shows field errors on failure
+- re-registration form prefills IC if passed in query string, omits matric/password fields
+- flash messages (success and error) are visible and styled
+- file inputs are clearly labelled with accepted types

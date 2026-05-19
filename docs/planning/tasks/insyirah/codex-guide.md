@@ -14,10 +14,10 @@ PULL THE REPO
 Read docs/README.md  ->  find your task file
      |
      v
-Read insyirah-frontend-abr-and-tbr-pages.md
+Read task.md
   - role
-  - wait rule
-  - files you mainly touch
+  - current state
+  - what to do now
      |
      v
 Open Codex
@@ -43,15 +43,20 @@ Open Codex
 +------------------------------------------------------+
 | STEP 2 - Paste the implementation prompt            |
 |                                                      |
-| "Update only the ABR and TBR pages in the current  |
-|  PHP frontend. Reuse the imported template filter   |
-|  and results-table styling. Keep the project pure   |
-|  PHP and do not change backend logic.               |
+| "Review and polish the ABR and TBR search pages.   |
+|  Both are already built and wired to live backend   |
+|  data. Do not rebuild them from scratch.            |
+|                                                      |
+|  The backend is complete. Do not change backend     |
+|  files, routes, controllers, or SQL.                |
 |                                                      |
 |  Focus on:                                          |
-|  - clearer filter grouping                          |
+|  - clearer filter grouping and labelling            |
 |  - stronger visual distinction between filters and  |
-|    results                                          |
+|    results area                                     |
+|  - filter values must persist in the form after    |
+|    a search (do not wipe inputs on submit)          |
+|  - empty results state must be visible and clear   |
 |  - compact, readable result tables                 |
 |  - filter-state friendliness on mobile              |
 |                                                      |
@@ -62,7 +67,8 @@ Open Codex
 |                                                      |
 |  Do not invent new search fields beyond the docs.   |
 |  Do not change routes, backend expectations, or     |
-|  move search logic into JavaScript."                |
+|  move search logic into JavaScript. The existing    |
+|  PHP variables are correct — only improve display." |
 +---------------------------+--------------------------+
                             |
                             v
@@ -86,11 +92,12 @@ git add -> git commit -> push your branch
 ## Verify Before Accepting Codex Output
 
 - pages remain PHP views
-- filters match the documented ABR and TBR contracts only
-- no new backend expectations are invented
+- filters match the documented ABR and TBR contracts only — no new fields invented
+- filter values are repopulated in the form after a search (not wiped)
+- empty results state is shown clearly, not a blank area
 - no React/Vite/Node code appears
 - no backend files are touched
-- results tables remain ready for real query results from Taufiq
+- results tables use the existing PHP variables the controller already passes
 
 ---
 
@@ -98,9 +105,10 @@ git add -> git commit -> push your branch
 
 | Codex default | Must be |
 |---|---|
-| Add extra filters not in the docs | Stay aligned with retrieval contracts |
-| Put search logic in frontend JS | Backend search belongs to Taufiq |
+| Add extra filters not in the docs | Stay aligned with retrieval contracts exactly |
+| Put search logic in frontend JS | Backend search is complete — do not duplicate it |
 | Replace PHP views with SPA-style code | Stay in PHP |
+| Wipe filter form after submit | Filter values must persist across the round-trip |
 | Rewrite shared shell | Keep current template-based shell |
 
 ---
@@ -110,4 +118,6 @@ git add -> git commit -> push your branch
 Tell it exactly what is wrong. Example:
 
 > "Keep this inside the current PHP views. Do not move search logic into JavaScript.
-> Only improve the filter layout and result table presentation."
+> The backend is already complete and passes real results into the view.
+> Only improve the filter layout, result table presentation, and make sure filter
+> values repopulate after submit."

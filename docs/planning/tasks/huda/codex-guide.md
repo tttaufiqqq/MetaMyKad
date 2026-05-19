@@ -14,10 +14,10 @@ PULL THE REPO
 Read docs/README.md  ->  find your task file
      |
      v
-Read huda-frontend-dashboard-and-history.md
+Read task.md
   - role
-  - wait rule
-  - files you mainly touch
+  - current state
+  - what to do now
      |
      v
 Open Codex
@@ -43,16 +43,18 @@ Open Codex
 +------------------------------------------------------+
 | STEP 2 - Paste the implementation prompt            |
 |                                                      |
-| "Update only the dashboard and history pages in the |
-|  current PHP frontend. Reuse the imported template  |
-|  dashboard style. Keep the app pure PHP and do not  |
-|  introduce React, Vite, or backend changes.         |
+| "Review and polish the dashboard and history pages. |
+|  Both are already built and wired to live backend   |
+|  data. Do not rebuild them from scratch.            |
+|                                                      |
+|  The backend is complete. Do not change backend     |
+|  files, routes, controllers, or SQL.                |
 |                                                      |
 |  Focus on:                                          |
 |  - stronger metric card hierarchy                   |
 |  - better table readability                         |
 |  - clearer recent activity / history presentation   |
-|  - empty-state and placeholder polish               |
+|  - empty-state handling (no data yet shown clearly) |
 |  - mobile-friendly spacing                          |
 |                                                      |
 |  Edit only:                                         |
@@ -60,8 +62,10 @@ Open Codex
 |  - src/Views/pages/history.php                      |
 |  - public/assets/css/components.css if needed       |
 |                                                      |
-|  Do not change backend contracts, route names, or   |
-|  SQL expectations. Update existing files only."     |
+|  Do not change variable names, backend contracts,   |
+|  route names, or SQL expectations. The existing     |
+|  PHP variables passed to the view are correct —     |
+|  only improve how they are displayed."              |
 +---------------------------+--------------------------+
                             |
                             v
@@ -87,9 +91,10 @@ git add -> git commit -> push your branch
 - pages stay in `src/Views/pages/*.php`
 - no backend file is touched
 - no React/Vite code appears
-- dashboard still expects real MySQL metrics later rather than hardcoded fake logic
-- history table remains ready for `registration_history` data
+- dashboard uses the existing PHP variables passed from the controller — not hardcoded fake data
+- history table renders rows from the existing `$history` variable — not reinvented
 - shared shell in `main.php` is not replaced
+- empty-state handling is visible when there is no data
 
 ---
 
@@ -98,9 +103,9 @@ git add -> git commit -> push your branch
 | Codex default | Must be |
 |---|---|
 | Add new frontend framework code | Stay in PHP views and CSS only |
-| Turn metrics into fake JS-only widgets | Keep placeholders ready for backend data |
+| Replace PHP variables with hardcoded fake data | Use the existing variables the controller already passes |
 | Rewrite navigation layout | Keep the current template-based shell |
-| Move data logic into frontend | Backend truth belongs to Taufiq |
+| Move data logic into frontend | Backend is complete — do not invent logic in the view |
 
 ---
 
@@ -108,5 +113,6 @@ git add -> git commit -> push your branch
 
 Tell it exactly what is wrong. Example:
 
-> "Do not add React or fake dashboard logic. Keep this as PHP view markup and only improve the
-> card layout, table readability, and template-style polish."
+> "Do not add React or invent fake data. The backend is already complete and passes real data
+> into the view. Keep this as PHP view markup and only improve the card layout, table readability,
+> and empty-state handling."

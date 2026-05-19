@@ -7,34 +7,48 @@
 - [Design system](../../../pages/_shared/design-system.md)
 - [Shared page notes](../../../pages/_shared/notes-for-all-members.md)
 
-Status: Draft  
+Status: Active
 Type: Ownership guide
 
 ## Role
 
 You own:
 
-- the content-based retrieval page
-- shared UI consistency across frontend pages
+- the content-based retrieval page (CBR)
+- shared UI consistency across all frontend pages
 
-## Wait Rule
+## Current State
 
-Do not do real backend integration for CBR until Taufiq Phase 3 is complete.
+- `src/Views/pages/search-content.php` — already real and wired to live backend data: CBR filter form + results table
 
-Before that, you may:
+## What To Do Now
 
-- improve the shared layout shell
-- keep buttons, forms, cards, and tables visually consistent
-- prepare the CBR filter layout
+The backend is fully complete. Your job is to review the CBR page and audit shared UI consistency.
+
+**For `search-content.php`:**
+- Verify CBR filter fields match what the backend accepts (file type, photo category, audio duration tier, video resolution tier, etc.)
+- Check that results table shows the right metadata columns per file type
+- Ensure empty results state (no matches found) is handled and not blank
+- Check that filter values persist in the form after a search
+- Read the page spec: `docs/pages/browse/search-content.md`
+- Read the retrieval contracts: `docs/implementation/system-design/06-retrieval-and-search-contracts.md`
+
+**For shared UI consistency:**
+- Review all pages for visual consistency: buttons, forms, cards, tables, spacing
+- Check that toast/flash messages look and behave the same across all pages
+- Check that the confirm-dialog (used for file delete) works correctly
+- Refer to: `docs/pages/_shared/design-system.md` and `docs/pages/_shared/notes-for-all-members.md`
 
 ## Files You Will Mainly Touch
 
 - `src/Views/pages/search-content.php`
-- shared layout and partial view files only when needed
+- `src/Views/layouts/main.php` and partials only when needed
 - shared CSS files in `public/assets/css/`
 
 ## Done Means
 
-- CBR filters and results are clear
-- shared UI styles stay consistent across all pages
-- frontend polish does not invent backend behavior
+- CBR filters match the backend contract and values persist after search
+- CBR results table shows relevant metadata per file type
+- empty state is visible and not just a blank table
+- shared UI (buttons, cards, tables, toasts) is visually consistent across all pages
+- no invented backend behavior in any frontend change
