@@ -63,6 +63,29 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                             <span class="nav-icon">📜</span><span class="nav-text">History</span>
                         </a>
                     </li>
+                    <?php if (\MetaMyKad\Core\Auth::check()): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $currentPath === '/student-detail' ? 'is-active' : '' ?>"
+                           href="<?= e(url('/student-detail?id=' . \MetaMyKad\Core\Auth::user()['id'])) ?>">
+                            <span class="nav-icon">👤</span>
+                            <span class="nav-text"><?= e(\MetaMyKad\Core\Auth::user()['full_name']) ?></span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <form action="<?= e(url('/logout')) ?>" method="post" style="margin:0;">
+                            <?php require src_path('Views/partials/csrf.php'); ?>
+                            <button type="submit" class="nav-link" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;color:var(--color-danger-text,#ff6b6b);">
+                                <span class="nav-icon">🚪</span><span class="nav-text">Sign Out</span>
+                            </button>
+                        </form>
+                    </li>
+                    <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $currentPath === '/login' ? 'is-active' : '' ?>" href="<?= e(url('/login')) ?>">
+                            <span class="nav-icon">🔑</span><span class="nav-text">Student Login</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
                 </ul>
             </div>
             <div class="sidebar-note">
@@ -104,5 +127,6 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
 <script src="<?= e(asset('js/fetch.js')) ?>"></script>
 <script src="<?= e(asset('js/validate.js')) ?>"></script>
 <script src="<?= e(asset('js/app.js')) ?>"></script>
+<script src="<?= e(asset('js/player.js')) ?>"></script>
 </body>
 </html>
