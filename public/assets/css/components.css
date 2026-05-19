@@ -607,6 +607,90 @@ select optgroup {
     color: var(--color-text);
 }
 
+/* ── Custom Select Component ─────────────────────── */
+.cs-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.cs-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0.15rem 0 0;
+    color: var(--color-text);
+    font: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    min-height: 1.6rem;
+}
+
+.cs-trigger:focus {
+    outline: none;
+}
+
+.cs-value {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cs-panel {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: -1rem;
+    right: -1rem;
+    z-index: 200;
+    background: rgba(8, 13, 30, 0.98);
+    border: 1px solid rgba(100, 223, 255, 0.22);
+    border-radius: 18px;
+    padding: 0.45rem;
+    box-shadow:
+        0 24px 64px rgba(2, 6, 23, 0.72),
+        0 0 0 1px rgba(57, 197, 255, 0.06);
+    backdrop-filter: blur(24px);
+    animation: cs-open 0.14s ease;
+    overflow: hidden;
+}
+
+@keyframes cs-open {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.cs-option {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: var(--color-muted);
+    font: inherit;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    letter-spacing: 0.01em;
+}
+
+.cs-option:hover,
+.cs-option:focus {
+    background: rgba(57, 197, 255, 0.1);
+    color: var(--color-text);
+    outline: none;
+}
+
+.cs-option.is-selected {
+    background: rgba(57, 197, 255, 0.14);
+    color: var(--color-brand-bright);
+    font-weight: 600;
+}
+
 input:focus,
 select:focus,
 textarea:focus {
