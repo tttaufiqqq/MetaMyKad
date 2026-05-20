@@ -39,18 +39,18 @@ final class Student extends BaseModel
     {
         $domain = strtolower((string) substr(strrchr($email, '@') ?: '', 1));
         if ($domain === '') {
-            return 'personal';
+            return 'Personal';
         }
 
         if (str_contains($domain, 'student') || str_ends_with($domain, '.edu.my')) {
-            return 'student';
+            return 'Student';
         }
 
         if (in_array($domain, ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'], true)) {
-            return 'personal';
+            return 'Personal';
         }
 
-        return 'work';
+        return 'Work';
     }
 
     public function findByIc(string $icNumber): array|false
