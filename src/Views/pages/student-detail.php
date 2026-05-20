@@ -175,8 +175,12 @@ foreach ($files as $f) {
                 ];
             } elseif ($file['file_type'] === 'photo') {
                 $cbrData = [
-                    'category'              => $cbr['photo_category'] ?? null,
-                    'expression'            => $cbr['dominant_expression'] ?? null,
+                    'category'              => match ($cbr['photo_category'] ?? null) {
+                        'formal'     => 'Formal',
+                        'non_formal' => 'Not Formal',
+                        default      => null,
+                    },
+                    'expression'            => isset($cbr['dominant_expression']) ? ucfirst((string) $cbr['dominant_expression']) : null,
                     'expression_confidence' => isset($cbr['expression_confidence']) ? round((float) $cbr['expression_confidence'] * 100) : null,
                     'bg_color'              => $cbr['dominant_bg_color'] ?? null,
                     'width'                 => $cbr['photo_width'] ?? null,
@@ -236,13 +240,22 @@ foreach ($files as $f) {
                     <div class="fc-meta__row"><dt>Duration</dt><dd><?= ($cbr['video_duration_sec'] ?? 0) > 0 ? e(fmt_seconds((int) $cbr['video_duration_sec'])) : '—' ?></dd></div>
                     <?php elseif ($file['file_type'] === 'pdf'): ?>
                     <div class="fc-meta__row"><dt>Text</dt><dd><?= $safeText !== null ? e(mb_strimwidth($safeText, 0, 60, '…')) : 'not extracted' ?></dd></div>
-                    <?php elseif ($file['file_type'] === 'photo' && $cbr !== []): ?>
-                    <?php if (!empty($cbr['photo_category'])): ?>
-                    <div class="fc-meta__row"><dt>Category</dt><dd><?= e($cbr['photo_category']) ?></dd></div>
-                    <?php endif; ?>
-                    <?php if (!empty($cbr['dominant_expression'])): ?>
-                    <div class="fc-meta__row"><dt>Expression</dt><dd><?= e($cbr['dominant_expression']) ?><?php if (isset($cbr['expression_confidence'])): ?> <?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%<?php endif; ?></dd></div>
-                    <?php endif; ?>
+                    <?php elseif ($file['file_type'] === 'photo'): ?>
+                    <?php
+                    $fmtCategory = match ($cbr['photo_category'] ?? null) {
+                        'formal'     => 'Formal',
+                        'non_formal' => 'Not Formal',
+                        default      => '—',
+                    };
+                    $fmtExpression = isset($cbr['dominant_expression'])
+                        ? ucfirst((string) $cbr['dominant_expression'])
+                        : '—';
+                    $fmtConfidence = isset($cbr['expression_confidence'])
+                        ? ' ' . round((float) $cbr['expression_confidence'] * 100) . '%'
+                        : '';
+                    ?>
+                    <div class="fc-meta__row"><dt>Category</dt><dd><?= e($fmtCategory) ?></dd></div>
+                    <div class="fc-meta__row"><dt>Expression</dt><dd><?= e($fmtExpression . $fmtConfidence) ?></dd></div>
                     <?php endif; ?>
                 </dl>
                 <?php if (!empty($tags)): ?>
