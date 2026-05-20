@@ -79,7 +79,7 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                     <li class="nav-item">
                         <form action="<?= e(url('/logout')) ?>" method="post" style="margin:0;">
                             <?php require src_path('Views/partials/csrf.php'); ?>
-                            <button type="submit" class="nav-link" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;color:var(--color-danger-text,#ff6b6b);">
+                            <button type="submit" class="nav-link nav-link--signout" style="background:none;border:none;width:100%;text-align:left;cursor:pointer;">
                                 <span class="nav-icon"><img src="<?= e(asset('images/nav/signout.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Sign Out</span>
                             </button>
                         </form>

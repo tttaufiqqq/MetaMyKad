@@ -33,8 +33,8 @@
                 </div>
             </div>
 
-            <div class="form-actions" style="margin-top:1.5rem;">
-                <button class="button" type="submit" style="width:100%;">Sign In</button>
+            <div class="form-actions">
+                <button class="button button--full" type="submit">Sign In</button>
             </div>
         </form>
 

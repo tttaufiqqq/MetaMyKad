@@ -41,7 +41,7 @@
     <section class="table-card">
         <h3>Badge Distribution</h3>
         <?php if (empty($badgeRows)): ?>
-            <p class="muted" style="padding:1rem;">No data yet.</p>
+            <p class="muted">No data yet.</p>
         <?php else: ?>
         <table>
             <thead>
@@ -65,7 +65,7 @@
     <section class="table-card">
         <h3>Recent Registrations</h3>
         <?php if (empty($recentRows)): ?>
-            <p class="muted" style="padding:1rem;">No students registered yet.</p>
+            <p class="muted">No students registered yet.</p>
         <?php else: ?>
         <table>
             <thead>

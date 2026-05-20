@@ -9,7 +9,7 @@
 <section class="table-card">
     <h3>History Log</h3>
     <?php if (empty($rows)): ?>
-        <p class="muted" style="padding:1rem;">No history records found.</p>
+        <p class="muted">No history records found.</p>
     <?php else: ?>
     <table>
         <thead>

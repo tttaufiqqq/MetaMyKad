@@ -34,8 +34,8 @@
 </section>
 
 <section class="home-features">
-    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
-        <p class="home-features__label" style="margin:0;">Quick Access</p>
+    <div class="home-features__header">
+        <p class="home-features__label">Quick Access</p>
         <button type="button" class="badge-guide-trigger" data-badge-guide-open>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                 <circle cx="6" cy="6" r="5.5" stroke="currentColor"/>

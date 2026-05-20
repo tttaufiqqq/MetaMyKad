@@ -25,6 +25,11 @@
     --color-warning-bg: rgba(255, 179, 92, 0.14);
     --color-danger-bg: rgba(255, 97, 119, 0.14);
     --color-shadow: rgba(2, 6, 23, 0.56);
+    /* Aliases used in player / portal components */
+    --color-brand-cyan: #39c5ff;
+    --color-text-muted: #9db0d3;
+    --color-surface-1: rgba(8, 14, 33, 0.76);
+    --color-danger-text: #ff6177;
     --shadow-soft: 0 24px 60px rgba(2, 6, 23, 0.32);
     --shadow-panel: 0 28px 90px rgba(2, 6, 23, 0.46);
     --gradient-brand: linear-gradient(135deg, rgba(57, 197, 255, 0.95), rgba(29, 140, 255, 0.88));

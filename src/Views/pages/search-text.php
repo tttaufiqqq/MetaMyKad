@@ -6,7 +6,7 @@
 ?>
 <section class="search-panel">
     <h2>Text-Based Retrieval</h2>
-    <p class="muted" style="margin-bottom:1.25rem;">
+    <p class="muted">
         Search across all file types by <strong>tag</strong> (photo, audio, PDF, video),
         or search within <strong>extracted text</strong> content using a keyword.
         You can use either or both fields.
@@ -35,11 +35,11 @@
 <section class="table-card">
     <h3>Results</h3>
     <?php if (!($submitted ?? false)): ?>
-        <p class="muted" style="padding:1rem;">Enter a keyword or tag to search.</p>
+        <p class="muted">Enter a keyword or tag to search.</p>
     <?php elseif (($keyword ?? '') === '' && ($tag ?? '') === ''): ?>
-        <p class="muted" style="padding:1rem;">Enter a keyword or tag to search.</p>
+        <p class="muted">Enter a keyword or tag to search.</p>
     <?php elseif (empty($results)): ?>
-        <p class="muted" style="padding:1rem;">
+        <p class="muted">
             No results found
             <?php if (($keyword ?? '') !== ''): ?>for keyword <strong><?= e($keyword) ?></strong><?php endif; ?>
             <?php if (($tag ?? '') !== ''): ?>with tag <strong><?= e($tag) ?></strong><?php endif; ?>.

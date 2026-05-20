@@ -47,9 +47,9 @@ foreach ($files as $f) {
 
 <!-- ── Header card ─────────────────────────────────────── -->
 <section class="card">
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+    <div class="card-header-row">
         <div>
-            <h2 style="text-transform:uppercase;"><?= e($student['full_name']) ?></h2>
+            <h2 class="detail-name-heading"><?= e($student['full_name']) ?></h2>
             <p class="muted">IC: <?= e($student['ic_number']) ?> &nbsp;|&nbsp; Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
         </div>
         <div class="owner-actions">
@@ -62,8 +62,7 @@ foreach ($files as $f) {
                     <?php require src_path('Views/partials/csrf.php'); ?>
                     <input type="hidden" name="student_id" value="<?= e((string) $student['student_id']) ?>">
                     <button type="submit"
-                            class="button secondary"
-                            style="color:var(--color-danger-text,#ff6b6b); border-color:rgba(255,107,107,0.35);"
+                            class="button secondary button--danger"
                             data-confirm="Delete your account? This will permanently remove all your data and cannot be undone.">
                         Delete Account
                     </button>
@@ -130,8 +129,8 @@ foreach ($files as $f) {
 <?php if ($isOwner): ?>
 <!-- ── Password change (edit mode only) ───────────────── -->
 <section class="card">
-    <h3>Change Password <span class="muted" style="font-size:0.8rem; font-weight:400;">(optional — leave blank to keep current)</span></h3>
-    <div class="form-grid two-col" style="margin-top:1rem;">
+    <h3>Change Password <span class="field-note">(optional — leave blank to keep current)</span></h3>
+    <div class="form-grid two-col mt-4">
         <div class="form-group">
             <input type="password" id="current_password" name="current_password" form="student-update-form" autocomplete="current-password">
             <label for="current_password">Current Password</label>
@@ -151,7 +150,7 @@ foreach ($files as $f) {
 </section>
 <?php else: ?>
 <section class="card">
-    <h3 style="margin-bottom:1rem;">Uploaded Files</h3>
+    <h3>Uploaded Files</h3>
     <div class="metadata-grid">
     <?php foreach ($files as $file): ?>
         <?php

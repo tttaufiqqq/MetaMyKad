@@ -102,8 +102,8 @@ $badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
     border-radius: var(--radius-md);
     text-decoration: none;
     text-align: center;
-    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-    animation: fade-in-up 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background 0.2s ease;
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
     position: relative;
     overflow: hidden;
 }
@@ -172,4 +172,9 @@ $badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
     border-radius: var(--radius-pill);
     margin: 0;
 }
+
+/* Stagger student cards in rows of 4 */
+.student-card:nth-child(4n+2) { animation-delay: 55ms; }
+.student-card:nth-child(4n+3) { animation-delay: 110ms; }
+.student-card:nth-child(4n+4) { animation-delay: 165ms; }
 </style>

@@ -9,7 +9,7 @@
 ?>
 <section class="search-panel">
     <h2>Content-Based Retrieval</h2>
-    <p class="muted" style="margin-bottom:1.25rem;">
+    <p class="muted">
         Search files by their analysed multimedia content — photo category and facial expression,
         audio duration tier, or video resolution tier. Select one or more filters to find matching files.
     </p>
@@ -74,11 +74,11 @@
 <section class="table-card">
     <h3>Results</h3>
     <?php if (!($submitted ?? false)): ?>
-        <p class="muted" style="padding:1rem;">Select at least one content filter to search.</p>
+        <p class="muted">Select at least one content filter to search.</p>
     <?php elseif (empty($activeFilters)): ?>
-        <p class="muted" style="padding:1rem;">Select at least one content filter to search.</p>
+        <p class="muted">Select at least one content filter to search.</p>
     <?php elseif (empty($results)): ?>
-        <p class="muted" style="padding:1rem;">No matching records found.</p>
+        <p class="muted">No matching records found.</p>
     <?php else: ?>
         <table>
             <thead>

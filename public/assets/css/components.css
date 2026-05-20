@@ -264,8 +264,18 @@
 .search-panel,
 .metric-grid article,
 .detail-grid article {
-    animation: fade-in-up 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+/* Stagger grid children so they cascade in sequentially */
+.metric-grid article:nth-child(2),
+.detail-grid article:nth-child(2) { animation-delay: 55ms; }
+.metric-grid article:nth-child(3),
+.detail-grid article:nth-child(3) { animation-delay: 110ms; }
+.metric-grid article:nth-child(4),
+.detail-grid article:nth-child(4) { animation-delay: 165ms; }
+.metric-grid article:nth-child(5) { animation-delay: 220ms; }
+.metric-grid article:nth-child(6) { animation-delay: 275ms; }
 
 .hero::before,
 .card::before,
@@ -683,7 +693,7 @@ select optgroup {
         0 24px 64px rgba(2, 6, 23, 0.72),
         0 0 0 1px rgba(57, 197, 255, 0.06);
     backdrop-filter: blur(24px);
-    animation: cs-open 0.14s ease;
+    animation: cs-open 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     max-height: min(18rem, calc(100vh - 8rem));
     overflow-x: hidden;
     overflow-y: auto;
@@ -712,8 +722,8 @@ select optgroup {
 }
 
 @keyframes cs-open {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(-5px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
 }
 
 .cs-option {
@@ -974,12 +984,13 @@ textarea:focus {
     border: 1px solid var(--color-line);
     border-radius: 18px;
     padding: 0.9rem;
-    transition: all 0.25s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.3s ease;
 }
 
 .file-card:hover {
     transform: translateY(-4px);
     border-color: rgba(143, 235, 255, 0.52);
+    box-shadow: 0 12px 32px rgba(57, 197, 255, 0.1);
 }
 
 .file-preview {
@@ -1511,7 +1522,7 @@ tr[data-student-row] {
 @keyframes fade-in-up {
     from {
         opacity: 0;
-        transform: translateY(18px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -2648,7 +2659,7 @@ tr[data-student-row] {
     box-shadow: var(--shadow-panel);
     backdrop-filter: blur(24px);
     z-index: 100;
-    animation: fade-in-up 0.15s ease both;
+    animation: fade-in-up 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .topnav__dropdown.is-open {
@@ -2897,11 +2908,16 @@ tr[data-student-row] {
     background: linear-gradient(180deg, rgba(18, 27, 54, 0.88), rgba(8, 14, 33, 0.8));
     border: 1px solid var(--color-line);
     text-decoration: none;
-    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background 0.2s ease, box-shadow 0.3s ease;
     backdrop-filter: blur(16px);
     position: relative;
     overflow: hidden;
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+.home-feature-card:nth-child(2) { animation-delay: 55ms; }
+.home-feature-card:nth-child(3) { animation-delay: 110ms; }
+.home-feature-card:nth-child(4) { animation-delay: 165ms; }
 
 .home-feature-card::before {
     content: "";
@@ -2913,9 +2929,10 @@ tr[data-student-row] {
 }
 
 .home-feature-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(57, 197, 255, 0.3);
+    transform: translateY(-5px);
+    border-color: rgba(57, 197, 255, 0.35);
     background: linear-gradient(180deg, rgba(19, 29, 58, 0.92), rgba(8, 14, 33, 0.86));
+    box-shadow: 0 16px 40px rgba(57, 197, 255, 0.1);
 }
 
 .home-feature-card__icon {
@@ -3051,4 +3068,89 @@ tr[data-student-row] {
     .home-features__grid {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+/* =========================================================
+   LAYOUT HELPERS
+   ========================================================= */
+
+/* Flex row used in card headers: title left, actions right */
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Row for quick-access header above feature cards on home */
+.home-features__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* =========================================================
+   BUTTON VARIANTS
+   ========================================================= */
+
+.button--full {
+    width: 100%;
+    justify-content: center;
+}
+
+.button--danger {
+    color: var(--color-danger-text);
+    border-color: rgba(255, 107, 107, 0.35);
+}
+
+.button--danger:hover {
+    border-color: rgba(255, 107, 107, 0.6);
+    background: rgba(255, 107, 107, 0.08);
+}
+
+/* =========================================================
+   EMPTY STATE & SEARCH INTRO POLISH
+   ========================================================= */
+
+/* Description paragraph directly inside a search panel */
+.search-panel > p.muted {
+    margin-bottom: 1.25rem;
+}
+
+/* Empty-state paragraph inside table card (no-data message) */
+.table-card > p.muted {
+    padding: 1rem;
+}
+
+/* Login card form-actions top spacing */
+.login-card .form-actions {
+    margin-top: 1.5rem;
+}
+
+/* Student detail: uppercase heading shorthand */
+.detail-name-heading {
+    text-transform: uppercase;
+}
+
+/* Subdued field note below a form group */
+.field-note {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    margin-top: -0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Sign-out nav link */
+.nav-link--signout {
+    color: var(--color-danger-text);
+}
+
+.nav-link--signout:hover {
+    background: rgba(255, 97, 119, 0.08) !important;
+    border-color: rgba(255, 97, 119, 0.22) !important;
+    color: #ff8a9b !important;
 }

@@ -10,7 +10,7 @@
 ?>
 <section class="search-panel">
     <h2>Attribute-Based Retrieval</h2>
-    <p class="muted" style="margin-bottom:1.25rem;">
+    <p class="muted">
         Filter students by structured profile attributes — gender, state of birth, email category,
         badge level, and uploaded file type. All filters are optional and can be combined freely.
     </p>
@@ -89,9 +89,9 @@
 <section class="table-card">
     <h3>Results</h3>
     <?php if (!($submitted ?? false)): ?>
-        <p class="muted" style="padding:1rem;">Use the filters above and click Search to find students.</p>
+        <p class="muted">Use the filters above and click Search to find students.</p>
     <?php elseif (empty($results)): ?>
-        <p class="muted" style="padding:1rem;">No matching records found.</p>
+        <p class="muted">No matching records found.</p>
     <?php else: ?>
         <table>
             <thead>
