@@ -9,6 +9,19 @@ use MetaMyKad\Models\FileMetadata;
 
 final class MetadataExtractor
 {
+    /**
+     * Run a shell command with common tool paths prepended on Windows,
+     * where Git Bash tools are not in the cmd.exe PATH.
+     */
+    private function shell(string $cmd): ?string
+    {
+        if (PHP_OS_FAMILY === 'Windows') {
+            $extra = 'C:\\Program Files\\Git\\mingw64\\bin';
+            return @shell_exec('cmd /c "set "PATH=%PATH%;' . $extra . '" && ' . $cmd . '"');
+        }
+        return @shell_exec($cmd);
+    }
+
     public function extract(int $fileId, string $fileType, string $storedPath): void
     {
         match ($fileType) {
@@ -118,7 +131,7 @@ final class MetadataExtractor
         $durationSec = 0;
         $bitrate     = 0;
 
-        $out = @shell_exec(
+        $out = $this->shell(
             'ffprobe -v error -show_entries format=duration,bit_rate'
             . ' -of default=noprint_wrappers=1 '
             . escapeshellarg($path)
@@ -155,7 +168,7 @@ final class MetadataExtractor
         ]);
 
         // Extract original date from audio tags via ffprobe
-        $tagOut = @shell_exec(
+        $tagOut = $this->shell(
             'ffprobe -v error -show_entries format_tags=date'
             . ' -of default=noprint_wrappers=1 '
             . escapeshellarg($path)
@@ -179,7 +192,7 @@ final class MetadataExtractor
         $durationSec = 0;
         $width = $height = 0;
 
-        $streamOut = @shell_exec(
+        $streamOut = $this->shell(
             'ffprobe -v error -select_streams v:0'
             . ' -show_entries stream=width,height'
             . ' -of default=noprint_wrappers=1 '
@@ -187,7 +200,7 @@ final class MetadataExtractor
             . ' 2>&1'
         );
 
-        $formatOut = @shell_exec(
+        $formatOut = $this->shell(
             'ffprobe -v error -show_entries format=duration'
             . ' -of default=noprint_wrappers=1 '
             . escapeshellarg($path)
@@ -228,7 +241,7 @@ final class MetadataExtractor
         ]);
 
         // Extract original date from video creation_time tag via ffprobe
-        $tagOut = @shell_exec(
+        $tagOut = $this->shell(
             'ffprobe -v error -show_entries format_tags=creation_time'
             . ' -of default=noprint_wrappers=1 '
             . escapeshellarg($path)
@@ -250,7 +263,7 @@ final class MetadataExtractor
         $text = '';
 
         // Try pdftotext (Poppler)
-        $out = @shell_exec('pdftotext ' . escapeshellarg($path) . ' - 2>&1');
+        $out = $this->shell('pdftotext ' . escapeshellarg($path) . ' - 2>&1');
         if ($out !== null
             && !str_starts_with(ltrim($out), 'Error')
             && !str_contains($out, 'is not recognized')) {
@@ -283,7 +296,7 @@ final class MetadataExtractor
         (new FileMetadata())->updateExtractedText($fileId, $text);
 
         // Extract original date from PDF metadata via pdfinfo
-        $infoOut = @shell_exec('pdfinfo ' . escapeshellarg($path) . ' 2>&1');
+        $infoOut = $this->shell('pdfinfo ' . escapeshellarg($path) . ' 2>&1');
         if ($infoOut !== null && preg_match('/CreationDate:\s+(.+)/i', $infoOut, $m)) {
             $dt = date_create(trim($m[1]));
             if ($dt instanceof \DateTime) {
