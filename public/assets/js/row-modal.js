@@ -22,16 +22,6 @@
         'file-type' : 'fileType',
     };
 
-    function lockScroll()   { document.body.classList.add('modal-open'); }
-    function unlockScroll() {
-        var anyOpen = document.querySelector(
-            '.student-modal:not(.hidden),' +
-            '.badge-guide-modal:not(.hidden),' +
-            '.confirm-dialog:not(.hidden)'
-        );
-        if (!anyOpen) document.body.classList.remove('modal-open');
-    }
-
     function openModal(data) {
         nameEl.textContent = data.name || '—';
 
@@ -51,13 +41,11 @@
 
         modal.classList.remove('hidden');
         modal.setAttribute('aria-hidden', 'false');
-        lockScroll();
     }
 
     function closeModal() {
         modal.classList.add('hidden');
         modal.setAttribute('aria-hidden', 'true');
-        unlockScroll();
     }
 
     document.addEventListener('click', function (e) {

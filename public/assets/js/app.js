@@ -41,7 +41,6 @@
         pendingHref = trigger.tagName === 'A' ? trigger.href : null;
         dialog.classList.remove('hidden');
         dialog.setAttribute('aria-hidden', 'false');
-        lockScroll();
     });
 
     if (dialog) {
@@ -54,7 +53,6 @@
                 pendingHref = null;
                 dialog.classList.add('hidden');
                 dialog.setAttribute('aria-hidden', 'true');
-                unlockScroll();
             });
         }
 
@@ -102,39 +100,19 @@
 
     window.addEventListener('pageshow', hideSpinner);
 
-    // ── Scroll lock helpers ───────────────────────────
-    function lockScroll() {
-        document.body.classList.add('modal-open');
-    }
-
-    function unlockScroll() {
-        var anyOpen = document.querySelector(
-            '.student-modal:not(.hidden),' +
-            '.badge-guide-modal:not(.hidden),' +
-            '.confirm-dialog:not(.hidden)'
-        );
-        if (!anyOpen) {
-            document.body.classList.remove('modal-open');
-        }
-    }
-
     // ── Badge Guide Modal ─────────────────────────────
     var badgeModal  = document.getElementById('badge-guide-modal');
-    var badgeCloseA = document.getElementById('badge-guide-close');
-    var badgeCloseB = document.getElementById('badge-guide-cancel');
 
     function openBadgeGuide() {
         if (!badgeModal) return;
         badgeModal.classList.remove('hidden');
         badgeModal.setAttribute('aria-hidden', 'false');
-        lockScroll();
     }
 
     function closeBadgeGuide() {
         if (!badgeModal) return;
         badgeModal.classList.add('hidden');
         badgeModal.setAttribute('aria-hidden', 'true');
-        unlockScroll();
     }
 
     document.addEventListener('click', function (e) {
@@ -147,8 +125,28 @@
         if (e.key === 'Escape') closeBadgeGuide();
     });
 
-    // ── Auto-dismiss toasts after 5 s ────────────────────
+    // ── Global scroll lock via MutationObserver ───────────
+    // Watches every modal element; locks/unlocks body scroll automatically.
     document.addEventListener('DOMContentLoaded', function () {
+        var MODAL_SELECTOR = '.student-modal, .badge-guide-modal, .confirm-dialog';
+
+        function syncScrollLock() {
+            var anyOpen = document.querySelector(
+                '.student-modal:not(.hidden),' +
+                '.badge-guide-modal:not(.hidden),' +
+                '.confirm-dialog:not(.hidden)'
+            );
+            document.body.classList.toggle('modal-open', !!anyOpen);
+        }
+
+        document.querySelectorAll(MODAL_SELECTOR).forEach(function (el) {
+            new MutationObserver(syncScrollLock).observe(el, {
+                attributes: true,
+                attributeFilter: ['class'],
+            });
+        });
+
+        // ── Auto-dismiss toasts after 5 s ────────────────────
         var toasts = document.querySelectorAll('[data-toast]');
         for (var i = 0; i < toasts.length; i += 1) {
             (function (toast) {
