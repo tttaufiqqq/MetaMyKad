@@ -202,7 +202,7 @@ foreach ($files as $f) {
             'filename'      => $file['filename'],
             'url'           => url('/file?id=' . $file['id']),
             'size'          => fmt_bytes((int) $file['file_size']),
-            'uploaded'      => substr($file['upload_date'], 0, 10),
+            'uploaded'      => $file['original_date'] ?? substr($file['upload_date'], 0, 10),
             'original_date' => $file['original_date'] ?? null,
             'mime'          => $file['mime_type'] ?? null,
             'text'          => $safeText,
@@ -238,7 +238,7 @@ foreach ($files as $f) {
                 </div>
                 <dl class="fc-meta">
                     <div class="fc-meta__row"><dt>Size</dt><dd><?= e(fmt_bytes((int) $file['file_size'])) ?></dd></div>
-                    <div class="fc-meta__row"><dt>Uploaded</dt><dd><?= e(substr($file['upload_date'], 0, 10)) ?></dd></div>
+                    <div class="fc-meta__row"><dt>Uploaded</dt><dd><?= e($file['original_date'] ?? substr($file['upload_date'], 0, 10)) ?></dd></div>
                     <?php if ($file['file_type'] === 'audio'): ?>
                     <?php
                     $audioDur  = $cbr !== [] ? fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0)) : '—';
@@ -406,7 +406,6 @@ foreach ($files as $f) {
         metaEl.innerHTML = '';
         addRow('SIZE', esc(f.size));
         addRow('UPLOADED', esc(f.uploaded));
-        if (f.original_date) addRow(f.type === 'photo' ? 'CAPTURED' : 'DATE', esc(f.original_date));
         if (f.mime) addRow('MIME', esc(f.mime));
 
         var c = f.cbr || {};
@@ -468,8 +467,36 @@ foreach ($files as $f) {
     });
 }());
 </script>
-
 <?php if ($isOwner): ?>
+<script>
+(function () {
+    ['photo', 'audio', 'pdf', 'video'].forEach(function (type) {
+        var inputs = document.querySelectorAll('[name="' + type + '"]');
+        inputs.forEach(function (input) {
+            input.addEventListener('change', function () {
+                var formEl = input.form || document.getElementById('student-update-form');
+                if (!formEl) return;
+                var name = 'original_date_' + type;
+                var hidden = formEl.querySelector('[name="' + name + '"]');
+                if (!hidden) {
+                    hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = name;
+                    formEl.appendChild(hidden);
+                }
+                if (this.files && this.files[0]) {
+                    var d = new Date(this.files[0].lastModified);
+                    hidden.value = d.getFullYear() + '-' +
+                        String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(d.getDate()).padStart(2, '0');
+                } else {
+                    hidden.value = '';
+                }
+            });
+        });
+    });
+}());
+</script>
 <!-- ── Upload new file types not yet uploaded ─────────── -->
 <?php
 $missingTypes = array_diff(['photo', 'audio', 'pdf', 'video'], array_keys($filesByType));

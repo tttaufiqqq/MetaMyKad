@@ -109,3 +109,29 @@
 
     <a class="register-cancel" href="<?= e(url('/')) ?>">&#8592; Cancel and Back to Home</a>
 </div>
+<script>
+(function () {
+    ['photo', 'audio', 'pdf', 'video'].forEach(function (type) {
+        var input = document.getElementById(type);
+        if (!input) return;
+        input.addEventListener('change', function () {
+            var name = 'original_date_' + type;
+            var hidden = input.form.querySelector('[name="' + name + '"]');
+            if (!hidden) {
+                hidden = document.createElement('input');
+                hidden.type = 'hidden';
+                hidden.name = name;
+                input.form.appendChild(hidden);
+            }
+            if (this.files && this.files[0]) {
+                var d = new Date(this.files[0].lastModified);
+                hidden.value = d.getFullYear() + '-' +
+                    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                    String(d.getDate()).padStart(2, '0');
+            } else {
+                hidden.value = '';
+            }
+        });
+    });
+}());
+</script>

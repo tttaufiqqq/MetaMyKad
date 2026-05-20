@@ -125,6 +125,9 @@ final class RegistrationController extends BaseController
         foreach ($uploads as $fileType => $uploadData) {
             $movedFiles[] = base_path($uploadData['file_path']);
 
+            $rawDate      = trim((string) ($_POST['original_date_' . $fileType] ?? ''));
+            $originalDate = preg_match('/^\d{4}-\d{2}-\d{2}$/', $rawDate) ? $rawDate : null;
+
             $fileId = $fileModel->insert([
                 'student_id'      => $studentId,
                 'file_type'       => $fileType,
@@ -133,6 +136,7 @@ final class RegistrationController extends BaseController
                 'file_path'       => $uploadData['file_path'],
                 'file_size'       => $uploadData['file_size'],
                 'mime_type'       => $uploadData['mime_type'],
+                'original_date'   => $originalDate,
             ]);
 
             try {
