@@ -28,7 +28,7 @@ final class RegistrationController extends BaseController
             $idRules['ic_number'] = ['required', 'ic'];
         }
         if ($passportProvided && !$icProvided) {
-            $idRules['passport_number'] = ['required'];
+            $idRules['passport_number'] = ['required', 'passport'];
         }
 
         $errors = Validator::validate($_POST, array_merge($idRules, [

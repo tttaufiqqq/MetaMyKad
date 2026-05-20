@@ -10,12 +10,17 @@
         <div class="form-grid">
             <div class="reg-id-row full-span">
                 <div class="form-group" style="flex:1;">
-                    <input id="ic_number" name="ic_number" type="text" maxlength="12" autocomplete="off">
+                    <input id="ic_number" name="ic_number" type="text" maxlength="12" autocomplete="off"
+                               value="<?= e((string) old('ic_number')) ?>">
                     <label for="ic_number">Existing IC Number</label>
                 </div>
                 <div class="id-or-divider">or</div>
                 <div class="form-group" style="flex:1;">
-                    <input id="passport_number" name="passport_number" type="text" autocomplete="off">
+                    <input id="passport_number" name="passport_number" type="text" autocomplete="off"
+                           pattern="[A-Za-z0-9]{6,20}"
+                           minlength="6" maxlength="20"
+                           title="6–20 alphanumeric characters (letters and digits only)"
+                           value="<?= e((string) old('passport_number')) ?>">
                     <label for="passport_number">Passport Number</label>
                 </div>
             </div>
@@ -24,18 +29,21 @@
                 for the same IC number.
             </div>
             <div class="form-group">
-                <input id="full_name" name="full_name" type="text">
+                <input id="full_name" name="full_name" type="text" required
+                       value="<?= e((string) old('full_name')) ?>">
                 <label for="full_name">Full Name</label>
             </div>
             <div class="form-group">
                 <input id="phone" name="phone" type="tel" required
                        pattern="(\+?60|0)[0-9\-\s]{7,11}"
                        maxlength="16"
-                       title="Malaysian phone number, e.g. 012-3456789">
+                       title="Malaysian phone number, e.g. 012-3456789"
+                       value="<?= e((string) old('phone')) ?>">
                 <label for="phone">Phone</label>
             </div>
             <div class="form-group">
-                <input id="email" name="email" type="email">
+                <input id="email" name="email" type="email" required
+                       value="<?= e((string) old('email')) ?>">
                 <label for="email">Email</label>
             </div>
         </div>

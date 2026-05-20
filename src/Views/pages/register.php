@@ -45,6 +45,9 @@
             <div class="form-group" style="flex:1;">
                 <input id="passport_number" name="passport_number" type="text"
                        autocomplete="off"
+                       pattern="[A-Za-z0-9]{6,20}"
+                       minlength="6" maxlength="20"
+                       title="6–20 alphanumeric characters (letters and digits only)"
                        value="<?= e((string) old('passport_number')) ?>">
                 <label for="passport_number">Passport Number (International)</label>
             </div>
@@ -64,23 +67,41 @@
 
         <hr class="register-divider">
 
-        <div class="upload-card-grid">
-            <div class="upload-card">
-                <span class="upload-card-label">Photo (Image):</span>
-                <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png">
+        <div class="upload-panel">
+            <div class="upload-grid">
+                <label class="upload-box" for="photo">
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-image.png')) ?>" alt="" aria-hidden="true">
+                    </span>
+                    <span>Photo</span>
+                    <small>JPEG / PNG</small>
+                </label>
+                <label class="upload-box" for="audio">
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-audio.png')) ?>" alt="" aria-hidden="true">
+                    </span>
+                    <span>Audio</span>
+                    <small>MP3 / WAV</small>
+                </label>
+                <label class="upload-box" for="pdf">
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-pdf.png')) ?>" alt="" aria-hidden="true">
+                    </span>
+                    <span>Document</span>
+                    <small>Searchable PDF</small>
+                </label>
+                <label class="upload-box" for="video">
+                    <span class="upload-icon">
+                        <img src="<?= e(asset('images/nav/replace-video.png')) ?>" alt="" aria-hidden="true">
+                    </span>
+                    <span>Video</span>
+                    <small>MP4 / MOV / AVI</small>
+                </label>
             </div>
-            <div class="upload-card">
-                <span class="upload-card-label">Document (PDF):</span>
-                <input id="pdf" name="pdf" type="file" accept=".pdf">
-            </div>
-            <div class="upload-card">
-                <span class="upload-card-label">Audio (MP3):</span>
-                <input id="audio" name="audio" type="file" accept=".mp3,.wav">
-            </div>
-            <div class="upload-card">
-                <span class="upload-card-label">Video (MP4):</span>
-                <input id="video" name="video" type="file" accept=".mp4,.mov,.avi">
-            </div>
+            <input id="photo" name="photo" type="file" accept=".jpg,.jpeg,.png" class="hidden">
+            <input id="audio" name="audio" type="file" accept=".mp3,.wav"       class="hidden">
+            <input id="pdf"   name="pdf"   type="file" accept=".pdf"            class="hidden">
+            <input id="video" name="video" type="file" accept=".mp4,.mov,.avi"  class="hidden">
         </div>
 
         <button class="register-submit-btn" type="submit">Register Student</button>
