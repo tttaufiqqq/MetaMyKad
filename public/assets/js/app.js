@@ -100,6 +100,33 @@
 
     window.addEventListener('pageshow', hideSpinner);
 
+    // ── Badge Guide Modal ─────────────────────────────
+    var badgeModal  = document.getElementById('badge-guide-modal');
+    var badgeCloseA = document.getElementById('badge-guide-close');
+    var badgeCloseB = document.getElementById('badge-guide-cancel');
+
+    function openBadgeGuide() {
+        if (!badgeModal) return;
+        badgeModal.classList.remove('hidden');
+        badgeModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeBadgeGuide() {
+        if (!badgeModal) return;
+        badgeModal.classList.add('hidden');
+        badgeModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-badge-guide-open]')) { openBadgeGuide(); return; }
+        if (e.target.closest('#badge-guide-close') || e.target.closest('#badge-guide-cancel')) { closeBadgeGuide(); return; }
+        if (badgeModal && !badgeModal.classList.contains('hidden') && !e.target.closest('.badge-guide-modal__panel')) { closeBadgeGuide(); }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeBadgeGuide();
+    });
+
     // ── Auto-dismiss toasts after 5 s ────────────────────
     document.addEventListener('DOMContentLoaded', function () {
         var toasts = document.querySelectorAll('[data-toast]');
