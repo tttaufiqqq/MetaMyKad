@@ -53,6 +53,7 @@
         </div>
         <div class="form-actions full-span">
             <button class="button" type="submit">Search Content</button>
+            <a class="button secondary" href="<?= e(url('/search-content')) ?>">Clear Filters</a>
         </div>
     </form>
 </section>

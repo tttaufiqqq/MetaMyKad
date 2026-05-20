@@ -68,6 +68,7 @@
         </div>
         <div class="form-actions">
             <button class="button" type="submit">Search</button>
+            <a class="button secondary" href="<?= e(url('/search-attribute')) ?>">Clear Filters</a>
         </div>
     </form>
 </section>

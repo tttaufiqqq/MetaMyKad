@@ -232,12 +232,22 @@ foreach ($files as $f) {
                 <dl class="fc-meta">
                     <div class="fc-meta__row"><dt>Size</dt><dd><?= e(fmt_bytes((int) $file['file_size'])) ?></dd></div>
                     <div class="fc-meta__row"><dt>Uploaded</dt><dd><?= e(substr($file['upload_date'], 0, 10)) ?></dd></div>
-                    <?php if ($file['file_type'] === 'audio' && $cbr !== []): ?>
-                    <div class="fc-meta__row"><dt>Duration</dt><dd><?= e(fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0))) ?> <span class="fc-tier"><?= e($cbr['audio_duration_tier'] ?? '') ?></span></dd></div>
-                    <div class="fc-meta__row"><dt>Bitrate</dt><dd><?= e((string) ($cbr['audio_bitrate'] ?? '—')) ?> kbps</dd></div>
-                    <?php elseif ($file['file_type'] === 'video' && $cbr !== []): ?>
-                    <div class="fc-meta__row"><dt>Resolution</dt><dd><?= e($cbr['video_resolution'] ?? '—') ?> <span class="fc-tier"><?= e($cbr['video_resolution_tier'] ?? '') ?></span></dd></div>
-                    <div class="fc-meta__row"><dt>Duration</dt><dd><?= ($cbr['video_duration_sec'] ?? 0) > 0 ? e(fmt_seconds((int) $cbr['video_duration_sec'])) : '—' ?></dd></div>
+                    <?php if ($file['file_type'] === 'audio'): ?>
+                    <?php
+                    $audioDur  = $cbr !== [] ? fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0)) : '—';
+                    $audioTier = ($cbr !== [] && !empty($cbr['audio_duration_tier'])) ? $cbr['audio_duration_tier'] : null;
+                    $audioBr   = $cbr !== [] ? ((string) ($cbr['audio_bitrate'] ?? '—')) . ' kbps' : '—';
+                    ?>
+                    <div class="fc-meta__row"><dt>Duration</dt><dd><?= e($audioDur) ?><?= $audioTier ? ' <span class="fc-tier">' . e($audioTier) . '</span>' : '' ?></dd></div>
+                    <div class="fc-meta__row"><dt>Bitrate</dt><dd><?= e($audioBr) ?></dd></div>
+                    <?php elseif ($file['file_type'] === 'video'): ?>
+                    <?php
+                    $videoRes    = $cbr !== [] ? ($cbr['video_resolution'] ?? '—') : '—';
+                    $videoTier   = ($cbr !== [] && !empty($cbr['video_resolution_tier'])) ? $cbr['video_resolution_tier'] : null;
+                    $videoDur    = ($cbr !== [] && ($cbr['video_duration_sec'] ?? 0) > 0) ? fmt_seconds((int) $cbr['video_duration_sec']) : '—';
+                    ?>
+                    <div class="fc-meta__row"><dt>Resolution</dt><dd><?= e($videoRes) ?><?= $videoTier ? ' <span class="fc-tier">' . e($videoTier) . '</span>' : '' ?></dd></div>
+                    <div class="fc-meta__row"><dt>Duration</dt><dd><?= e($videoDur) ?></dd></div>
                     <?php elseif ($file['file_type'] === 'pdf'): ?>
                     <div class="fc-meta__row"><dt>Text</dt><dd><?= $safeText !== null ? e(mb_strimwidth($safeText, 0, 60, '…')) : 'not extracted' ?></dd></div>
                     <?php elseif ($file['file_type'] === 'photo'): ?>

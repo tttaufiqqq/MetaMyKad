@@ -22,6 +22,7 @@
         </div>
         <div class="form-actions">
             <button class="button" type="submit">Search PDF Text</button>
+            <a class="button secondary" href="<?= e(url('/search-text')) ?>">Clear Filters</a>
         </div>
     </form>
 </section>
