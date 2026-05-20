@@ -262,8 +262,8 @@ BEGIN
         SELECT p_ic, full_name, v_file_count, v_badge, 'update'
         FROM students WHERE id = v_student_id;
 
-        -- CASCADE on file_metadata removes cbr_metadata and file_tags automatically
-        DELETE FROM file_metadata WHERE student_id = v_student_id;
+        -- PHP selectively deletes old file_metadata rows (only for replaced types)
+        -- so we do NOT delete all files here any more.
 
         UPDATE students
         SET full_name      = p_name,

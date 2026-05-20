@@ -72,11 +72,26 @@ final class RegistrationController extends BaseController
             $this->redirect('/re-register');
         }
 
-        // --- 4. Re-registration: unlink old physical files ---
+        // --- 4. Re-registration: delete only files whose type is being replaced ---
         if ($existing !== false) {
             $fileModel = new FileMetadata();
-            $oldFiles  = $fileModel->findByStudentId((int) $existing['id']);
-            foreach ($oldFiles as $oldFile) {
+            foreach (['photo', 'audio', 'pdf', 'video'] as $type) {
+                $entry = $_FILES[$type] ?? null;
+                if ($entry === null || ($entry['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+                    continue; // no new upload for this type — keep the existing file
+                }
+                $oldFile = $fileModel->findByStudentIdAndType((int) $existing['id'], $type);
+                if ($oldFile === false) {
+                    continue;
+                }
+                // Remove DB record first (CASCADE handles cbr_metadata + file_tags)
+                try {
+                    (new FileMetadata())->callProcedure('sp_delete_file', [$oldFile['id']]);
+                } catch (\Throwable $e) {
+                    $this->flash('error', "Could not remove existing {$type} record. Registration aborted.");
+                    $this->redirect('/re-register');
+                }
+                // Remove physical file
                 $absPath = base_path($oldFile['file_path']);
                 if (file_exists($absPath) && !unlink($absPath)) {
                     $this->flash('error', "Could not remove existing file '{$oldFile['filename']}'. Registration aborted.");
