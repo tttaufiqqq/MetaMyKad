@@ -9,27 +9,27 @@
     <div class="form-card-layout full-span">
         <div class="form-grid">
             <div class="form-group">
-                <label for="ic_number">Existing IC Number</label>
                 <input id="ic_number" name="ic_number" type="text" maxlength="12" required>
+                <label for="ic_number">Existing IC Number</label>
             </div>
             <div class="feedback-box">
                 Re-registration updates the existing student row. It must not create a second record
                 for the same IC number.
             </div>
             <div class="form-group">
-                <label for="full_name">Full Name</label>
                 <input id="full_name" name="full_name" type="text">
+                <label for="full_name">Full Name</label>
             </div>
             <div class="form-group">
-                <label for="phone">Phone</label>
                 <input id="phone" name="phone" type="tel" required
                        pattern="(\+?60|0)[0-9\-\s]{7,11}"
                        maxlength="16"
                        title="Malaysian phone number, e.g. 012-3456789">
+                <label for="phone">Phone</label>
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
                 <input id="email" name="email" type="email">
+                <label for="email">Email</label>
             </div>
         </div>
         <div class="upload-panel">

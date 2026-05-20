@@ -6,55 +6,55 @@
 
         <div class="form-grid two-col">
             <div class="form-group">
-                <label for="full_name">Full Name (as per IC)</label>
                 <input id="full_name" name="full_name" type="text" required
                        autocomplete="name"
                        value="<?= e((string) old('full_name')) ?>">
+                <label for="full_name">Full Name (as per IC)</label>
             </div>
             <div class="form-group">
-                <label for="matric_number">Matric Number</label>
                 <input id="matric_number" name="matric_number" type="text" required
                        autocomplete="off"
                        value="<?= e((string) old('matric_number')) ?>">
+                <label for="matric_number">Matric Number</label>
             </div>
             <div class="form-group">
-                <label for="phone">Phone</label>
                 <input id="phone" name="phone" type="tel" required
                        pattern="(\+?60|0)[0-9\-\s]{7,11}"
                        maxlength="16"
                        autocomplete="tel"
                        title="Malaysian phone number, e.g. 012-3456789"
                        value="<?= e((string) old('phone')) ?>">
+                <label for="phone">Phone</label>
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
                 <input id="email" name="email" type="email" required
                        autocomplete="email"
                        value="<?= e((string) old('email')) ?>">
+                <label for="email">Email</label>
             </div>
         </div>
 
         <div class="reg-id-row">
             <div class="form-group" style="flex:1;">
-                <label for="ic_number">Malaysian IC Number (12 Digits)</label>
                 <input id="ic_number" name="ic_number" type="text" maxlength="12"
                        autocomplete="off"
                        value="<?= e((string) old('ic_number')) ?>">
+                <label for="ic_number">Malaysian IC Number (12 Digits)</label>
             </div>
             <div class="id-or-divider">or</div>
             <div class="form-group" style="flex:1;">
-                <label for="passport_number">Passport Number (International)</label>
                 <input id="passport_number" name="passport_number" type="text"
                        autocomplete="off"
                        value="<?= e((string) old('passport_number')) ?>">
+                <label for="passport_number">Passport Number (International)</label>
             </div>
         </div>
 
         <div class="form-grid two-col">
             <div class="form-group">
-                <label for="password">Password</label>
                 <input id="password" name="password" type="password" required minlength="8"
                        autocomplete="new-password">
+                <label for="password">Password</label>
             </div>
             <div class="feedback-box" style="display:flex; align-items:center;">
                 DOB, gender, state of birth, and age are derived from the IC number automatically.
