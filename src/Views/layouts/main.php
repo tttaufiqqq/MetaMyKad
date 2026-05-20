@@ -125,5 +125,6 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
 <script src="<?= e(asset('js/player.js')) ?>"></script>
 <script src="<?= e(asset('js/select.js')) ?>"></script>
 <script src="<?= e(asset('js/row-modal.js')) ?>"></script>
+<script src="<?= e(asset('js/tags.js')) ?>"></script>
 </body>
 </html>

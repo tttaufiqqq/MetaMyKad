@@ -275,11 +275,32 @@ foreach ($files as $f) {
                     <div class="fc-meta__row"><dt>Expression</dt><dd><?= e($fmtExpression . $fmtConfidence) ?></dd></div>
                     <?php endif; ?>
                 </dl>
-                <?php if (!empty($tags)): ?>
-                <div class="fc-tags">
-                    <?php foreach ($tags as $tag): ?>
-                        <span class="tag-pill"><?= e($tag['tag_name']) ?></span>
-                    <?php endforeach; ?>
+                <?php if (!empty($tags) || \MetaMyKad\Core\Auth::check()): ?>
+                <div class="fc-tag-manager"
+                     data-file-id="<?= e((string) $file['id']) ?>"
+                     data-add-url="<?= e(url('/tag-add')) ?>"
+                     data-remove-url="<?= e(url('/tag-remove')) ?>">
+                    <?php if (!empty($tags)): ?>
+                    <div class="fc-tags">
+                        <?php foreach ($tags as $tag): ?>
+                        <span class="tag-pill">
+                            <?= e($tag['tag_name']) ?>
+                            <?php if (\MetaMyKad\Core\Auth::check()): ?>
+                            <button type="button" class="tag-remove-btn"
+                                    data-tag="<?= e($tag['tag_name']) ?>"
+                                    aria-label="Remove tag <?= e($tag['tag_name']) ?>">&times;</button>
+                            <?php endif; ?>
+                        </span>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (\MetaMyKad\Core\Auth::check()): ?>
+                    <div class="tag-add-row">
+                        <input type="text" class="tag-add-input"
+                               placeholder="Add tag…" maxlength="32" autocomplete="off">
+                        <button type="button" class="tag-add-btn">+ Add</button>
+                    </div>
+                    <?php endif; ?>
                 </div>
                 <?php endif; ?>
             </div>
