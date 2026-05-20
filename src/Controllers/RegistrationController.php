@@ -9,6 +9,7 @@ use MetaMyKad\Core\Validator;
 use MetaMyKad\Models\CbrMetadata;
 use MetaMyKad\Models\FileMetadata;
 use MetaMyKad\Models\Student;
+use MetaMyKad\Services\AutoTagger;
 use MetaMyKad\Services\MetadataExtractor;
 use MetaMyKad\Services\UploadService;
 
@@ -121,7 +122,8 @@ final class RegistrationController extends BaseController
             $this->redirect($mode === 'update' ? '/re-register' : '/register');
         }
 
-        $fileModel = new FileMetadata();
+        $fileModel   = new FileMetadata();
+        $autoTagger  = new AutoTagger();
         foreach ($uploads as $fileType => $uploadData) {
             $movedFiles[] = base_path($uploadData['file_path']);
 
@@ -151,6 +153,8 @@ final class RegistrationController extends BaseController
                     (new CbrMetadata())->updateDuration($fileId, $fileType, $browserDuration);
                 }
             }
+
+            $autoTagger->tag($fileId, $fileType);
         }
 
         // --- 9. Recompute badge ---

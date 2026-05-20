@@ -10,6 +10,10 @@
 ?>
 <section class="search-panel">
     <h2>Attribute-Based Retrieval</h2>
+    <p class="muted" style="margin-bottom:1.25rem;">
+        Filter students by structured profile attributes — gender, state of birth, email category,
+        badge level, and uploaded file type. All filters are optional and can be combined freely.
+    </p>
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-attribute')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">
@@ -39,9 +43,9 @@
         <div class="form-group">
             <select id="email_category" name="email_category">
                 <option value="">Any</option>
-                <option value="personal" <?= ($emailCategory ?? '') === 'personal' ? 'selected' : '' ?>>Personal</option>
-                <option value="student"  <?= ($emailCategory ?? '') === 'student'  ? 'selected' : '' ?>>Student</option>
-                <option value="work"     <?= ($emailCategory ?? '') === 'work'     ? 'selected' : '' ?>>Work</option>
+                <option value="Personal" <?= ($emailCategory ?? '') === 'Personal' ? 'selected' : '' ?>>Personal</option>
+                <option value="Student"  <?= ($emailCategory ?? '') === 'Student'  ? 'selected' : '' ?>>Student</option>
+                <option value="Work"     <?= ($emailCategory ?? '') === 'Work'     ? 'selected' : '' ?>>Work</option>
             </select>
             <label for="email_category">Email Category</label>
         </div>

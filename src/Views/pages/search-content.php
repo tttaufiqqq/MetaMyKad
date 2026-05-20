@@ -9,6 +9,10 @@
 ?>
 <section class="search-panel">
     <h2>Content-Based Retrieval</h2>
+    <p class="muted" style="margin-bottom:1.25rem;">
+        Search files by their analysed multimedia content — photo category and facial expression,
+        audio duration tier, or video resolution tier. Select one or more filters to find matching files.
+    </p>
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-content')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">

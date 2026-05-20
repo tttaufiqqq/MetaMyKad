@@ -11,6 +11,7 @@ use MetaMyKad\Models\FileMetadata;
 use MetaMyKad\Models\RegistrationHistory;
 use MetaMyKad\Models\Student;
 use MetaMyKad\Models\StudentProfileSummaryView;
+use MetaMyKad\Services\AutoTagger;
 use MetaMyKad\Services\MetadataExtractor;
 use MetaMyKad\Services\UploadService;
 
@@ -184,6 +185,7 @@ final class StudentController extends BaseController
         $fileModel    = new FileMetadata();
         $uploadService = new UploadService();
         $extractor    = new MetadataExtractor();
+        $autoTagger   = new AutoTagger();
 
         try {
             $uploads = $uploadService->processAll($studentId, $_FILES);
@@ -234,6 +236,8 @@ final class StudentController extends BaseController
                     (new CbrMetadata())->updateDuration($fileId, $fileType, $browserDuration);
                 }
             }
+
+            $autoTagger->tag($fileId, $fileType);
         }
 
         // Recompute badge

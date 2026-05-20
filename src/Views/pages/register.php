@@ -1,5 +1,9 @@
 <div class="register-card">
     <h1 class="register-title">Student Registration</h1>
+    <p class="muted" style="margin-bottom:1.5rem; text-align:center;">
+        Create a new student profile. Fill in your personal details and upload your multimedia files —
+        photo, audio, PDF, and video. IC number is used to derive your birthdate, gender, and state automatically.
+    </p>
 
     <form action="<?= e(url('/register')) ?>" method="post" enctype="multipart/form-data" data-validate>
         <?php require src_path('Views/partials/csrf.php'); ?>
