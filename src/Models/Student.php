@@ -96,6 +96,24 @@ final class Student extends BaseModel
         $stmt->execute(['pw' => $newHash, 'id' => $id]);
     }
 
+    public function getAllWithPhoto(): array
+    {
+        $pdo = \MetaMyKad\Core\Database::connection();
+        return $pdo->query(
+            'SELECT s.id, s.full_name, s.badge,
+                    fm.id AS photo_id
+             FROM students s
+             LEFT JOIN file_metadata fm
+               ON fm.student_id = s.id
+              AND fm.file_type = \'photo\'
+              AND fm.id = (
+                  SELECT MAX(id) FROM file_metadata
+                  WHERE student_id = s.id AND file_type = \'photo\'
+              )
+             ORDER BY s.full_name'
+        )->fetchAll();
+    }
+
     private function resolveState(string $stateCode): string
     {
         $map = [

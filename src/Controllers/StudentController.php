@@ -16,6 +16,36 @@ use MetaMyKad\Services\UploadService;
 
 final class StudentController extends BaseController
 {
+    public function index(): void
+    {
+        $students = (new Student())->getAllWithPhoto();
+
+        $name  = trim((string) ($_GET['name'] ?? ''));
+        $badge = trim((string) ($_GET['badge'] ?? ''));
+
+        if ($name !== '') {
+            $lower = strtolower($name);
+            $students = array_values(array_filter(
+                $students,
+                fn($s) => str_contains(strtolower((string) $s['full_name']), $lower)
+            ));
+        }
+
+        if ($badge !== '') {
+            $students = array_values(array_filter(
+                $students,
+                fn($s) => $s['badge'] === $badge
+            ));
+        }
+
+        $this->render('students', [
+            'pageTitle' => 'All Students',
+            'students'  => $students,
+            'name'      => $name,
+            'badge'     => $badge,
+        ]);
+    }
+
     public function show(): void
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
