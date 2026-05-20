@@ -37,7 +37,11 @@ final class MetadataExtractor
             $photoCategory = 'formal';
         }
 
-        [$r, $g, $b, $variance] = $this->sampleCorners($path, $imgType);
+        try {
+            [$r, $g, $b, $variance] = $this->sampleCorners($path, $imgType);
+        } catch (\Throwable) {
+            [$r, $g, $b, $variance] = [200, 200, 200, 0.0];
+        }
 
         (new CbrMetadata())->insert([
             'file_id'               => $fileId,
