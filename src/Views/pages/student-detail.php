@@ -143,36 +143,31 @@ foreach ($files as $f) {
     <p class="muted">No files uploaded for this student.<?= $isOwner ? ' Use the fields below to upload files.' : '' ?></p>
 </section>
 <?php else: ?>
-<section class="table-card">
-    <h3>Uploaded Files</h3>
-    <div class="metadata-grid mt-4">
+<section class="card">
+    <h3 style="margin-bottom:1rem;">Uploaded Files</h3>
+    <div class="metadata-grid">
     <?php foreach ($files as $file): ?>
         <?php $cbr = $file['cbr'] ?? []; $tags = $file['tags'] ?? []; ?>
-        <div class="file-card">
+        <div class="fc">
 
+            <!-- Media preview area -->
+            <div class="fc-media">
             <?php if ($file['file_type'] === 'photo'): ?>
-                <!-- Photo thumbnail -->
-                <img
-                    class="file-photo-thumb"
-                    src="<?= e(url('/file?id=' . $file['id'])) ?>"
-                    alt="<?= e($file['filename']) ?>"
-                    loading="lazy"
-                >
+                <img class="fc-media__img"
+                     src="<?= e(url('/file?id=' . $file['id'])) ?>"
+                     alt="<?= e($file['filename']) ?>"
+                     loading="lazy">
             <?php elseif ($file['file_type'] === 'audio'): ?>
-                <!-- Custom audio player -->
-                <div class="custom-player custom-player--audio"
+                <div class="fc-media__audio custom-player custom-player--audio"
                      data-src="<?= e(url('/file?id=' . $file['id'])) ?>">
                     <button class="cp-play" type="button" aria-label="Play">&#9654;</button>
-                    <span class="cp-current">0:00</span>
                     <input class="cp-seek" type="range" value="0" min="0" max="100" step="0.01">
-                    <span class="cp-duration">--:--</span>
+                    <span class="cp-current">0:00</span>
                     <button class="cp-mute" type="button" aria-label="Mute">&#128266;</button>
-                    <input class="cp-volume" type="range" value="1" min="0" max="1" step="0.05">
                     <audio preload="none"></audio>
                 </div>
             <?php elseif ($file['file_type'] === 'video'): ?>
-                <!-- Custom video player -->
-                <div class="custom-player custom-player--video"
+                <div class="fc-media__video custom-player custom-player--video"
                      data-src="<?= e(url('/file?id=' . $file['id'])) ?>">
                     <video preload="none"></video>
                     <div class="cp-controls">
@@ -186,82 +181,96 @@ foreach ($files as $f) {
                     </div>
                 </div>
             <?php else: ?>
-                <div class="file-preview">
+                <div class="fc-media__icon">
                     <?php if (!empty($fileIcons[$file['file_type']])): ?>
                         <img src="<?= e($fileIcons[$file['file_type']]) ?>" alt="" aria-hidden="true">
-                    <?php else: ?>
-                        <span>FILE</span>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
+            </div>
 
-            <div class="file-name"><?= e($file['filename']) ?></div>
-            <div class="file-data">
-                Type: <?= e($file['mime_type']) ?><br>
-                Size: <?= e(fmt_bytes((int) $file['file_size'])) ?><br>
-                Date: <?= e($file['upload_date']) ?>
-                <?php if (!empty($file['original_date'])): ?>
-                <br><?= $file['file_type'] === 'photo' ? 'Captured' : 'Original Date' ?>: <?= e($file['original_date']) ?>
-                <?php endif; ?>
+            <!-- Body -->
+            <div class="fc-body">
+                <div class="fc-header">
+                    <span class="fc-name" title="<?= e($file['filename']) ?>"><?= e($file['filename']) ?></span>
+                    <span class="fc-type-badge"><?= e(strtoupper($file['file_type'])) ?></span>
+                </div>
+
+                <dl class="fc-meta">
+                    <div class="fc-meta__row">
+                        <dt>Size</dt><dd><?= e(fmt_bytes((int) $file['file_size'])) ?></dd>
+                    </div>
+                    <div class="fc-meta__row">
+                        <dt>Uploaded</dt><dd><?= e(substr($file['upload_date'], 0, 10)) ?></dd>
+                    </div>
+                    <?php if (!empty($file['original_date'])): ?>
+                    <div class="fc-meta__row">
+                        <dt><?= $file['file_type'] === 'photo' ? 'Captured' : 'Date' ?></dt>
+                        <dd><?= e($file['original_date']) ?></dd>
+                    </div>
+                    <?php endif; ?>
+
+                    <?php if ($file['file_type'] === 'audio' && $cbr !== []): ?>
+                    <div class="fc-meta__row">
+                        <dt>Duration</dt><dd><?= e(fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0))) ?> <span class="fc-tier"><?= e($cbr['audio_duration_tier'] ?? '') ?></span></dd>
+                    </div>
+                    <div class="fc-meta__row">
+                        <dt>Bitrate</dt><dd><?= e((string) ($cbr['audio_bitrate'] ?? '—')) ?> kbps</dd>
+                    </div>
+                    <?php elseif ($file['file_type'] === 'video' && $cbr !== []): ?>
+                    <div class="fc-meta__row">
+                        <dt>Resolution</dt><dd><?= e($cbr['video_resolution'] ?? '—') ?> <span class="fc-tier"><?= e($cbr['video_resolution_tier'] ?? '') ?></span></dd>
+                    </div>
+                    <div class="fc-meta__row">
+                        <dt>Duration</dt><dd><?= ($cbr['video_duration_sec'] ?? 0) > 0 ? e(fmt_seconds((int) $cbr['video_duration_sec'])) : '—' ?></dd>
+                    </div>
+                    <?php elseif ($file['file_type'] === 'pdf'): ?>
+                        <?php $safeText = !empty($file['extracted_text']) && !str_contains((string) $file['extracted_text'], 'is not recognized') ? (string) $file['extracted_text'] : ''; ?>
+                    <div class="fc-meta__row">
+                        <dt>Text</dt><dd><?= $safeText !== '' ? e(mb_strimwidth($safeText, 0, 80, '…')) : 'not extracted' ?></dd>
+                    </div>
+                    <?php endif; ?>
+                </dl>
 
                 <?php if ($file['file_type'] === 'photo' && $cbr !== []): ?>
-                    <br>
-                    <span class="tag-pill"><?= e($cbr['photo_category'] ?? '—') ?></span>
-                    <span class="tag-pill"><?= e($cbr['dominant_expression'] ?? '—') ?><?php if (isset($cbr['expression_confidence'])): ?> <?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%<?php endif; ?></span>
+                <div class="fc-tags">
+                    <?php if (!empty($cbr['photo_category'])): ?><span class="tag-pill"><?= e($cbr['photo_category']) ?></span><?php endif; ?>
+                    <?php if (!empty($cbr['dominant_expression'])): ?>
+                    <span class="tag-pill"><?= e($cbr['dominant_expression']) ?><?php if (isset($cbr['expression_confidence'])): ?> <?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%<?php endif; ?></span>
+                    <?php endif; ?>
                     <?php if (!empty($cbr['dominant_bg_color'])): ?>
                     <span class="tag-pill" style="display:inline-flex;align-items:center;gap:0.3rem;">
-                        <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:<?= e($cbr['dominant_bg_color']) ?>;flex-shrink:0;"></span><?= e($cbr['dominant_bg_color']) ?>
+                        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:<?= e($cbr['dominant_bg_color']) ?>;flex-shrink:0;"></span><?= e($cbr['dominant_bg_color']) ?>
                     </span>
                     <?php endif; ?>
-                <?php elseif ($file['file_type'] === 'audio' && $cbr !== []): ?>
-                    <br><br>Duration: <?= e(fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0))) ?>
-                    (<?= e($cbr['audio_duration_tier'] ?? '—') ?>)
-                    <br>Bitrate: <?= e((string) ($cbr['audio_bitrate'] ?? '—')) ?> kbps
-                <?php elseif ($file['file_type'] === 'video' && $cbr !== []): ?>
-                    <br><br>Resolution: <?= e($cbr['video_resolution'] ?? '—') ?>
-                    (<?= e($cbr['video_resolution_tier'] ?? '—') ?>)
-                    <br>Duration: <?= ($cbr['video_duration_sec'] ?? 0) > 0 ? e(fmt_seconds((int) $cbr['video_duration_sec'])) : '—' ?>
-                <?php elseif ($file['file_type'] === 'pdf'): ?>
-                    <?php
-                    $safeText = !empty($file['extracted_text']) && !str_contains((string) $file['extracted_text'], 'is not recognized')
-                        ? (string) $file['extracted_text'] : '';
-                    ?>
-                    <?php if ($safeText !== ''): ?>
-                        <br><br>Text preview: <?= e(mb_strimwidth($safeText, 0, 200, '…')) ?>
-                    <?php else: ?>
-                        <br><br>Text: not extracted
-                    <?php endif; ?>
+                </div>
                 <?php endif; ?>
 
                 <?php if (!empty($tags)): ?>
-                    <br><br>
+                <div class="fc-tags">
                     <?php foreach ($tags as $tag): ?>
                         <span class="tag-pill"><?= e($tag['tag_name']) ?></span>
                     <?php endforeach; ?>
+                </div>
                 <?php endif; ?>
             </div>
 
+            <!-- Owner actions -->
             <?php if ($isOwner): ?>
-                <!-- File replacement input (edit mode) -->
-                <label class="file-replace-label">
-                    Replace <?= e($file['file_type']) ?> file
-                    <input type="file" name="<?= e($file['file_type']) ?>" form="student-update-form" style="display:block;margin-top:0.3rem;width:100%;font-size:0.8rem;">
+            <div class="fc-actions">
+                <label class="fc-replace-label">
+                    <span>Replace file</span>
+                    <input type="file" name="<?= e($file['file_type']) ?>" form="student-update-form">
                 </label>
-            <?php else: ?>
-                <!-- Delete (non-edit read-only: hidden; only owner can delete) -->
-            <?php endif; ?>
-
-            <?php if ($isOwner): ?>
-                <form action="<?= e(url('/delete-file')) ?>" method="post" style="margin-top:0.75rem;">
+                <form action="<?= e(url('/delete-file')) ?>" method="post">
                     <?php require src_path('Views/partials/csrf.php'); ?>
                     <input type="hidden" name="file_id" value="<?= e((string) $file['id']) ?>">
-                    <button class="button secondary"
-                            type="submit"
-                            data-confirm="Delete this <?= e($file['file_type']) ?> file? This cannot be undone."
-                            style="width:100%; font-size:0.76rem; padding:0.5rem 0.75rem;">
+                    <button class="fc-delete-btn" type="submit"
+                            data-confirm="Delete this <?= e($file['file_type']) ?> file? This cannot be undone.">
                         Delete
                     </button>
                 </form>
+            </div>
             <?php endif; ?>
 
         </div>

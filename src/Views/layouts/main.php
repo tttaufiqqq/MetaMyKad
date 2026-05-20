@@ -93,11 +93,6 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                     <?php endif; ?>
                 </ul>
             </div>
-            <div class="sidebar-note">
-                <span class="sidebar-note__label">Stack</span>
-                <strong>Pure PHP + MySQL</strong>
-                <p>Identity-first search, registration, and multimedia metadata in one custom console.</p>
-            </div>
         </div>
     </aside>
 
@@ -113,10 +108,6 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
             <?php require $contentView; ?>
         </main>
         <footer class="status-footer">
-            <div class="status-footer__group">
-                <span>SYSTEM STATUS: <span class="status-online">OPERATIONAL</span></span>
-                <span>STACK: PURE PHP + MYSQL</span>
-            </div>
             <div>METAMYKAD | BITP3353 MULTIMEDIA DATABASE</div>
         </footer>
     </div>

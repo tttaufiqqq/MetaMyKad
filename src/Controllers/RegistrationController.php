@@ -145,6 +145,22 @@ final class RegistrationController extends BaseController
         // --- 9. Recompute badge ---
         (new Student())->callProcedure('sp_update_badge', [$studentId]);
 
+        // --- 10. Backfill history row with actual file count + badge ---
+        // The history row was written before uploads, so files_uploaded was 0.
+        $db = \MetaMyKad\Core\Database::connection();
+        $db->prepare(
+            'UPDATE registration_history rh
+             JOIN (SELECT MAX(id) AS mid FROM registration_history WHERE ic_number = :ic) t
+               ON rh.id = t.mid
+             JOIN students s ON s.id = :sid
+             SET rh.files_uploaded = (SELECT COUNT(*) FROM file_metadata WHERE student_id = :sid2),
+                 rh.badge_at_time  = s.badge'
+        )->execute([
+            'ic'   => $_POST['ic_number'] ?? '',
+            'sid'  => $studentId,
+            'sid2' => $studentId,
+        ]);
+
         unset($_SESSION['_old']);
         $this->flash('success', $existing !== false ? 'Re-registration successful.' : 'Registration successful.');
         $this->redirect('/student-detail?id=' . $studentId);
