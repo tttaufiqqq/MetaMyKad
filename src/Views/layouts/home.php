@@ -53,7 +53,7 @@ $currentPath = current_path();
         <div class="topnav__user">
             <?php if (Auth::check()): ?>
                 <a href="<?= e(url('/student-detail?id=' . Auth::user()['id'])) ?>" class="topnav__user-link">
-                    &#x1F464; <?= e(Auth::user()['full_name']) ?>
+                    &#x1F464; <?= e(strtoupper(Auth::user()['full_name'])) ?>
                 </a>
                 <form action="<?= e(url('/logout')) ?>" method="post" style="display:inline;margin:0;">
                     <?php require src_path('Views/partials/csrf.php'); ?>
@@ -75,10 +75,6 @@ $currentPath = current_path();
     </main>
 
     <footer class="status-footer home-footer">
-        <div class="status-footer__group">
-            <span>SYSTEM STATUS: <span class="status-online">OPERATIONAL</span></span>
-            <span>STACK: PURE PHP + MYSQL</span>
-        </div>
         <div>METAMYKAD | BITP3353 MULTIMEDIA DATABASE</div>
     </footer>
 
