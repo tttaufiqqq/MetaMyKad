@@ -208,6 +208,9 @@ final class StudentController extends BaseController
             }
 
             // Insert new file record
+            $rawDate      = trim((string) ($_POST['original_date_' . $fileType] ?? ''));
+            $originalDate = preg_match('/^\d{4}-\d{2}-\d{2}$/', $rawDate) ? $rawDate : null;
+
             $fileId = $fileModel->insert([
                 'student_id'      => $studentId,
                 'file_type'       => $fileType,
@@ -216,12 +219,20 @@ final class StudentController extends BaseController
                 'file_path'       => $uploadData['file_path'],
                 'file_size'       => $uploadData['file_size'],
                 'mime_type'       => $uploadData['mime_type'],
+                'original_date'   => $originalDate,
             ]);
 
             try {
                 $extractor->extract($fileId, $fileType, base_path($uploadData['file_path']));
             } catch (\Throwable $e) {
                 error_log("Metadata extraction failed for file {$fileId}: " . $e->getMessage());
+            }
+
+            if (in_array($fileType, ['audio', 'video'], true)) {
+                $browserDuration = (int) ($_POST['duration_sec_' . $fileType] ?? 0);
+                if ($browserDuration > 0) {
+                    (new CbrMetadata())->updateDuration($fileId, $fileType, $browserDuration);
+                }
             }
         }
 

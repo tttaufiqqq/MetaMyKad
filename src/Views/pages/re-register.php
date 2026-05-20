@@ -112,5 +112,30 @@
             }
         });
     });
+
+    ['audio', 'video'].forEach(function (type) {
+        var input = document.getElementById(type);
+        if (!input) return;
+        input.addEventListener('change', function () {
+            if (!this.files || !this.files[0]) return;
+            var url = URL.createObjectURL(this.files[0]);
+            var el = document.createElement(type === 'video' ? 'video' : 'audio');
+            el.preload = 'metadata';
+            el.onloadedmetadata = function () {
+                URL.revokeObjectURL(url);
+                var sec = Math.round(el.duration);
+                var name = 'duration_sec_' + type;
+                var hidden = input.form.querySelector('[name="' + name + '"]');
+                if (!hidden) {
+                    hidden = document.createElement('input');
+                    hidden.type = 'hidden';
+                    hidden.name = name;
+                    input.form.appendChild(hidden);
+                }
+                hidden.value = sec;
+            };
+            el.src = url;
+        });
+    });
 }());
 </script>

@@ -144,6 +144,13 @@ final class RegistrationController extends BaseController
             } catch (\Throwable $e) {
                 error_log("Metadata extraction failed for file {$fileId}: " . $e->getMessage());
             }
+
+            if (in_array($fileType, ['audio', 'video'], true)) {
+                $browserDuration = (int) ($_POST['duration_sec_' . $fileType] ?? 0);
+                if ($browserDuration > 0) {
+                    (new CbrMetadata())->updateDuration($fileId, $fileType, $browserDuration);
+                }
+            }
         }
 
         // --- 9. Recompute badge ---
