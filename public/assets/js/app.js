@@ -41,6 +41,7 @@
         pendingHref = trigger.tagName === 'A' ? trigger.href : null;
         dialog.classList.remove('hidden');
         dialog.setAttribute('aria-hidden', 'false');
+        lockScroll();
     });
 
     if (dialog) {
@@ -53,6 +54,7 @@
                 pendingHref = null;
                 dialog.classList.add('hidden');
                 dialog.setAttribute('aria-hidden', 'true');
+                unlockScroll();
             });
         }
 
@@ -100,6 +102,22 @@
 
     window.addEventListener('pageshow', hideSpinner);
 
+    // ── Scroll lock helpers ───────────────────────────
+    function lockScroll() {
+        document.body.classList.add('modal-open');
+    }
+
+    function unlockScroll() {
+        var anyOpen = document.querySelector(
+            '.student-modal:not(.hidden),' +
+            '.badge-guide-modal:not(.hidden),' +
+            '.confirm-dialog:not(.hidden)'
+        );
+        if (!anyOpen) {
+            document.body.classList.remove('modal-open');
+        }
+    }
+
     // ── Badge Guide Modal ─────────────────────────────
     var badgeModal  = document.getElementById('badge-guide-modal');
     var badgeCloseA = document.getElementById('badge-guide-close');
@@ -109,12 +127,14 @@
         if (!badgeModal) return;
         badgeModal.classList.remove('hidden');
         badgeModal.setAttribute('aria-hidden', 'false');
+        lockScroll();
     }
 
     function closeBadgeGuide() {
         if (!badgeModal) return;
         badgeModal.classList.add('hidden');
         badgeModal.setAttribute('aria-hidden', 'true');
+        unlockScroll();
     }
 
     document.addEventListener('click', function (e) {

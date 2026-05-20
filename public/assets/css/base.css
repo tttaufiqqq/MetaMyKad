@@ -46,6 +46,10 @@ body {
     min-height: 100vh;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
 a {
     color: inherit;
 }
