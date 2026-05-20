@@ -36,6 +36,10 @@ final class TagController extends BaseController
             $this->json(['error' => 'File not found.'], 404);
         }
 
+        if ((int) $file['student_id'] !== (int) Auth::user()['id']) {
+            $this->json(['error' => 'You can only tag your own files.'], 403);
+        }
+
         $tagModel     = new Tag();
         $existingTags = $tagModel->findByFileId($fileId);
 
@@ -76,6 +80,10 @@ final class TagController extends BaseController
         $file = (new FileMetadata())->find($fileId);
         if ($file === false) {
             $this->json(['error' => 'File not found.'], 404);
+        }
+
+        if ((int) $file['student_id'] !== (int) Auth::user()['id']) {
+            $this->json(['error' => 'You can only remove tags from your own files.'], 403);
         }
 
         (new Tag())->detachByName($fileId, $tagName);

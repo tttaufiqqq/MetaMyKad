@@ -275,7 +275,7 @@ foreach ($files as $f) {
                     <div class="fc-meta__row"><dt>Expression</dt><dd><?= e($fmtExpression . $fmtConfidence) ?></dd></div>
                     <?php endif; ?>
                 </dl>
-                <?php if (!empty($tags) || \MetaMyKad\Core\Auth::check()): ?>
+                <?php if (!empty($tags) || $isOwner): ?>
                 <div class="fc-tag-manager"
                      data-file-id="<?= e((string) $file['id']) ?>"
                      data-add-url="<?= e(url('/tag-add')) ?>"
@@ -285,7 +285,7 @@ foreach ($files as $f) {
                         <?php foreach ($tags as $tag): ?>
                         <span class="tag-pill">
                             <?= e($tag['tag_name']) ?>
-                            <?php if (\MetaMyKad\Core\Auth::check()): ?>
+                            <?php if ($isOwner): ?>
                             <button type="button" class="tag-remove-btn"
                                     data-tag="<?= e($tag['tag_name']) ?>"
                                     aria-label="Remove tag <?= e($tag['tag_name']) ?>">&times;</button>
@@ -294,7 +294,7 @@ foreach ($files as $f) {
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
-                    <?php if (\MetaMyKad\Core\Auth::check()): ?>
+                    <?php if ($isOwner): ?>
                     <div class="tag-add-row">
                         <input type="text" class="tag-add-input"
                                placeholder="Add tag…" maxlength="32" autocomplete="off">
@@ -448,9 +448,9 @@ foreach ($files as $f) {
         mediaEl.innerHTML = '';
     }
 
-    // Open on card click (skip actions panel)
+    // Open on card click (skip actions panel and tag manager)
     document.addEventListener('click', function (e) {
-        if (!e.target.closest('.fc-actions')) {
+        if (!e.target.closest('.fc-actions') && !e.target.closest('.fc-tag-manager')) {
             var card = e.target.closest('.fc[data-fc]');
             if (card) openModal(card);
         }
