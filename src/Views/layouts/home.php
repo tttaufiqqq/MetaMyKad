@@ -53,7 +53,8 @@ $currentPath = current_path();
         <div class="topnav__user">
             <?php if (Auth::check()): ?>
                 <a href="<?= e(url('/student-detail?id=' . Auth::user()['id'])) ?>" class="topnav__user-link">
-                    &#x1F464; <?= e(strtoupper(Auth::user()['full_name'])) ?>
+                    <img src="<?= e(asset('images/nav/profile.png')) ?>" alt="" aria-hidden="true" style="width:1.1rem;height:1.1rem;object-fit:contain;vertical-align:middle;margin-right:0.35rem;opacity:0.85;">
+                    <?= e(strtoupper(Auth::user()['full_name'])) ?>
                 </a>
                 <form action="<?= e(url('/logout')) ?>" method="post" style="display:inline;margin:0;">
                     <?php require src_path('Views/partials/csrf.php'); ?>
