@@ -147,39 +147,69 @@ foreach ($files as $f) {
     <h3 style="margin-bottom:1rem;">Uploaded Files</h3>
     <div class="metadata-grid">
     <?php foreach ($files as $file): ?>
-        <?php $cbr = $file['cbr'] ?? []; $tags = $file['tags'] ?? []; ?>
-        <div class="fc">
+        <?php
+        $cbr  = $file['cbr']  ?? [];
+        $tags = $file['tags'] ?? [];
 
-            <!-- Media preview area -->
+        // Build JSON payload for the modal
+        $safeText = !empty($file['extracted_text']) && !str_contains((string) $file['extracted_text'], 'is not recognized')
+            ? (string) $file['extracted_text'] : null;
+
+        $cbrData = [];
+        if ($cbr !== []) {
+            if ($file['file_type'] === 'audio') {
+                $cbrData = [
+                    'duration'       => fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0)),
+                    'duration_tier'  => $cbr['audio_duration_tier'] ?? null,
+                    'bitrate'        => $cbr['audio_bitrate'] ?? null,
+                    'sample_rate'    => $cbr['audio_sample_rate'] ?? null,
+                    'channels'       => $cbr['audio_channels'] ?? null,
+                ];
+            } elseif ($file['file_type'] === 'video') {
+                $cbrData = [
+                    'resolution'      => $cbr['video_resolution'] ?? null,
+                    'resolution_tier' => $cbr['video_resolution_tier'] ?? null,
+                    'duration'        => ($cbr['video_duration_sec'] ?? 0) > 0 ? fmt_seconds((int) $cbr['video_duration_sec']) : null,
+                    'framerate'       => isset($cbr['video_framerate']) ? $cbr['video_framerate'] . ' fps' : null,
+                    'codec'           => $cbr['video_codec'] ?? null,
+                ];
+            } elseif ($file['file_type'] === 'photo') {
+                $cbrData = [
+                    'category'              => $cbr['photo_category'] ?? null,
+                    'expression'            => $cbr['dominant_expression'] ?? null,
+                    'expression_confidence' => isset($cbr['expression_confidence']) ? round((float) $cbr['expression_confidence'] * 100) : null,
+                    'bg_color'              => $cbr['dominant_bg_color'] ?? null,
+                    'width'                 => $cbr['photo_width'] ?? null,
+                    'height'                => $cbr['photo_height'] ?? null,
+                ];
+            }
+        }
+
+        $fcJson = json_encode([
+            'id'            => $file['id'],
+            'type'          => $file['file_type'],
+            'filename'      => $file['filename'],
+            'url'           => url('/file?id=' . $file['id']),
+            'size'          => fmt_bytes((int) $file['file_size']),
+            'uploaded'      => substr($file['upload_date'], 0, 10),
+            'original_date' => $file['original_date'] ?? null,
+            'mime'          => $file['mime_type'] ?? null,
+            'text'          => $safeText,
+            'cbr'           => $cbrData,
+            'tags'          => array_values(array_map(fn($t) => $t['tag_name'], $tags)),
+            'is_owner'      => $isOwner,
+            'file_type_label' => $file['file_type'],
+        ]);
+        ?>
+        <div class="fc" data-fc="<?= htmlspecialchars($fcJson, ENT_QUOTES, 'UTF-8') ?>">
+
+            <!-- Thumbnail (left) -->
             <div class="fc-media">
             <?php if ($file['file_type'] === 'photo'): ?>
                 <img class="fc-media__img"
                      src="<?= e(url('/file?id=' . $file['id'])) ?>"
                      alt="<?= e($file['filename']) ?>"
                      loading="lazy">
-            <?php elseif ($file['file_type'] === 'audio'): ?>
-                <div class="fc-media__audio custom-player custom-player--audio"
-                     data-src="<?= e(url('/file?id=' . $file['id'])) ?>">
-                    <button class="cp-play" type="button" aria-label="Play">&#9654;</button>
-                    <input class="cp-seek" type="range" value="0" min="0" max="100" step="0.01">
-                    <span class="cp-current">0:00</span>
-                    <button class="cp-mute" type="button" aria-label="Mute">&#128266;</button>
-                    <audio preload="none"></audio>
-                </div>
-            <?php elseif ($file['file_type'] === 'video'): ?>
-                <div class="fc-media__video custom-player custom-player--video"
-                     data-src="<?= e(url('/file?id=' . $file['id'])) ?>">
-                    <video preload="none"></video>
-                    <div class="cp-controls">
-                        <button class="cp-play" type="button" aria-label="Play">&#9654;</button>
-                        <span class="cp-current">0:00</span>
-                        <input class="cp-seek" type="range" value="0" min="0" max="100" step="0.01">
-                        <span class="cp-duration">--:--</span>
-                        <button class="cp-mute" type="button" aria-label="Mute">&#128266;</button>
-                        <input class="cp-volume" type="range" value="1" min="0" max="1" step="0.05">
-                        <button class="cp-fullscreen" type="button" aria-label="Fullscreen">&#x26F6;</button>
-                    </div>
-                </div>
             <?php else: ?>
                 <div class="fc-media__icon">
                     <?php if (!empty($fileIcons[$file['file_type']])): ?>
@@ -189,63 +219,32 @@ foreach ($files as $f) {
             <?php endif; ?>
             </div>
 
-            <!-- Body -->
+            <!-- Summary (middle) -->
             <div class="fc-body">
                 <div class="fc-header">
                     <span class="fc-name" title="<?= e($file['filename']) ?>"><?= e($file['filename']) ?></span>
                     <span class="fc-type-badge"><?= e(strtoupper($file['file_type'])) ?></span>
                 </div>
-
                 <dl class="fc-meta">
-                    <div class="fc-meta__row">
-                        <dt>Size</dt><dd><?= e(fmt_bytes((int) $file['file_size'])) ?></dd>
-                    </div>
-                    <div class="fc-meta__row">
-                        <dt>Uploaded</dt><dd><?= e(substr($file['upload_date'], 0, 10)) ?></dd>
-                    </div>
-                    <?php if (!empty($file['original_date'])): ?>
-                    <div class="fc-meta__row">
-                        <dt><?= $file['file_type'] === 'photo' ? 'Captured' : 'Date' ?></dt>
-                        <dd><?= e($file['original_date']) ?></dd>
-                    </div>
-                    <?php endif; ?>
-
+                    <div class="fc-meta__row"><dt>Size</dt><dd><?= e(fmt_bytes((int) $file['file_size'])) ?></dd></div>
+                    <div class="fc-meta__row"><dt>Uploaded</dt><dd><?= e(substr($file['upload_date'], 0, 10)) ?></dd></div>
                     <?php if ($file['file_type'] === 'audio' && $cbr !== []): ?>
-                    <div class="fc-meta__row">
-                        <dt>Duration</dt><dd><?= e(fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0))) ?> <span class="fc-tier"><?= e($cbr['audio_duration_tier'] ?? '') ?></span></dd>
-                    </div>
-                    <div class="fc-meta__row">
-                        <dt>Bitrate</dt><dd><?= e((string) ($cbr['audio_bitrate'] ?? '—')) ?> kbps</dd>
-                    </div>
+                    <div class="fc-meta__row"><dt>Duration</dt><dd><?= e(fmt_seconds((int) ($cbr['audio_duration_sec'] ?? 0))) ?> <span class="fc-tier"><?= e($cbr['audio_duration_tier'] ?? '') ?></span></dd></div>
+                    <div class="fc-meta__row"><dt>Bitrate</dt><dd><?= e((string) ($cbr['audio_bitrate'] ?? '—')) ?> kbps</dd></div>
                     <?php elseif ($file['file_type'] === 'video' && $cbr !== []): ?>
-                    <div class="fc-meta__row">
-                        <dt>Resolution</dt><dd><?= e($cbr['video_resolution'] ?? '—') ?> <span class="fc-tier"><?= e($cbr['video_resolution_tier'] ?? '') ?></span></dd>
-                    </div>
-                    <div class="fc-meta__row">
-                        <dt>Duration</dt><dd><?= ($cbr['video_duration_sec'] ?? 0) > 0 ? e(fmt_seconds((int) $cbr['video_duration_sec'])) : '—' ?></dd>
-                    </div>
+                    <div class="fc-meta__row"><dt>Resolution</dt><dd><?= e($cbr['video_resolution'] ?? '—') ?> <span class="fc-tier"><?= e($cbr['video_resolution_tier'] ?? '') ?></span></dd></div>
+                    <div class="fc-meta__row"><dt>Duration</dt><dd><?= ($cbr['video_duration_sec'] ?? 0) > 0 ? e(fmt_seconds((int) $cbr['video_duration_sec'])) : '—' ?></dd></div>
                     <?php elseif ($file['file_type'] === 'pdf'): ?>
-                        <?php $safeText = !empty($file['extracted_text']) && !str_contains((string) $file['extracted_text'], 'is not recognized') ? (string) $file['extracted_text'] : ''; ?>
-                    <div class="fc-meta__row">
-                        <dt>Text</dt><dd><?= $safeText !== '' ? e(mb_strimwidth($safeText, 0, 80, '…')) : 'not extracted' ?></dd>
-                    </div>
+                    <div class="fc-meta__row"><dt>Text</dt><dd><?= $safeText !== null ? e(mb_strimwidth($safeText, 0, 60, '…')) : 'not extracted' ?></dd></div>
+                    <?php elseif ($file['file_type'] === 'photo' && $cbr !== []): ?>
+                    <?php if (!empty($cbr['photo_category'])): ?>
+                    <div class="fc-meta__row"><dt>Category</dt><dd><?= e($cbr['photo_category']) ?></dd></div>
+                    <?php endif; ?>
+                    <?php if (!empty($cbr['dominant_expression'])): ?>
+                    <div class="fc-meta__row"><dt>Expression</dt><dd><?= e($cbr['dominant_expression']) ?><?php if (isset($cbr['expression_confidence'])): ?> <?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%<?php endif; ?></dd></div>
+                    <?php endif; ?>
                     <?php endif; ?>
                 </dl>
-
-                <?php if ($file['file_type'] === 'photo' && $cbr !== []): ?>
-                <div class="fc-tags">
-                    <?php if (!empty($cbr['photo_category'])): ?><span class="tag-pill"><?= e($cbr['photo_category']) ?></span><?php endif; ?>
-                    <?php if (!empty($cbr['dominant_expression'])): ?>
-                    <span class="tag-pill"><?= e($cbr['dominant_expression']) ?><?php if (isset($cbr['expression_confidence'])): ?> <?= e(round((float) $cbr['expression_confidence'] * 100)) ?>%<?php endif; ?></span>
-                    <?php endif; ?>
-                    <?php if (!empty($cbr['dominant_bg_color'])): ?>
-                    <span class="tag-pill" style="display:inline-flex;align-items:center;gap:0.3rem;">
-                        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:<?= e($cbr['dominant_bg_color']) ?>;flex-shrink:0;"></span><?= e($cbr['dominant_bg_color']) ?>
-                    </span>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
-
                 <?php if (!empty($tags)): ?>
                 <div class="fc-tags">
                     <?php foreach ($tags as $tag): ?>
@@ -255,9 +254,9 @@ foreach ($files as $f) {
                 <?php endif; ?>
             </div>
 
-            <!-- Owner actions -->
+            <!-- Owner actions (right panel) -->
             <?php if ($isOwner): ?>
-            <div class="fc-actions">
+            <div class="fc-actions" onclick="event.stopPropagation()">
                 <label class="fc-replace-label">
                     <span>Replace file</span>
                     <input type="file" name="<?= e($file['file_type']) ?>" form="student-update-form">
@@ -278,6 +277,145 @@ foreach ($files as $f) {
     </div>
 </section>
 <?php endif; ?>
+
+<!-- ── File detail modal ───────────────────────────────── -->
+<div id="fc-modal" class="fm-overlay" hidden aria-modal="true" role="dialog" aria-label="File detail">
+    <div class="fm">
+        <button id="fc-modal-close" class="fm-close" type="button" aria-label="Close">&times;</button>
+        <div class="fm-media" id="fm-media"></div>
+        <div class="fm-body">
+            <div class="fm-header">
+                <span class="fm-name" id="fm-name"></span>
+                <span class="fc-type-badge" id="fm-badge"></span>
+            </div>
+            <dl class="fc-meta fm-meta" id="fm-meta"></dl>
+            <div class="fm-tags fc-tags" id="fm-tags"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    var overlay  = document.getElementById('fc-modal');
+    var mediaEl  = document.getElementById('fm-media');
+    var nameEl   = document.getElementById('fm-name');
+    var badgeEl  = document.getElementById('fm-badge');
+    var metaEl   = document.getElementById('fm-meta');
+    var tagsEl   = document.getElementById('fm-tags');
+
+    function esc(str) {
+        var d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
+    }
+
+    function addRow(label, valueHtml) {
+        var div = document.createElement('div');
+        div.className = 'fc-meta__row';
+        div.innerHTML = '<dt>' + esc(label) + '</dt><dd>' + valueHtml + '</dd>';
+        metaEl.appendChild(div);
+    }
+
+    function openModal(card) {
+        var raw = card.getAttribute('data-fc');
+        if (!raw) return;
+        var f;
+        try { f = JSON.parse(raw); } catch (e) { return; }
+
+        // Media
+        mediaEl.innerHTML = '';
+        if (f.type === 'photo') {
+            var img = document.createElement('img');
+            img.src = f.url;
+            img.alt = f.filename;
+            mediaEl.appendChild(img);
+        } else if (f.type === 'audio') {
+            var audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = f.url;
+            mediaEl.appendChild(audio);
+        } else if (f.type === 'video') {
+            var video = document.createElement('video');
+            video.controls = true;
+            video.src = f.url;
+            mediaEl.appendChild(video);
+        } else if (f.type === 'pdf') {
+            var iframe = document.createElement('iframe');
+            iframe.src = f.url;
+            iframe.title = f.filename;
+            mediaEl.appendChild(iframe);
+        }
+
+        // Header
+        nameEl.textContent = f.filename;
+        badgeEl.textContent = f.type.toUpperCase();
+
+        // Meta
+        metaEl.innerHTML = '';
+        addRow('SIZE', esc(f.size));
+        addRow('UPLOADED', esc(f.uploaded));
+        if (f.original_date) addRow(f.type === 'photo' ? 'CAPTURED' : 'DATE', esc(f.original_date));
+        if (f.mime) addRow('MIME', esc(f.mime));
+
+        var c = f.cbr || {};
+        if (f.type === 'audio') {
+            if (c.duration) addRow('DURATION', esc(c.duration) + (c.duration_tier ? ' <span class="fc-tier">' + esc(c.duration_tier) + '</span>' : ''));
+            if (c.bitrate)  addRow('BITRATE', esc(String(c.bitrate)) + ' kbps');
+            if (c.sample_rate) addRow('SAMPLE RATE', esc(String(c.sample_rate)) + ' Hz');
+            if (c.channels) addRow('CHANNELS', esc(String(c.channels)));
+        } else if (f.type === 'video') {
+            if (c.resolution) addRow('RESOLUTION', esc(c.resolution) + (c.resolution_tier ? ' <span class="fc-tier">' + esc(c.resolution_tier) + '</span>' : ''));
+            if (c.duration)   addRow('DURATION', esc(c.duration));
+            if (c.framerate)  addRow('FRAME RATE', esc(c.framerate));
+            if (c.codec)      addRow('CODEC', esc(c.codec));
+        } else if (f.type === 'photo') {
+            if (c.category)   addRow('CATEGORY', esc(c.category));
+            if (c.expression) addRow('EXPRESSION', esc(c.expression) + (c.expression_confidence ? ' <span class="fc-tier">' + c.expression_confidence + '%</span>' : ''));
+            if (c.bg_color)   addRow('BG COLOR', '<span style="display:inline-flex;align-items:center;gap:0.35rem;"><span style="width:10px;height:10px;border-radius:50%;background:' + esc(c.bg_color) + ';display:inline-block;flex-shrink:0;"></span>' + esc(c.bg_color) + '</span>');
+            if (c.width && c.height) addRow('DIMENSIONS', esc(c.width) + ' × ' + esc(c.height) + ' px');
+        } else if (f.type === 'pdf' && f.text) {
+            addRow('EXTRACTED TEXT', '<span style="white-space:pre-wrap;word-break:break-word;">' + esc(f.text.slice(0, 400)) + (f.text.length > 400 ? '…' : '') + '</span>');
+        }
+
+        // Tags
+        tagsEl.innerHTML = '';
+        (f.tags || []).forEach(function (tag) {
+            var span = document.createElement('span');
+            span.className = 'tag-pill';
+            span.textContent = tag;
+            tagsEl.appendChild(span);
+        });
+
+        overlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        overlay.hidden = true;
+        document.body.style.overflow = '';
+        mediaEl.innerHTML = '';
+    }
+
+    // Open on card click (skip actions panel)
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.fc-actions')) {
+            var card = e.target.closest('.fc[data-fc]');
+            if (card) openModal(card);
+        }
+    });
+
+    // Close on backdrop click
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeModal();
+    });
+
+    document.getElementById('fc-modal-close').addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !overlay.hidden) closeModal();
+    });
+}());
+</script>
 
 <?php if ($isOwner): ?>
 <!-- ── Upload new file types not yet uploaded ─────────── -->
