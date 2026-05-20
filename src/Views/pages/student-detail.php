@@ -43,7 +43,7 @@ foreach ($files as $f) {
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
         <div>
             <h2><?= e($student['full_name']) ?></h2>
-            <p class="muted">IC: <?= e($student['ic_number']) ?> &nbsp;|&nbsp; Badge: <strong><?= e($student['stored_badge']) ?></strong></p>
+            <p class="muted">IC: <?= e($student['ic_number']) ?> &nbsp;|&nbsp; Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
         </div>
         <div class="owner-actions">
             <?php if ($isOwner): ?>
@@ -108,7 +108,7 @@ foreach ($files as $f) {
         <p>Age: <?= e((string) $student['current_age']) ?> years</p>
         <p>Gender: <?= $student['gender'] === 'M' ? 'Male' : 'Female' ?></p>
         <p>State of Birth: <?= e($student['state_of_birth']) ?></p>
-        <p>Badge: <strong><?= e($student['stored_badge']) ?></strong></p>
+        <p>Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
     </article>
     <article>
         <h3>File Summary</h3>
@@ -279,7 +279,7 @@ foreach ($files as $f) {
 
             <!-- Owner actions (right panel) -->
             <?php if ($isOwner): ?>
-            <div class="fc-actions" onclick="event.stopPropagation()">
+            <div class="fc-actions">
                 <label class="fc-replace-label">
                     <span>Replace file</span>
                     <input type="file" name="<?= e($file['file_type']) ?>" form="student-update-form">
@@ -495,7 +495,7 @@ if (!empty($missingTypes)): ?>
             <td><?= e($entry['action']) ?></td>
             <td><?= e($entry['registered_at']) ?></td>
             <td><?= e((string) $entry['files_uploaded']) ?></td>
-            <td><?= e($entry['badge_at_time']) ?></td>
+            <td><?= badge_icon((string) $entry['badge_at_time']) ?></td>
         </tr>
         <?php endforeach; ?>
         </tbody>

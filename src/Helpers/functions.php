@@ -64,3 +64,22 @@ function current_path(): string
     $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
     return $path ?: '/';
 }
+
+function badge_icon(string $badge, string $size = '1.3rem'): string
+{
+    static $map = [
+        'Pendaftar' => 'pendaftar.png',
+        'Pelajar'   => 'pelajar.png',
+        'Aktif'     => 'aktif.png',
+        'Dedikasi'  => 'dedikasi.png',
+        'Cemerlang' => 'cemerlang.png',
+    ];
+    $file = $map[$badge] ?? null;
+    if ($file === null) {
+        return e($badge);
+    }
+    $src = asset('images/nav/' . $file);
+    return '<img src="' . e($src) . '" alt="' . e($badge) . '" title="' . e($badge) . '"'
+         . ' style="width:' . e($size) . ';height:' . e($size) . ';object-fit:contain;vertical-align:middle;" loading="lazy">'
+         . ' ' . e($badge);
+}

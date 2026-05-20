@@ -30,7 +30,7 @@
             <td><?= e($row['action']) ?></td>
             <td><?= e($row['registered_at']) ?></td>
             <td><?= e((string) $row['files_uploaded']) ?></td>
-            <td><?= e($row['badge_at_time']) ?></td>
+            <td><?= badge_icon((string) $row['badge_at_time']) ?></td>
         </tr>
         <?php endforeach; ?>
         </tbody>

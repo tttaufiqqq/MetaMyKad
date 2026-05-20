@@ -62,7 +62,7 @@ $badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
             <?php endif; ?>
         </div>
         <p class="student-card__name"><?= e($student['full_name']) ?></p>
-        <p class="student-card__badge"><?= e($student['badge']) ?></p>
+        <p class="student-card__badge"><?= badge_icon((string) $student['badge'], '1rem') ?></p>
     </a>
     <?php endforeach; ?>
 </div>

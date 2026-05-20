@@ -109,7 +109,7 @@
                 <td><?= e($row['ic_number']) ?></td>
                 <td><?= e($row['gender']) ?></td>
                 <td><?= e($row['state_of_birth']) ?></td>
-                <td><?= e($row['stored_badge']) ?></td>
+                <td><?= badge_icon($row['stored_badge']) ?></td>
                 <td><?= e((string) $row['total_files']) ?></td>
                 <td><?= e((string) ($row['file_type'] ?? '—')) ?></td>
                 <td>

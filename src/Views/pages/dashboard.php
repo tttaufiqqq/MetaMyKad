@@ -53,7 +53,7 @@
             <tbody>
             <?php foreach ($badgeRows as $row): ?>
             <tr>
-                <td><?= e($row['badge']) ?></td>
+                <td><?= badge_icon($row['badge']) ?></td>
                 <td><?= e((string) $row['cnt']) ?></td>
             </tr>
             <?php endforeach; ?>
@@ -81,7 +81,7 @@
             <?php foreach ($recentRows as $row): ?>
             <tr>
                 <td><?= e($row['full_name']) ?></td>
-                <td><?= e($row['badge']) ?></td>
+                <td><?= badge_icon($row['badge']) ?></td>
                 <td><?= e((string) $row['total_files']) ?></td>
                 <td><?= e($row['created_at']) ?></td>
                 <td>
