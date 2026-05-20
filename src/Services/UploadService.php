@@ -106,13 +106,25 @@ final class UploadService
     }
 
     /**
-     * Convert a full name into a lowercase underscore slug safe for filenames.
-     * e.g. "Muhammad Taufiq bin Mohd Arifin" → "muhammad_taufiq_bin_mohd_arifin"
+     * Convert a full name into a short lowercase slug: first word + last word.
+     * e.g. "Muhammad Taufiq bin Mohd Arifin" → "muhammad_arifin"
+     *      "Nur Aisyah binti Ahmad"           → "nur_ahmad"
      */
     private function slugifyName(string $name): string
     {
-        $slug = mb_strtolower(trim($name));
-        $slug = (string) preg_replace('/[^a-z0-9]+/', '_', $slug);
-        return trim(mb_substr($slug, 0, 50), '_');
+        $name  = mb_strtolower(trim($name));
+        $words = (array) preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY);
+        $words = array_values(array_filter($words));
+
+        if (empty($words)) {
+            return 'student';
+        }
+
+        $slug = count($words) > 1
+            ? $words[0] . '_' . $words[count($words) - 1]
+            : $words[0];
+
+        $slug = (string) preg_replace('/[^a-z0-9_]+/', '', $slug);
+        return $slug ?: 'student';
     }
 }
