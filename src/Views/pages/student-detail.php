@@ -14,6 +14,13 @@ $fileIcons = [
     'video' => asset('images/nav/replace-video.png'),
 ];
 
+$fileAccept = [
+    'photo' => 'image/jpeg,image/png,.jpg,.jpeg,.png',
+    'audio' => 'audio/mpeg,audio/wav,.mp3,.wav',
+    'pdf'   => 'application/pdf,.pdf',
+    'video' => 'video/mp4,video/quicktime,video/x-msvideo,.mp4,.mov,.avi',
+];
+
 function fmt_bytes(int $bytes): string {
     if ($bytes >= 1048576) return round($bytes / 1048576, 1) . ' MB';
     if ($bytes >= 1024)    return round($bytes / 1024, 1) . ' KB';
@@ -282,7 +289,8 @@ foreach ($files as $f) {
             <div class="fc-actions">
                 <label class="fc-replace-label">
                     <span>Replace file</span>
-                    <input type="file" name="<?= e($file['file_type']) ?>" form="student-update-form">
+                    <input type="file" name="<?= e($file['file_type']) ?>" form="student-update-form"
+                           accept="<?= e($fileAccept[$file['file_type']] ?? '') ?>">
                 </label>
                 <form action="<?= e(url('/delete-file')) ?>" method="post">
                     <?php require src_path('Views/partials/csrf.php'); ?>
@@ -459,7 +467,8 @@ if (!empty($missingTypes)): ?>
                 <?php endif; ?>
             </span>
             <p><?= ucfirst($type) ?></p>
-            <input type="file" name="<?= e($type) ?>" form="student-update-form" style="margin-top:0.5rem;">
+            <input type="file" name="<?= e($type) ?>" form="student-update-form"
+                   accept="<?= e($fileAccept[$type] ?? '') ?>" style="margin-top:0.5rem;">
         </div>
         <?php endforeach; ?>
     </div>
