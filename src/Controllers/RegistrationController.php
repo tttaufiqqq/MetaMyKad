@@ -115,7 +115,7 @@ final class RegistrationController extends BaseController
         $movedFiles    = [];
 
         try {
-            $uploads = $uploadService->processAll($studentId, $_FILES);
+            $uploads = $uploadService->processAll($studentId, $_FILES, (string) $_POST['full_name']);
         } catch (\RuntimeException $e) {
             $this->flash('error', 'File upload error: ' . $e->getMessage());
             $this->redirect($mode === 'update' ? '/re-register' : '/register');
