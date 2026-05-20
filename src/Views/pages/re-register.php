@@ -8,9 +8,16 @@
     <input type="hidden" name="mode" value="update">
     <div class="form-card-layout full-span">
         <div class="form-grid">
-            <div class="form-group">
-                <input id="ic_number" name="ic_number" type="text" maxlength="12" required>
-                <label for="ic_number">Existing IC Number</label>
+            <div class="reg-id-row full-span">
+                <div class="form-group" style="flex:1;">
+                    <input id="ic_number" name="ic_number" type="text" maxlength="12" autocomplete="off">
+                    <label for="ic_number">Existing IC Number</label>
+                </div>
+                <div class="id-or-divider">or</div>
+                <div class="form-group" style="flex:1;">
+                    <input id="passport_number" name="passport_number" type="text" autocomplete="off">
+                    <label for="passport_number">Passport Number</label>
+                </div>
             </div>
             <div class="feedback-box">
                 Re-registration updates the existing student row. It must not create a second record
