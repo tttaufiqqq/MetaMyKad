@@ -69,7 +69,7 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                         </a>
                     </li>
                     <?php if (\MetaMyKad\Core\Auth::check()): ?>
-                    <li class="nav-item">
+                    <li class="nav-item nav-item--user">
                         <a class="nav-link <?= $currentPath === '/student-detail' ? 'is-active' : '' ?>"
                            href="<?= e(url('/student-detail?id=' . \MetaMyKad\Core\Auth::user()['id'])) ?>">
                             <span class="nav-icon"><img src="<?= e(asset('images/nav/profile.png')) ?>" alt="" aria-hidden="true"></span>

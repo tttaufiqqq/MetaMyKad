@@ -49,7 +49,7 @@ foreach ($files as $f) {
 <section class="card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
         <div>
-            <h2><?= e($student['full_name']) ?></h2>
+            <h2 style="text-transform:uppercase;"><?= e($student['full_name']) ?></h2>
             <p class="muted">IC: <?= e($student['ic_number']) ?> &nbsp;|&nbsp; Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
         </div>
         <div class="owner-actions">

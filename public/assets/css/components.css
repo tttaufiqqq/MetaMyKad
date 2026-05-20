@@ -146,6 +146,10 @@
     flex: 1;
 }
 
+.nav-item--user .nav-text {
+    text-transform: uppercase;
+}
+
 .nav-link:hover,
 .nav-link.is-active {
     background: linear-gradient(135deg, rgba(57, 197, 255, 0.16), rgba(29, 140, 255, 0.08));
