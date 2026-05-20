@@ -1018,6 +1018,13 @@ textarea:focus {
     margin-top: -0.35rem;
 }
 
+/* ── Global name display ─────────────────────────── */
+.student-card__name,
+.table-card tbody td:first-child,
+.table-container tbody td:first-child {
+    text-transform: uppercase;
+}
+
 .table-card,
 .table-container {
     background: linear-gradient(180deg, rgba(18, 27, 54, 0.88), rgba(8, 14, 33, 0.8));
@@ -1120,6 +1127,106 @@ tbody tr:hover {
     cursor: pointer;
 }
 
+/* ── Student row click cursor ─────────────────────── */
+tr[data-student-row] {
+    cursor: pointer;
+}
+
+/* ── Student Preview Modal ───────────────────────── */
+.student-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    padding: var(--space-2);
+    z-index: 60;
+}
+
+.student-modal__panel {
+    width: min(480px, 100%);
+    background: linear-gradient(180deg, rgba(15, 24, 50, 0.98), rgba(8, 14, 33, 0.94));
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-panel);
+    position: relative;
+}
+
+.student-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm, 4px);
+    transition: color 0.15s;
+}
+
+.student-modal__close:hover {
+    color: #fff;
+}
+
+.student-modal__eyebrow {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-brand-bright);
+    font-family: var(--font-mono);
+    margin-bottom: 0.3rem;
+}
+
+.student-modal__name {
+    font-size: 1.15rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 1.25rem;
+    padding-right: 2rem;
+}
+
+.student-modal__meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+}
+
+.sm-field {
+    background: rgba(57, 197, 255, 0.04);
+    border: 1px solid rgba(57, 197, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.55rem 0.75rem;
+}
+
+.sm-field dt {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-muted);
+    font-family: var(--font-mono);
+    margin-bottom: 0.2rem;
+}
+
+.sm-field dd {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.student-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-1);
+}
+
+/* ── Confirm Dialog ───────────────────────────────── */
 .confirm-dialog {
     position: fixed;
     inset: 0;

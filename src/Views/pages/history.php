@@ -24,7 +24,11 @@
         </thead>
         <tbody>
         <?php foreach ($rows as $row): ?>
-        <tr>
+        <tr data-student-row
+            data-name="<?= e($row['full_name'] ?? '') ?>"
+            data-ic="<?= e($row['ic_number']) ?>"
+            data-badge="<?= e($row['badge_at_time']) ?>"
+            data-href="<?= $row['student_id'] ? e(url('/student-detail?id=' . $row['student_id'])) : '' ?>">
             <td><?= e($row['full_name'] ?? '—') ?></td>
             <td><?= e($row['ic_number']) ?></td>
             <td><?= e($row['action']) ?></td>

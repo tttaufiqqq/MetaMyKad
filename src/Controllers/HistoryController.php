@@ -13,7 +13,8 @@ final class HistoryController extends BaseController
         $rows = Database::connection()->query(
             'SELECT rh.id, rh.ic_number, rh.action, rh.files_uploaded,
                     rh.badge_at_time, rh.registered_at,
-                    COALESCE(NULLIF(rh.full_name, \'\'), s.full_name) AS full_name
+                    COALESCE(NULLIF(rh.full_name, \'\'), s.full_name) AS full_name,
+                    s.id AS student_id
              FROM registration_history rh
              LEFT JOIN students s ON s.ic_number = rh.ic_number
              ORDER BY rh.registered_at DESC, rh.id DESC

@@ -102,7 +102,7 @@ foreach ($files as $f) {
                 Email type: <span class="tag-pill"><?= e($student['email_category']) ?></span>
             </p>
         <?php else: ?>
-            <p>Full Name: <strong><?= e($student['full_name']) ?></strong></p>
+            <p>Full Name: <strong><?= e(mb_strtoupper($student['full_name'])) ?></strong></p>
             <p>IC Number: <?= e($student['ic_number']) ?></p>
             <p>Phone: <?= e($student['phone']) ?></p>
             <p>Email: <?= e($student['email']) ?></p>

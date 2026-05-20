@@ -79,7 +79,11 @@
             </thead>
             <tbody>
             <?php foreach ($recentRows as $row): ?>
-            <tr>
+            <tr data-student-row
+                data-name="<?= e($row['full_name']) ?>"
+                data-badge="<?= e($row['badge']) ?>"
+                data-files="<?= e((string) $row['total_files']) ?>"
+                data-href="<?= e(url('/student-detail?id=' . $row['id'])) ?>">
                 <td><?= e($row['full_name']) ?></td>
                 <td><?= badge_icon($row['badge']) ?></td>
                 <td><?= e((string) $row['total_files']) ?></td>

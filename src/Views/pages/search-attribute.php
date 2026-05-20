@@ -13,15 +13,14 @@
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-attribute')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">
-            <label for="gender">Gender</label>
             <select id="gender" name="gender">
                 <option value="">Any</option>
                 <option value="M" <?= ($gender ?? '') === 'M' ? 'selected' : '' ?>>Male</option>
                 <option value="F" <?= ($gender ?? '') === 'F' ? 'selected' : '' ?>>Female</option>
             </select>
+            <label for="gender">Gender</label>
         </div>
         <div class="form-group">
-            <label for="state_of_birth">State Of Birth</label>
             <select id="state_of_birth" name="state_of_birth">
                 <option value="">Any</option>
                 <?php foreach ([
@@ -35,18 +34,18 @@
                 <option value="<?= e($state) ?>" <?= ($stateOfBirth ?? '') === $state ? 'selected' : '' ?>><?= e($state) ?></option>
                 <?php endforeach; ?>
             </select>
+            <label for="state_of_birth">State Of Birth</label>
         </div>
         <div class="form-group">
-            <label for="email_category">Email Category</label>
             <select id="email_category" name="email_category">
                 <option value="">Any</option>
                 <option value="personal" <?= ($emailCategory ?? '') === 'personal' ? 'selected' : '' ?>>Personal</option>
                 <option value="student"  <?= ($emailCategory ?? '') === 'student'  ? 'selected' : '' ?>>Student</option>
                 <option value="work"     <?= ($emailCategory ?? '') === 'work'     ? 'selected' : '' ?>>Work</option>
             </select>
+            <label for="email_category">Email Category</label>
         </div>
         <div class="form-group">
-            <label for="badge">Badge</label>
             <select id="badge" name="badge">
                 <option value="">Any</option>
                 <option value="Pendaftar" <?= ($badge ?? '') === 'Pendaftar' ? 'selected' : '' ?>>Pendaftar</option>
@@ -55,9 +54,9 @@
                 <option value="Dedikasi"  <?= ($badge ?? '') === 'Dedikasi'  ? 'selected' : '' ?>>Dedikasi</option>
                 <option value="Cemerlang" <?= ($badge ?? '') === 'Cemerlang' ? 'selected' : '' ?>>Cemerlang</option>
             </select>
+            <label for="badge">Badge</label>
         </div>
         <div class="form-group">
-            <label for="file_type">File Type</label>
             <select id="file_type" name="file_type">
                 <option value="">Any</option>
                 <option value="photo" <?= ($fileType ?? '') === 'photo' ? 'selected' : '' ?>>Photo</option>
@@ -65,6 +64,7 @@
                 <option value="pdf"   <?= ($fileType ?? '') === 'pdf'   ? 'selected' : '' ?>>PDF</option>
                 <option value="video" <?= ($fileType ?? '') === 'video' ? 'selected' : '' ?>>Video</option>
             </select>
+            <label for="file_type">File Type</label>
         </div>
         <div class="form-actions">
             <button class="button" type="submit">Search</button>
@@ -104,7 +104,15 @@
             </thead>
             <tbody>
             <?php foreach ($results as $row): ?>
-            <tr>
+            <tr data-student-row
+                data-name="<?= e($row['full_name']) ?>"
+                data-ic="<?= e($row['ic_number']) ?>"
+                data-gender="<?= e($row['gender']) ?>"
+                data-state="<?= e($row['state_of_birth']) ?>"
+                data-badge="<?= e($row['stored_badge']) ?>"
+                data-files="<?= e((string) $row['total_files']) ?>"
+                data-file-type="<?= e((string) ($row['file_type'] ?? '')) ?>"
+                data-href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">
                 <td><?= e($row['full_name']) ?></td>
                 <td><?= e($row['ic_number']) ?></td>
                 <td><?= e($row['gender']) ?></td>

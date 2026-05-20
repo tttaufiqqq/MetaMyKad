@@ -9,16 +9,16 @@
     <form class="form-grid" method="get" action="<?= e(url('/search-text')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">
-            <label for="keyword">Keyword Or Phrase</label>
             <input id="keyword" name="keyword" type="text"
                    value="<?= e($keyword ?? '') ?>"
                    placeholder="Search in extracted PDF text...">
+            <label for="keyword">Keyword Or Phrase</label>
         </div>
         <div class="form-group">
-            <label for="tag">Tag (optional)</label>
             <input id="tag" name="tag" type="text"
                    value="<?= e($tag ?? '') ?>"
                    placeholder="Filter by tag name">
+            <label for="tag">Tag (optional)</label>
         </div>
         <div class="form-actions">
             <button class="button" type="submit">Search PDF Text</button>
@@ -52,7 +52,10 @@
             </thead>
             <tbody>
             <?php foreach ($results as $row): ?>
-            <tr>
+            <tr data-student-row
+                data-name="<?= e($row['full_name']) ?>"
+                data-file-type="<?= e($row['file_type']) ?>"
+                data-href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">
                 <td><?= e($row['full_name']) ?></td>
                 <td><?= e($row['filename']) ?></td>
                 <td><?= e($row['file_type']) ?></td>

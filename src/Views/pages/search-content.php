@@ -12,15 +12,14 @@
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-content')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">
-            <label for="photo_category">Photo Category</label>
             <select id="photo_category" name="photo_category">
                 <option value="">Any</option>
                 <option value="formal"     <?= ($photoCategory ?? '') === 'formal'     ? 'selected' : '' ?>>Formal</option>
                 <option value="non_formal" <?= ($photoCategory ?? '') === 'non_formal' ? 'selected' : '' ?>>Non-formal</option>
             </select>
+            <label for="photo_category">Photo Category</label>
         </div>
         <div class="form-group">
-            <label for="dominant_expression">Dominant Expression</label>
             <select id="dominant_expression" name="dominant_expression">
                 <option value="">Any</option>
                 <option value="happy"     <?= ($dominantExpression ?? '') === 'happy'     ? 'selected' : '' ?>>Happy</option>
@@ -31,18 +30,18 @@
                 <option value="fearful"   <?= ($dominantExpression ?? '') === 'fearful'   ? 'selected' : '' ?>>Fearful</option>
                 <option value="disgusted" <?= ($dominantExpression ?? '') === 'disgusted' ? 'selected' : '' ?>>Disgusted</option>
             </select>
+            <label for="dominant_expression">Dominant Expression</label>
         </div>
         <div class="form-group">
-            <label for="audio_duration_tier">Audio Duration Tier</label>
             <select id="audio_duration_tier" name="audio_duration_tier">
                 <option value="">Any</option>
                 <option value="short"  <?= ($audioDurationTier ?? '') === 'short'  ? 'selected' : '' ?>>Short</option>
                 <option value="medium" <?= ($audioDurationTier ?? '') === 'medium' ? 'selected' : '' ?>>Medium</option>
                 <option value="long"   <?= ($audioDurationTier ?? '') === 'long'   ? 'selected' : '' ?>>Long</option>
             </select>
+            <label for="audio_duration_tier">Audio Duration Tier</label>
         </div>
         <div class="form-group">
-            <label for="video_resolution_tier">Video Resolution Tier</label>
             <select id="video_resolution_tier" name="video_resolution_tier">
                 <option value="">Any</option>
                 <option value="SD"  <?= ($videoResolutionTier ?? '') === 'SD'  ? 'selected' : '' ?>>SD</option>
@@ -50,6 +49,7 @@
                 <option value="FHD" <?= ($videoResolutionTier ?? '') === 'FHD' ? 'selected' : '' ?>>FHD</option>
                 <option value="UHD" <?= ($videoResolutionTier ?? '') === 'UHD' ? 'selected' : '' ?>>UHD</option>
             </select>
+            <label for="video_resolution_tier">Video Resolution Tier</label>
         </div>
         <div class="form-actions full-span">
             <button class="button" type="submit">Search Content</button>
@@ -91,7 +91,10 @@
             </thead>
             <tbody>
             <?php foreach ($results as $row): ?>
-            <tr>
+            <tr data-student-row
+                data-name="<?= e($row['full_name']) ?>"
+                data-file-type="<?= e($row['file_type']) ?>"
+                data-href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">
                 <td><?= e($row['full_name']) ?></td>
                 <td><?= e($row['file_type']) ?></td>
                 <td><?= e($row['photo_category'] ?? '—') ?></td>
