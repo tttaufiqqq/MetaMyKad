@@ -12,6 +12,7 @@ return [
     ['GET',  '/students',       'StudentController@index'],
     ['GET',  '/student-detail', 'StudentController@show'],
     ['POST', '/student-update',  'StudentController@update',        ['csrf', 'auth']],
+    ['POST', '/delete-account', 'StudentController@deleteAccount', ['csrf', 'auth']],
     ['GET',  '/file',           'FileController@serve'],
     ['GET',  '/search-attribute', 'SearchController@attributeSearch'],
     ['GET',  '/search-text',    'SearchController@textSearch'],

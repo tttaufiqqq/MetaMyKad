@@ -51,6 +51,16 @@ foreach ($files as $f) {
                     <?php require src_path('Views/partials/csrf.php'); ?>
                     <button type="submit" class="button secondary">Sign Out</button>
                 </form>
+                <form id="delete-account-form" action="<?= e(url('/delete-account')) ?>" method="post" style="margin:0;">
+                    <?php require src_path('Views/partials/csrf.php'); ?>
+                    <input type="hidden" name="student_id" value="<?= e((string) $student['student_id']) ?>">
+                    <button type="submit"
+                            class="button secondary"
+                            style="color:var(--color-danger-text,#ff6b6b); border-color:rgba(255,107,107,0.35);"
+                            data-confirm="Delete your account? This will permanently remove all your data and cannot be undone.">
+                        Delete Account
+                    </button>
+                </form>
             <?php else: ?>
                 <a class="button secondary" href="<?= e(url('/re-register')) ?>">Re-Register</a>
                 <a class="button" href="<?= e(url('/login')) ?>">Login to Edit</a>

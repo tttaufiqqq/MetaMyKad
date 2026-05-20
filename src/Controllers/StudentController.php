@@ -91,6 +91,45 @@ final class StudentController extends BaseController
         ]);
     }
 
+    public function deleteAccount(): void
+    {
+        $loggedUser = Auth::user();
+        $studentId  = (int) ($_POST['student_id'] ?? 0);
+
+        if ($studentId < 1 || (int) $loggedUser['id'] !== $studentId) {
+            http_response_code(403);
+            require src_path('Views/errors/403.php');
+            exit;
+        }
+
+        $studentModel = new Student();
+        $student = $studentModel->find($studentId);
+
+        if ($student === false) {
+            $this->flash('error', 'Student record not found.');
+            $this->redirect('/dashboard');
+        }
+
+        // Delete physical files first
+        $fileModel = new FileMetadata();
+        $files     = $fileModel->findByStudentId($studentId);
+        foreach ($files as $file) {
+            $absPath = base_path((string) $file['file_path']);
+            if (file_exists($absPath)) {
+                unlink($absPath);
+            }
+        }
+
+        // Delete student record (CASCADE removes file_metadata, cbr_metadata, etc.)
+        $studentModel->delete($studentId);
+
+        // End session
+        \MetaMyKad\Core\Session::destroy();
+
+        $this->flash('success', 'Your account has been deleted.');
+        $this->redirect('/');
+    }
+
     public function update(): void
     {
         $loggedUser = Auth::user();
