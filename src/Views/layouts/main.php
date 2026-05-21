@@ -44,11 +44,6 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPath === '/re-register' ? 'is-active' : '' ?>" href="<?= e(url('/re-register')) ?>">
-                            <span class="nav-icon"><img src="<?= e(asset('images/nav/reregister.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">Re-Registration</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link <?= $currentPath === '/search-attribute' ? 'is-active' : '' ?>" href="<?= e(url('/search-attribute')) ?>">
                             <span class="nav-icon"><img src="<?= e(asset('images/nav/abr.png')) ?>" alt="" aria-hidden="true"></span><span class="nav-text">ABR Search</span>
                         </a>

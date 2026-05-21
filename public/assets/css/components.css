@@ -56,7 +56,9 @@
 }
 
 .sidebar-section {
-    margin-bottom: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar-kicker {
@@ -107,7 +109,8 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    flex: 1;
+    justify-content: space-between;
     padding: 0;
 }
 
@@ -121,7 +124,7 @@
     padding: 0.9rem 0.95rem;
     text-decoration: none;
     border-radius: 16px;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--color-muted);
     border: 1px solid transparent;
@@ -1583,7 +1586,6 @@ tr[data-student-row] {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 4rem;
 }
 
 .login-card {
@@ -2348,8 +2350,6 @@ tr[data-student-row] {
 
 /* ── Register page card layout ────────────────────────── */
 .register-card {
-    max-width: 780px;
-    margin: 0 auto;
     background: linear-gradient(180deg, rgba(13, 21, 46, 0.98), rgba(7, 12, 28, 0.96));
     border: 1px solid rgba(121, 166, 255, 0.14);
     border-radius: 24px;

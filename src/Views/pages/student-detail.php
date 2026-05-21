@@ -68,7 +68,6 @@ foreach ($files as $f) {
                     </button>
                 </form>
             <?php else: ?>
-                <a class="button secondary" href="<?= e(url('/re-register')) ?>">Re-Register</a>
                 <a class="button" href="<?= e(url('/login')) ?>">Login to Edit</a>
             <?php endif; ?>
         </div>
