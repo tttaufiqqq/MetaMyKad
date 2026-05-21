@@ -18,7 +18,7 @@ return [
     ['GET',  '/search-text',    'SearchController@textSearch'],
     ['GET',  '/search-content', 'SearchController@contentSearch'],
     ['GET',  '/history',        'HistoryController@index'],
-    ['POST', '/delete-file',    'RegistrationController@deleteFile', ['csrf']],
+    ['POST', '/delete-file',    'RegistrationController@deleteFile', ['csrf', 'auth']],
     ['POST', '/tag-add',        'TagController@add',                 ['csrf']],
     ['POST', '/tag-remove',     'TagController@remove',              ['csrf']],
 ];

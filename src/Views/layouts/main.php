@@ -17,7 +17,7 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
                 </span>
                 <div class="logo-copy">
                     <span class="logo-wordmark"><?= e((string) config('app.name', 'MetaMyKad')) ?></span>
-                    <span class="logo-subtitle">BITP3353 MULTIMEDIA DATABASE</span>
+                    <span class="logo-subtitle">BITP3353 &middot; GROUP GS02</span>
                 </div>
             </div>
             <div class="sidebar-section">
@@ -108,7 +108,7 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
             <?php require $contentView; ?>
         </main>
         <footer class="status-footer">
-            <div>METAMYKAD | BITP3353 MULTIMEDIA DATABASE</div>
+            <div>METAMYKAD | BITP3353 MULTIMEDIA DATABASE | GROUP GS02</div>
         </footer>
     </div>
 </div>

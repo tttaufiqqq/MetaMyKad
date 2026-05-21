@@ -40,7 +40,7 @@ foreach ($files as $f) {
 ?>
 
 <?php if ($isOwner): ?>
-<form id="student-update-form" action="<?= e(url('/student-update')) ?>" method="post" enctype="multipart/form-data">
+<form id="student-update-form" action="<?= e(url('/student-update')) ?>" method="post" enctype="multipart/form-data" data-validate>
     <?php require src_path('Views/partials/csrf.php'); ?>
     <input type="hidden" name="student_id" value="<?= e((string) $student['student_id']) ?>">
 <?php endif; ?>
@@ -79,34 +79,28 @@ foreach ($files as $f) {
 <section class="detail-grid">
     <article>
         <h3>Identity</h3>
-        <?php if ($isOwner): ?>
-            <div class="form-group" style="margin-bottom:0.75rem;">
-                <input type="text" id="full_name" name="full_name" value="<?= e($student['full_name']) ?>" form="student-update-form" required>
-                <label for="full_name">Full Name</label>
+        <dl class="edit-field-list">
+            <div class="edit-field-row">
+                <dt>Full Name</dt>
+                <dd><?php if ($isOwner): ?><input type="text" name="full_name" value="<?= e($student['full_name']) ?>" class="inline-input" form="student-update-form" required><?php else: ?><strong><?= e(mb_strtoupper($student['full_name'])) ?></strong><?php endif; ?></dd>
             </div>
-            <p>IC Number: <?= e($student['ic_number']) ?></p>
-            <div class="form-group" style="margin-bottom:0.75rem; margin-top:0.5rem;">
-                <input type="tel" id="phone" name="phone" value="<?= e($student['phone']) ?>"
-                       form="student-update-form" required
-                       pattern="(\+?60|0)[0-9\-\s]{7,11}"
-                       maxlength="16"
-                       title="Malaysian phone number, e.g. 012-3456789">
-                <label for="phone">Phone</label>
+            <div class="edit-field-row">
+                <dt>IC Number</dt>
+                <dd><?= e($student['ic_number']) ?></dd>
             </div>
-            <div class="form-group" style="margin-bottom:0.75rem;">
-                <input type="email" id="email" name="email" value="<?= e($student['email']) ?>" form="student-update-form" required>
-                <label for="email">Email</label>
+            <div class="edit-field-row">
+                <dt>Phone</dt>
+                <dd><?php if ($isOwner): ?><input type="tel" name="phone" value="<?= e($student['phone']) ?>" class="inline-input" form="student-update-form" required pattern="(\+?60|0)[0-9\-\s]{7,11}" maxlength="16" title="Malaysian phone number, e.g. 012-3456789"><?php else: ?><?= e($student['phone']) ?><?php endif; ?></dd>
             </div>
-            <p style="font-size:0.8rem; color:var(--color-muted); margin-top:-0.25rem; margin-bottom:0.75rem;">
-                Email type: <span class="tag-pill"><?= e($student['email_category']) ?></span>
-            </p>
-        <?php else: ?>
-            <p>Full Name: <strong><?= e(mb_strtoupper($student['full_name'])) ?></strong></p>
-            <p>IC Number: <?= e($student['ic_number']) ?></p>
-            <p>Phone: <?= e($student['phone']) ?></p>
-            <p>Email: <?= e($student['email']) ?></p>
-            <p>Email Type: <?= e($student['email_category']) ?></p>
-        <?php endif; ?>
+            <div class="edit-field-row">
+                <dt>Email</dt>
+                <dd><?php if ($isOwner): ?><input type="email" name="email" value="<?= e($student['email']) ?>" class="inline-input" form="student-update-form" required><?php else: ?><?= e($student['email']) ?><?php endif; ?></dd>
+            </div>
+            <div class="edit-field-row">
+                <dt>Email Type</dt>
+                <dd><span class="tag-pill"><?= e($student['email_category']) ?></span></dd>
+            </div>
+        </dl>
     </article>
     <article>
         <h3>Derived Attributes</h3>
@@ -130,16 +124,16 @@ foreach ($files as $f) {
 <!-- ── Password change (edit mode only) ───────────────── -->
 <section class="card">
     <h3>Change Password <span class="field-note">(optional — leave blank to keep current)</span></h3>
-    <div class="form-grid two-col mt-4">
-        <div class="form-group">
-            <input type="password" id="current_password" name="current_password" form="student-update-form" autocomplete="current-password">
-            <label for="current_password">Current Password</label>
+    <dl class="edit-field-list" style="margin-top:0.75rem;">
+        <div class="edit-field-row">
+            <dt>Current</dt>
+            <dd><input type="password" name="current_password" class="inline-input" form="student-update-form" autocomplete="current-password" placeholder="Enter current password"></dd>
         </div>
-        <div class="form-group">
-            <input type="password" id="new_password" name="new_password" form="student-update-form" autocomplete="new-password">
-            <label for="new_password">New Password</label>
+        <div class="edit-field-row">
+            <dt>New</dt>
+            <dd><input type="password" name="new_password" class="inline-input" form="student-update-form" autocomplete="new-password" placeholder="Enter new password"></dd>
         </div>
-    </div>
+    </dl>
 </section>
 <?php endif; ?>
 
@@ -307,7 +301,7 @@ foreach ($files as $f) {
                 <?php endif; ?>
             </div>
 
-            <!-- Owner actions (right panel) -->
+            <!-- Owner actions (right column) -->
             <?php if ($isOwner): ?>
             <div class="fc-actions">
                 <label class="fc-replace-label">

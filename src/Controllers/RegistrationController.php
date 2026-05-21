@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MetaMyKad\Controllers;
 
 use InvalidArgumentException;
+use MetaMyKad\Core\Auth;
 use MetaMyKad\Core\Validator;
 use MetaMyKad\Models\CbrMetadata;
 use MetaMyKad\Models\FileMetadata;
@@ -67,9 +68,20 @@ final class RegistrationController extends BaseController
         // --- 3. Detect existing student ---
         $existing = $icProvided ? $student->findByIc((string) $_POST['ic_number']) : false;
 
+        if ($mode === 'update' && !Auth::check()) {
+            $this->flash('error', 'You must be logged in to re-register.');
+            $this->redirect('/login');
+        }
+
         if ($mode === 'update' && $existing === false) {
             $this->flash('error', 'IC number not found. Please register first.');
             $this->redirect('/re-register');
+        }
+
+        if ($mode === 'update' && $existing !== false && (int) Auth::user()['id'] !== (int) $existing['id']) {
+            http_response_code(403);
+            require src_path('Views/errors/403.php');
+            exit;
         }
 
         // --- 4. Re-registration: delete only files whose type is being replaced ---
@@ -211,6 +223,12 @@ final class RegistrationController extends BaseController
         if ($file === false) {
             $this->flash('error', 'File not found.');
             $this->redirect('/dashboard');
+        }
+
+        if ((int) Auth::user()['id'] !== (int) $file['student_id']) {
+            http_response_code(403);
+            require src_path('Views/errors/403.php');
+            exit;
         }
 
         $studentId = (int) $file['student_id'];

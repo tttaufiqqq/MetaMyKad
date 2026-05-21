@@ -1,6 +1,6 @@
 <section class="home-hero">
     <div class="home-hero__content">
-        <span class="home-hero__eyebrow">BITP3353 Multimedia Database</span>
+        <span class="home-hero__eyebrow">BITP3353 Multimedia Database &middot; Group GS02</span>
         <h1 class="home-hero__title">
             MetaMyKad<br>
             <span class="home-hero__accent">Student Registry</span>
