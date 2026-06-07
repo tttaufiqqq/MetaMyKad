@@ -1,0 +1,205 @@
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(57, 197, 255, 0.3) var(--color-bg-deep);
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(57, 197, 255, 0.28);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(57, 197, 255, 0.55);
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background:
+        radial-gradient(circle at top left, rgba(57, 197, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(255, 179, 92, 0.14), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(29, 140, 255, 0.16), transparent 28%),
+        linear-gradient(160deg, var(--color-bg-alt) 0%, var(--color-bg) 48%, var(--color-bg-deep) 100%);
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+a {
+    color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.03em;
+}
+
+p {
+    color: var(--color-muted);
+}
+
+code {
+    background: rgba(4, 8, 22, 0.95);
+    border: 1px solid rgba(121, 166, 255, 0.14);
+    padding: 0.15rem 0.4rem;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+}
+
+::selection {
+    background: rgba(143, 235, 255, 0.24);
+    color: #fff;
+}
+
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+    padding: 1rem;
+}
+
+.sidebar {
+    width: 292px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 1rem;
+    align-self: flex-start;
+}
+
+.main-content {
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.site-header {
+    padding: 1.1rem 1.5rem;
+    border: 1px solid var(--color-line);
+    background: rgba(8, 14, 33, 0.72);
+    position: sticky;
+    top: 1rem;
+    z-index: 20;
+    margin-bottom: var(--space-3);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-soft);
+}
+
+.content {
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0 var(--space-4);
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+.muted {
+    color: var(--color-muted);
+}
+
+.status-footer {
+    min-height: 56px;
+    background: rgba(8, 14, 33, 0.74);
+    border: 1px solid var(--color-line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-dim);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(18px);
+    margin-top: auto;
+}
+
+.status-online {
+    color: var(--color-secondary);
+    font-weight: 700;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(121, 166, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(121, 166, 255, 0.035) 1px, transparent 1px);
+    background-size: 72px 72px;
+    z-index: -1;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.65), transparent 88%);
+    pointer-events: none;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: auto -10% -18% auto;
+    width: 34rem;
+    height: 34rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(57, 197, 255, 0.18), transparent 66%);
+    filter: blur(16px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+@media (max-width: 760px) {
+    .app-container {
+        flex-direction: column;
+        padding: 0.75rem;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    .site-header,
+    .content,
+    .status-footer {
+        padding: var(--space-2);
+    }
+
+    .site-header {
+        min-height: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--space-2);
+        top: 0.75rem;
+    }
+
+    .status-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
