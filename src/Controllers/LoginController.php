@@ -35,7 +35,13 @@ final class LoginController extends BaseController
         }
 
         // Step 2: check if this student has a MetaMyKad profile yet.
-        $student = (new Student())->findByMatric($matric);
+        $studentModel = new Student();
+        $student      = $studentModel->findByMatric($matric);
+
+        if ($student === false) {
+            // Fallback: student registered before matric_number was tracked — match by full_name.
+            $student = $studentModel->findByFullName((string) ($central['full_name'] ?? ''));
+        }
 
         if ($student === false) {
             // Identity confirmed but no project profile — send to registration.

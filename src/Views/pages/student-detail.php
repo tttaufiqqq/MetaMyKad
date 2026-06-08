@@ -539,6 +539,7 @@ if (!empty($missingTypes)): ?>
 </section>
 
 </form><!-- end edit form -->
+<?php endif; ?>
 <?php if ($isOwner): ?>
 <form id="logout-form" action="<?= e(url('/logout')) ?>" method="post" style="display:none;">
     <?php require src_path('Views/partials/csrf.php'); ?>

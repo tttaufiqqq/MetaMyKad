@@ -2851,6 +2851,17 @@ tr[data-student-row] {
     flex-wrap: wrap;
 }
 
+.home-hero__notice {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+.home-hero__notice a {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
 .home-hero__photo {
     width: 100%;
     border-radius: var(--radius-lg);

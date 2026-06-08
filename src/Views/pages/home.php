@@ -13,6 +13,11 @@
             <a href="<?= e(url('/register')) ?>" class="button">Register Now</a>
             <a href="<?= e(url('/dashboard')) ?>" class="button secondary">View Dashboard</a>
         </div>
+        <p class="home-hero__notice">
+            Already registered in <strong>Madam Hidayah's system</strong>?
+            <a href="<?= e(url('/login')) ?>">Log in to edit your profile</a> or
+            <a href="<?= e(url('/students')) ?>">browse the student list</a>.
+        </p>
     </div>
 
     <div class="home-hero__visual">

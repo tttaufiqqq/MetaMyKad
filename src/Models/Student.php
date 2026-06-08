@@ -71,11 +71,20 @@ final class Student extends BaseModel
         return $stmt->fetch();
     }
 
+    public function findByFullName(string $fullName): array|false
+    {
+        $stmt = \MetaMyKad\Core\Database::connection()->prepare(
+            'SELECT * FROM students WHERE full_name = :n LIMIT 1'
+        );
+        $stmt->execute(['n' => $fullName]);
+        return $stmt->fetch();
+    }
+
     public function findInCentral(string $matric): array|false
     {
         $stmt = \MetaMyKad\Core\Database::connection()->prepare(
             'SELECT id, matric_no, full_name, phone_no, password
-               FROM mmdb2026.stu WHERE matric_no = :m LIMIT 1'
+               FROM mmdb2026.stu WHERE LOWER(matric_no) = LOWER(:m) LIMIT 1'
         );
         $stmt->execute(['m' => $matric]);
         return $stmt->fetch();
