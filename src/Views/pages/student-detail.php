@@ -8,10 +8,10 @@ use MetaMyKad\Core\Auth;
 $isOwner = Auth::check() && (int) Auth::user()['id'] === (int) $student['student_id'];
 
 $fileIcons = [
-    'photo' => asset('images/nav/replace-image.png'),
-    'audio' => asset('images/nav/replace-audio.png'),
-    'pdf'   => asset('images/nav/replace-pdf.png'),
-    'video' => asset('images/nav/replace-video.png'),
+    'photo' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+    'audio' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+    'pdf'   => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+    'video' => '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>',
 ];
 
 $fileAccept = [
@@ -216,7 +216,7 @@ foreach ($files as $f) {
             <?php else: ?>
                 <div class="fc-media__icon">
                     <?php if (!empty($fileIcons[$file['file_type']])): ?>
-                        <img src="<?= e($fileIcons[$file['file_type']]) ?>" alt="" aria-hidden="true">
+                        <?= $fileIcons[$file['file_type']] ?>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
@@ -524,7 +524,7 @@ if (!empty($missingTypes)): ?>
         <div class="upload-box">
             <span class="upload-icon">
                 <?php if (!empty($fileIcons[$type])): ?>
-                    <img src="<?= e($fileIcons[$type]) ?>" alt="" aria-hidden="true">
+                    <?= $fileIcons[$type] ?>
                 <?php else: ?>
                     <span>FILE</span>
                 <?php endif; ?>
