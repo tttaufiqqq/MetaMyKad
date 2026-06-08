@@ -21,7 +21,6 @@ $currentPath = current_path();
         <ul class="topnav__links" id="topnav-links">
             <li><a href="<?= e(url('/dashboard')) ?>" class="topnav__link">Dashboard</a></li>
             <li><a href="<?= e(url('/register')) ?>" class="topnav__link">Register</a></li>
-            <li><a href="<?= e(url('/re-register')) ?>" class="topnav__link">Re-Register</a></li>
             <li class="topnav__dropdown-wrap">
                 <button class="topnav__link topnav__dropdown-btn" id="topnav-search-btn" type="button">
                     Search <span class="topnav__caret">&#x25BE;</span>

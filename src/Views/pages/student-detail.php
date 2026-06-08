@@ -54,19 +54,12 @@ foreach ($files as $f) {
         </div>
         <div class="owner-actions">
             <?php if ($isOwner): ?>
-                <form action="<?= e(url('/logout')) ?>" method="post" style="margin:0;">
-                    <?php require src_path('Views/partials/csrf.php'); ?>
-                    <button type="submit" class="button secondary">Sign Out</button>
-                </form>
-                <form id="delete-account-form" action="<?= e(url('/delete-account')) ?>" method="post" style="margin:0;">
-                    <?php require src_path('Views/partials/csrf.php'); ?>
-                    <input type="hidden" name="student_id" value="<?= e((string) $student['student_id']) ?>">
-                    <button type="submit"
-                            class="button secondary button--danger"
-                            data-confirm="Delete your account? This will permanently remove all your data and cannot be undone.">
-                        Delete Account
-                    </button>
-                </form>
+                <button type="submit" form="logout-form" class="button secondary">Sign Out</button>
+                <button type="submit" form="delete-account-form"
+                        class="button secondary button--danger"
+                        data-confirm="Delete your account? This will permanently remove all your data and cannot be undone.">
+                    Delete Account
+                </button>
             <?php else: ?>
                 <a class="button" href="<?= e(url('/login')) ?>">Login to Edit</a>
             <?php endif; ?>
@@ -546,6 +539,14 @@ if (!empty($missingTypes)): ?>
 </section>
 
 </form><!-- end edit form -->
+<?php if ($isOwner): ?>
+<form id="logout-form" action="<?= e(url('/logout')) ?>" method="post" style="display:none;">
+    <?php require src_path('Views/partials/csrf.php'); ?>
+</form>
+<form id="delete-account-form" action="<?= e(url('/delete-account')) ?>" method="post" style="display:none;">
+    <?php require src_path('Views/partials/csrf.php'); ?>
+    <input type="hidden" name="student_id" value="<?= e((string) $student['student_id']) ?>">
+</form>
 <?php endif; ?>
 
 <!-- ── Registration history ───────────────────────────── -->
