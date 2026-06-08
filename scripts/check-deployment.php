@@ -47,6 +47,8 @@ check_line(file_exists($root . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARA
 check_line(file_exists($root . DIRECTORY_SEPARATOR . '.env'), '.env file exists');
 check_line(file_exists($root . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'index.php'), 'public/index.php exists');
 check_line(file_exists($root . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'web.config'), 'public/web.config exists');
+check_line(file_exists($root . DIRECTORY_SEPARATOR . '.htaccess'), 'Apache root .htaccess exists');
+check_line(file_exists($root . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . '.htaccess'), 'Apache public/.htaccess exists');
 
 $appUrl = $env['APP_URL'] ?? '';
 check_line($appUrl !== '', 'APP_URL is configured');
@@ -91,4 +93,3 @@ if (extension_loaded('pdo_mysql') && $env !== []) {
 }
 
 exit($failed ? 1 : 0);
-
