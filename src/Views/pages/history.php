@@ -44,7 +44,7 @@
                     </span>
                 <?php endif; ?>
             </td>
-            <td><?= e($row['registered_at']) ?></td>
+            <td><?= fmt_date($row['registered_at']) ?></td>
             <td><?= e((string) $row['files_uploaded']) ?></td>
             <td><?= badge_icon((string) $row['badge_at_time']) ?></td>
         </tr>

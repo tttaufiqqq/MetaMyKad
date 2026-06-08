@@ -96,7 +96,7 @@ foreach ($files as $f) {
     </article>
     <article>
         <h3>Derived Attributes</h3>
-        <p>Date of Birth: <?= e($student['date_of_birth']) ?></p>
+        <p>Date of Birth: <?= fmt_date($student['date_of_birth']) ?></p>
         <p>Age: <?= e((string) $student['current_age']) ?> years</p>
         <p>Gender: <?= $student['gender'] === 'M' ? 'Male' : 'Female' ?></p>
         <p>State of Birth: <?= e($student['state_of_birth']) ?></p>
@@ -223,9 +223,9 @@ foreach ($files as $f) {
                 </div>
                 <dl class="fc-meta">
                     <div class="fc-meta__row"><dt>Size</dt><dd><?= e(fmt_bytes((int) $file['file_size'])) ?></dd></div>
-                    <div class="fc-meta__row"><dt>Uploaded</dt><dd><?= e(substr($file['upload_date'], 0, 10)) ?></dd></div>
+                    <div class="fc-meta__row"><dt>Uploaded</dt><dd><?= fmt_date($file['upload_date']) ?></dd></div>
                     <?php if (!empty($file['original_date'])): ?>
-                    <div class="fc-meta__row"><dt>Created</dt><dd><?= e($file['original_date']) ?></dd></div>
+                    <div class="fc-meta__row"><dt>Created</dt><dd><?= fmt_date($file['original_date']) ?></dd></div>
                     <?php endif; ?>
                     <?php if ($file['file_type'] === 'audio'): ?>
                     <?php
@@ -567,7 +567,7 @@ if (!empty($missingTypes)): ?>
         <?php foreach ($history as $entry): ?>
         <tr>
             <td><?= e($entry['action']) ?></td>
-            <td><?= e($entry['registered_at']) ?></td>
+            <td><?= fmt_date($entry['registered_at']) ?></td>
             <td><?= e((string) $entry['files_uploaded']) ?></td>
             <td><?= badge_icon((string) $entry['badge_at_time']) ?></td>
         </tr>

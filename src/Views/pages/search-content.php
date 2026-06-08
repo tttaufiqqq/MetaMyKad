@@ -105,7 +105,7 @@
                 <td><?= e($row['dominant_expression'] ?? '—') ?></td>
                 <td><?= e($row['audio_duration_tier'] ?? '—') ?></td>
                 <td><?= e($row['video_resolution_tier'] ?? '—') ?></td>
-                <td><?= e($row['upload_date']) ?></td>
+                <td><?= fmt_date($row['upload_date']) ?></td>
                 <td>
                     <a class="button" href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">View</a>
                 </td>

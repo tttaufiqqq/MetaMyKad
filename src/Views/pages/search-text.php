@@ -72,7 +72,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>—<?php endif; ?>
                 </td>
-                <td><?= e(substr($row['upload_date'], 0, 10)) ?></td>
+                <td><?= fmt_date($row['upload_date']) ?></td>
                 <td>
                     <a class="button" href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">View</a>
                 </td>

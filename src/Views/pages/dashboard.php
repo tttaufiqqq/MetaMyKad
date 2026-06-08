@@ -92,7 +92,7 @@
                 <td><?= e($row['full_name']) ?></td>
                 <td><?= badge_icon($row['badge']) ?></td>
                 <td><?= e((string) $row['total_files']) ?></td>
-                <td><?= e($row['created_at']) ?></td>
+                <td><?= fmt_date($row['created_at']) ?></td>
                 <td>
                     <a class="button" href="<?= e(url('/student-detail?id=' . $row['id'])) ?>">View</a>
                 </td>

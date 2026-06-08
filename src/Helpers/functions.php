@@ -58,6 +58,16 @@ function e(?string $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
+function fmt_date(?string $value): string
+{
+    if ($value === null || $value === '') {
+        return '—';
+    }
+    $dt = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $value)
+       ?: \DateTimeImmutable::createFromFormat('Y-m-d', $value);
+    return $dt ? $dt->format('d/m/Y') : e($value);
+}
+
 function redirect(string $path): never
 {
     header('Location: ' . url(ltrim($path, '/')));
