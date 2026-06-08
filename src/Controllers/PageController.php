@@ -13,7 +13,21 @@ final class PageController extends BaseController
 
     public function register(): void
     {
-        $this->render('register', ['pageTitle' => 'Registration']);
+        $matric  = trim((string) ($_GET['matric'] ?? ''));
+        $prefill = [];
+
+        if ($matric !== '') {
+            $central = (new \MetaMyKad\Models\Student())->findInCentral($matric);
+            if ($central !== false) {
+                $prefill = [
+                    'matric'    => $central['matric_no'],
+                    'full_name' => $central['full_name'],
+                    'phone'     => $central['phone_no'],
+                ];
+            }
+        }
+
+        $this->render('register', ['pageTitle' => 'Registration', 'prefill' => $prefill]);
     }
 
     public function reRegister(): void

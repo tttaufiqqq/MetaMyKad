@@ -6,6 +6,7 @@ namespace MetaMyKad\Controllers;
 
 use InvalidArgumentException;
 use MetaMyKad\Core\Auth;
+use MetaMyKad\Core\Session;
 use MetaMyKad\Core\Validator;
 use MetaMyKad\Models\CbrMetadata;
 use MetaMyKad\Models\FileMetadata;
@@ -42,7 +43,6 @@ final class RegistrationController extends BaseController
         if ($mode === 'create') {
             $errors += Validator::validate($_POST, [
                 'matric_number' => ['required'],
-                'password'      => ['required'],
             ]);
         }
 
@@ -52,8 +52,25 @@ final class RegistrationController extends BaseController
             $this->redirect($mode === 'update' ? '/re-register' : '/register');
         }
 
-        // --- 2. IC parse ---
         $student = new Student();
+
+        // --- 2. For new registrations: verify matric exists in mmdb2026.stu ---
+        if ($mode === 'create') {
+            $matric  = trim((string) ($_POST['matric_number'] ?? ''));
+            $central = $student->findInCentral($matric);
+            if ($central === false) {
+                $this->flash('error', 'Matric number not recognized. Only enrolled students can register.');
+                $this->redirect('/register');
+            }
+
+            // Guard against duplicate profiles
+            if ($student->findByMatric($matric) !== false) {
+                $this->flash('error', 'You already have a profile. Please log in.');
+                $this->redirect('/login');
+            }
+        }
+
+        // --- 3. IC parse ---
         $derived = null;
         if ($icProvided) {
             try {
@@ -65,7 +82,7 @@ final class RegistrationController extends BaseController
         }
         $emailCategory = $student->classifyEmail((string) $_POST['email']);
 
-        // --- 3. Detect existing student ---
+        // --- 4. Detect existing student (by IC for re-registration logic) ---
         $existing = $icProvided ? $student->findByIc((string) $_POST['ic_number']) : false;
 
         if ($mode === 'update' && !Auth::check()) {
@@ -113,9 +130,9 @@ final class RegistrationController extends BaseController
         }
 
         // --- 5. Call sp_register_student → get student_id ---
-        $passwordHash = $existing !== false
-            ? ($existing['password'] ?? '')
-            : password_hash((string) $_POST['password'], PASSWORD_DEFAULT);
+        // Password is NULL for new registrations — auth is delegated to mmdb2026.stu.
+        // Re-registration carries the existing value forward (also NULL for newer accounts).
+        $passwordHash = $existing !== false ? ($existing['password'] ?? null) : null;
 
         $result = (new Student())->callProcedure('sp_register_student', [
             $_POST['ic_number'] ?? '',
@@ -204,7 +221,20 @@ final class RegistrationController extends BaseController
         ]);
 
         unset($_SESSION['_old']);
-        $this->flash('success', $existing !== false ? 'Re-registration successful.' : 'Registration successful.');
+
+        // Auto-login on new registration so the student can edit their profile immediately.
+        if ($mode === 'create') {
+            $registered = (new Student())->findByMatric((string) ($_POST['matric_number'] ?? ''));
+            if ($registered !== false) {
+                Session::put('user', [
+                    'id'            => (int) $registered['id'],
+                    'full_name'     => $registered['full_name'],
+                    'matric_number' => $registered['matric_number'],
+                ]);
+            }
+        }
+
+        $this->flash('success', $existing !== false ? 'Re-registration successful.' : 'Registration successful. Welcome to MetaMyKad!');
         $this->redirect('/student-detail?id=' . $studentId);
     }
 

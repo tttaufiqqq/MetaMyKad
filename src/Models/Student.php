@@ -71,6 +71,16 @@ final class Student extends BaseModel
         return $stmt->fetch();
     }
 
+    public function findInCentral(string $matric): array|false
+    {
+        $stmt = \MetaMyKad\Core\Database::connection()->prepare(
+            'SELECT id, matric_no, full_name, phone_no, password
+               FROM mmdb2026.stu WHERE matric_no = :m LIMIT 1'
+        );
+        $stmt->execute(['m' => $matric]);
+        return $stmt->fetch();
+    }
+
     public function updateProfile(int $id, array $data): void
     {
         $db = \MetaMyKad\Core\Database::connection();
@@ -111,6 +121,27 @@ final class Student extends BaseModel
                   WHERE student_id = s.id AND file_type = \'photo\'
               )
              ORDER BY s.full_name'
+        )->fetchAll();
+    }
+
+    public function getAllFromCentral(): array
+    {
+        $pdo = \MetaMyKad\Core\Database::connection();
+        return $pdo->query(
+            'SELECT c.matric_no, c.full_name, c.group_no,
+                    m.id   AS metamykad_id,
+                    m.badge,
+                    fm.id  AS photo_id
+               FROM mmdb2026.stu c
+               LEFT JOIN students m ON m.matric_number = c.matric_no
+               LEFT JOIN file_metadata fm
+                 ON fm.student_id = m.id
+                AND fm.file_type = \'photo\'
+                AND fm.id = (
+                    SELECT MAX(id) FROM file_metadata
+                    WHERE student_id = m.id AND file_type = \'photo\'
+                )
+              ORDER BY c.full_name'
         )->fetchAll();
     }
 

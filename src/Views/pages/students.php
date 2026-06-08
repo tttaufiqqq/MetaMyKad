@@ -3,14 +3,15 @@
 /** @var string $name */
 /** @var string $badge */
 
-$badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
+$badges    = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
+$registered = count(array_filter($students, fn($s) => $s['metamykad_id'] !== null));
 ?>
 
 <section class="card">
     <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
         <div>
             <h2>All Students <span style="font-size:1rem; font-weight:400; color:var(--color-muted);">(<?= count($students) ?>)</span></h2>
-            <p class="muted" style="margin-bottom:0.5rem;">Browse every registered student in the system.</p>
+            <p class="muted" style="margin-bottom:0.5rem;"><?= $registered ?> of <?= count($students) ?> students have a MetaMyKad profile.</p>
             <button type="button" class="badge-guide-trigger" data-badge-guide-open>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <circle cx="6" cy="6" r="5.5" stroke="currentColor"/>
@@ -35,6 +36,7 @@ $badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
                 <?php foreach ($badges as $b): ?>
                 <option value="<?= e($b) ?>" <?= $badge === $b ? 'selected' : '' ?>><?= e($b) ?></option>
                 <?php endforeach; ?>
+                <option value="unregistered" <?= $badge === 'unregistered' ? 'selected' : '' ?>>Profile Not Complete</option>
             </select>
             <label for="badge">Badge</label>
         </div>
@@ -56,7 +58,11 @@ $badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
 <?php else: ?>
 <div class="students-grid">
     <?php foreach ($students as $student): ?>
-    <a class="student-card" href="<?= e(url('/student-detail?id=' . $student['id'])) ?>">
+    <?php $isRegistered = $student['metamykad_id'] !== null; ?>
+    <a class="student-card <?= $isRegistered ? '' : 'student-card--unregistered' ?>"
+       href="<?= $isRegistered
+               ? e(url('/student-detail?id=' . $student['metamykad_id']))
+               : e(url('/register?matric=' . urlencode($student['matric_no']))) ?>">
         <div class="student-card__photo">
             <?php if ($student['photo_id'] !== null): ?>
             <img src="<?= e(url('/file?id=' . $student['photo_id'])) ?>"
@@ -69,7 +75,11 @@ $badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
             <?php endif; ?>
         </div>
         <p class="student-card__name"><?= e($student['full_name']) ?></p>
+        <?php if ($isRegistered): ?>
         <p class="student-card__badge"><?= badge_icon((string) $student['badge'], '1rem') ?></p>
+        <?php else: ?>
+        <p class="student-card__badge student-card__badge--none">Profile Not Complete</p>
+        <?php endif; ?>
     </a>
     <?php endforeach; ?>
 </div>
@@ -171,6 +181,21 @@ $badges = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
     padding: 0.22rem 0.6rem;
     border-radius: var(--radius-pill);
     margin: 0;
+}
+
+.student-card--unregistered {
+    opacity: 0.55;
+    border-style: dashed;
+}
+
+.student-card--unregistered:hover {
+    opacity: 0.85;
+}
+
+.student-card__badge--none {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    border-color: rgba(255, 107, 107, 0.25);
 }
 
 /* Stagger student cards in rows of 4 */

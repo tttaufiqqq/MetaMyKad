@@ -19,7 +19,7 @@ final class StudentController extends BaseController
 {
     public function index(): void
     {
-        $students = (new Student())->getAllWithPhoto();
+        $students = (new Student())->getAllFromCentral();
 
         $name  = trim((string) ($_GET['name'] ?? ''));
         $badge = trim((string) ($_GET['badge'] ?? ''));
@@ -32,7 +32,12 @@ final class StudentController extends BaseController
             ));
         }
 
-        if ($badge !== '') {
+        if ($badge === 'unregistered') {
+            $students = array_values(array_filter(
+                $students,
+                fn($s) => $s['metamykad_id'] === null
+            ));
+        } elseif ($badge !== '') {
             $students = array_values(array_filter(
                 $students,
                 fn($s) => $s['badge'] === $badge

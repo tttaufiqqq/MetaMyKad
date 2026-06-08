@@ -683,11 +683,8 @@ select optgroup {
 }
 
 .cs-panel {
-    position: absolute;
-    top: calc(100% + 0.75rem);
-    left: -1rem;
-    right: -1rem;
-    z-index: 200;
+    position: fixed;
+    z-index: 9999;
     background: rgba(8, 13, 30, 0.98);
     border: 1px solid rgba(100, 223, 255, 0.22);
     border-radius: 18px;

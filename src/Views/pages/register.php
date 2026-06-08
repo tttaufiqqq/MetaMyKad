@@ -1,3 +1,23 @@
+<?php if (!empty($prefill)): ?>
+<div class="confirm-dialog hidden" id="welcome-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="confirm-dialog__panel">
+        <h3>Complete Your Profile</h3>
+        <p>
+            Welcome, <strong><?= e($prefill['full_name']) ?></strong>!
+            Your student identity has been verified.
+        </p>
+        <p style="margin-top:.75rem;">
+            To use MetaMyKad, please fill in the fields below &mdash;
+            your <strong>IC number</strong>, <strong>email</strong>, and
+            <strong>multimedia file uploads</strong> are required to activate your profile.
+        </p>
+        <div class="confirm-dialog__actions">
+            <button type="button" class="button" id="welcome-modal-close">Got it, let's go</button>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
 <div class="register-card">
     <h1 class="register-title">Student Registration</h1>
     <p class="muted" style="margin-bottom:1.5rem; text-align:center;">
@@ -12,13 +32,14 @@
             <div class="form-group">
                 <input id="full_name" name="full_name" type="text" required
                        autocomplete="name"
-                       value="<?= e((string) old('full_name')) ?>">
+                       value="<?= e((string) ($prefill['full_name'] ?? old('full_name'))) ?>">
                 <label for="full_name">Full Name (as per IC)</label>
             </div>
             <div class="form-group">
                 <input id="matric_number" name="matric_number" type="text" required
                        autocomplete="off"
-                       value="<?= e((string) old('matric_number')) ?>">
+                       <?php if (!empty($prefill['matric'])): ?>readonly<?php endif; ?>
+                       value="<?= e((string) ($prefill['matric'] ?? old('matric_number'))) ?>">
                 <label for="matric_number">Matric Number</label>
             </div>
             <div class="form-group">
@@ -27,7 +48,7 @@
                        maxlength="16"
                        autocomplete="tel"
                        title="Malaysian phone number, e.g. 012-3456789"
-                       value="<?= e((string) old('phone')) ?>">
+                       value="<?= e((string) ($prefill['phone'] ?? old('phone'))) ?>">
                 <label for="phone">Phone</label>
             </div>
             <div class="form-group">
@@ -57,16 +78,9 @@
             </div>
         </div>
 
-        <div class="form-grid two-col">
-            <div class="form-group">
-                <input id="password" name="password" type="password" required minlength="8"
-                       autocomplete="new-password">
-                <label for="password">Password</label>
-            </div>
-            <div class="feedback-box" style="display:flex; align-items:center;">
-                DOB, gender, state of birth, and age are derived from the IC number automatically.
-                Email is classified as personal, student, or work.
-            </div>
+        <div class="feedback-box" style="margin-bottom:1rem;">
+            DOB, gender, state of birth, and age are derived from the IC number automatically.
+            Email is classified as personal, student, or work.
         </div>
 
         <hr class="register-divider">
@@ -161,6 +175,17 @@
             };
             el.src = url;
         });
+    });
+}());
+
+(function () {
+    var modal = document.getElementById('welcome-modal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    modal.setAttribute('aria-hidden', 'false');
+    document.getElementById('welcome-modal-close').addEventListener('click', function () {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
     });
 }());
 </script>
