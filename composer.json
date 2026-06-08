@@ -2,10 +2,15 @@
   "name": "metamykad/app",
   "description": "Pure PHP and MySQL scaffold for the MetaMyKad multimedia registry project.",
   "type": "project",
+  "license": "proprietary",
   "require": {
     "php": "^8.2",
     "ext-pdo": "*",
-    "ext-fileinfo": "*"
+    "ext-pdo_mysql": "*",
+    "ext-fileinfo": "*",
+    "ext-mbstring": "*",
+    "ext-gd": "*",
+    "ext-exif": "*"
   },
   "autoload": {
     "psr-4": {
@@ -14,5 +19,9 @@
     "files": [
       "src/Helpers/functions.php"
     ]
+  },
+  "scripts": {
+    "deploy:folders": "php scripts/create-storage-folders.php",
+    "deploy:check": "php scripts/check-deployment.php"
   }
 }

@@ -38,6 +38,16 @@ function url(string $path = ''): string
     return $normalized === '' ? $baseUrl : $baseUrl . '/' . $normalized;
 }
 
+function app_base_path(): string
+{
+    $path = parse_url((string) config('app.base_url', ''), PHP_URL_PATH);
+    if (!is_string($path) || trim($path, '/') === '') {
+        return '';
+    }
+
+    return '/' . trim($path, '/');
+}
+
 function asset(string $path): string
 {
     return url('assets/' . ltrim($path, '/'));
@@ -62,7 +72,15 @@ function old(string $key, mixed $default = ''): mixed
 function current_path(): string
 {
     $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-    return $path ?: '/';
+    $path = is_string($path) && $path !== '' ? $path : '/';
+    $basePath = app_base_path();
+
+    if ($basePath !== '' && ($path === $basePath || str_starts_with($path, $basePath . '/'))) {
+        $path = substr($path, strlen($basePath));
+    }
+
+    $path = '/' . trim($path, '/');
+    return $path === '/' ? '/' : $path;
 }
 
 function badge_icon(string $badge, string $size = '1.3rem'): string

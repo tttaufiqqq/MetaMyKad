@@ -90,6 +90,11 @@ final class UploadService
         $displayName    = "{$slug}_{$fileType}.{$ext}";
         $relativePath   = "storage/uploads/{$fileType}/{$storedFilename}";
         $absolutePath   = base_path($relativePath);
+        $targetDirectory = dirname($absolutePath);
+
+        if (!is_dir($targetDirectory) && !mkdir($targetDirectory, 0775, true) && !is_dir($targetDirectory)) {
+            throw new RuntimeException("Failed to create upload directory for {$fileType}.");
+        }
 
         if (!move_uploaded_file($entry['tmp_name'], $absolutePath)) {
             throw new RuntimeException("Failed to store uploaded {$fileType} file.");
