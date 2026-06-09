@@ -43,8 +43,8 @@ $registered = count(array_filter($students, fn($s) => $s['metamykad_id'] !== nul
             <label for="badge">Badge</label>
         </div>
         <button class="button" type="submit">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-            Filter
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search
         </button>
         <?php if ($name !== '' || $badge !== ''): ?>
         <a class="button secondary" href="<?= e(url('/students')) ?>">Clear</a>
