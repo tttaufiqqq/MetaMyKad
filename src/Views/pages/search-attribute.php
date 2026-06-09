@@ -97,7 +97,6 @@
             <thead>
             <tr>
                 <th>Full Name</th>
-                <th>IC Number</th>
                 <th>Gender</th>
                 <th>State</th>
                 <th>Badge</th>
@@ -110,7 +109,6 @@
             <?php foreach ($results as $row): ?>
             <tr data-student-row
                 data-name="<?= e($row['full_name']) ?>"
-                data-ic="<?= e($row['ic_number']) ?>"
                 data-gender="<?= e($row['gender']) ?>"
                 data-state="<?= e($row['state_of_birth']) ?>"
                 data-badge="<?= e($row['stored_badge']) ?>"
@@ -118,7 +116,6 @@
                 data-file-type="<?= e((string) ($row['file_type'] ?? '')) ?>"
                 data-href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">
                 <td><?= e($row['full_name']) ?></td>
-                <td><?= e($row['ic_number']) ?></td>
                 <td><?= e($row['gender']) ?></td>
                 <td><?= e($row['state_of_birth']) ?></td>
                 <td><?= badge_icon($row['stored_badge']) ?></td>
