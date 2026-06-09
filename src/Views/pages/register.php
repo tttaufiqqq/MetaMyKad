@@ -78,6 +78,10 @@
             </div>
         </div>
 
+        <div class="feedback-box" style="margin-bottom:0.6rem; display:flex; align-items:flex-start; gap:0.55rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;opacity:0.7;" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Your IC number is private — only you can see it after registration. It is used solely to derive your birthdate, gender, and state of birth.</span>
+        </div>
         <div class="feedback-box" style="margin-bottom:1rem;">
             DOB, gender, state of birth, and age are derived from the IC number automatically.
             Email is classified as personal, student, or work.
