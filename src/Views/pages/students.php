@@ -3,6 +3,8 @@
 /** @var string $name */
 /** @var string $badge */
 
+use MetaMyKad\Core\Auth;
+
 $badges    = ['Pendaftar', 'Pelajar', 'Aktif', 'Dedikasi', 'Cemerlang'];
 $registered = count(array_filter($students, fn($s) => $s['metamykad_id'] !== null));
 ?>
@@ -58,11 +60,22 @@ $registered = count(array_filter($students, fn($s) => $s['metamykad_id'] !== nul
 <?php else: ?>
 <div class="students-grid">
     <?php foreach ($students as $student): ?>
-    <?php $isRegistered = $student['metamykad_id'] !== null; ?>
-    <a class="student-card <?= $isRegistered ? '' : 'student-card--unregistered' ?>"
-       href="<?= $isRegistered
-               ? e(url('/student-detail?id=' . $student['metamykad_id']))
-               : e(url('/register?matric=' . urlencode($student['matric_no']))) ?>">
+    <?php
+        $isRegistered = $student['metamykad_id'] !== null;
+        // Logged-in users must not be linked to another student's /register page.
+        // Only anonymous visitors get the self-registration link for unregistered cards.
+        if ($isRegistered) {
+            $cardTag  = 'a';
+            $cardHref = 'href="' . e(url('/student-detail?id=' . $student['metamykad_id'])) . '"';
+        } elseif (!Auth::check()) {
+            $cardTag  = 'a';
+            $cardHref = 'href="' . e(url('/register?matric=' . urlencode($student['matric_no']))) . '"';
+        } else {
+            $cardTag  = 'div';
+            $cardHref = '';
+        }
+    ?>
+    <<?= $cardTag ?> class="student-card <?= $isRegistered ? '' : 'student-card--unregistered' ?>" <?= $cardHref ?>>
         <div class="student-card__photo">
             <?php if ($student['photo_id'] !== null): ?>
             <img src="<?= e(url('/file?id=' . $student['photo_id'])) ?>"
@@ -80,7 +93,7 @@ $registered = count(array_filter($students, fn($s) => $s['metamykad_id'] !== nul
         <?php else: ?>
         <p class="student-card__badge student-card__badge--none">Profile Not Complete</p>
         <?php endif; ?>
-    </a>
+    </<?= $cardTag ?>>
     <?php endforeach; ?>
 </div>
 <?php endif; ?>
