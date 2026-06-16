@@ -100,8 +100,53 @@
 
     window.addEventListener('pageshow', hideSpinner);
 
-    // ── Auto-dismiss toasts after 5 s ────────────────────
+    // ── Badge Guide Modal ─────────────────────────────
+    var badgeModal  = document.getElementById('badge-guide-modal');
+
+    function openBadgeGuide() {
+        if (!badgeModal) return;
+        badgeModal.classList.remove('hidden');
+        badgeModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeBadgeGuide() {
+        if (!badgeModal) return;
+        badgeModal.classList.add('hidden');
+        badgeModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-badge-guide-open]')) { openBadgeGuide(); return; }
+        if (e.target.closest('#badge-guide-close') || e.target.closest('#badge-guide-cancel')) { closeBadgeGuide(); return; }
+        if (badgeModal && !badgeModal.classList.contains('hidden') && !e.target.closest('.badge-guide-modal__panel')) { closeBadgeGuide(); }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeBadgeGuide();
+    });
+
+    // ── Global scroll lock via MutationObserver ───────────
+    // Watches every modal element; locks/unlocks body scroll automatically.
     document.addEventListener('DOMContentLoaded', function () {
+        var MODAL_SELECTOR = '.student-modal, .badge-guide-modal, .confirm-dialog';
+
+        function syncScrollLock() {
+            var anyOpen = document.querySelector(
+                '.student-modal:not(.hidden),' +
+                '.badge-guide-modal:not(.hidden),' +
+                '.confirm-dialog:not(.hidden)'
+            );
+            document.body.classList.toggle('modal-open', !!anyOpen);
+        }
+
+        document.querySelectorAll(MODAL_SELECTOR).forEach(function (el) {
+            new MutationObserver(syncScrollLock).observe(el, {
+                attributes: true,
+                attributeFilter: ['class'],
+            });
+        });
+
+        // ── Auto-dismiss toasts after 5 s ────────────────────
         var toasts = document.querySelectorAll('[data-toast]');
         for (var i = 0; i < toasts.length; i += 1) {
             (function (toast) {

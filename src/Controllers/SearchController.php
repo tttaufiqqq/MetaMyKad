@@ -63,9 +63,9 @@ final class SearchController extends BaseController
         ], fn(string $v): bool => $v !== '');
 
         $results = [];
-        if ($submitted && $keyword !== '') {
+        if ($submitted && ($keyword !== '' || $tag !== '')) {
             $model   = new FileSearchCatalogView();
-            $results = $model->searchText($keyword, $tag ?: null);
+            $results = $model->searchText($keyword ?: null, $tag ?: null);
         }
 
         $this->render('search-text', [

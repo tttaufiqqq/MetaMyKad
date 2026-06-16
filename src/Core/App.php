@@ -63,11 +63,15 @@ final class App
 
     public function run(): void
     {
+        ob_start();
+
         if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             (new CSRFMiddleware())->handle();
         }
 
         $this->router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', current_path());
+
+        ob_end_flush();
     }
 
     private function registerRoutes(array $routes): void

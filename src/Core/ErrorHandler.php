@@ -38,7 +38,13 @@ final class ErrorHandler
         $debug     = (bool) filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
         $errorCode = $exception->getCode();
 
-        http_response_code(500);
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
+        if (!headers_sent()) {
+            http_response_code(500);
+        }
         require src_path('Views/errors/500.php');
     }
 }

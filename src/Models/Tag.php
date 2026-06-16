@@ -52,4 +52,13 @@ final class Tag extends BaseModel
         );
         $stmt->execute(['fid' => $fileId]);
     }
+
+    public function detachByName(int $fileId, string $tagName): void
+    {
+        Database::connection()->prepare(
+            'DELETE ft FROM file_tags ft
+             JOIN tags t ON t.id = ft.tag_id
+             WHERE ft.file_id = :fid AND t.tag_name = :name'
+        )->execute(['fid' => $fileId, 'name' => $tagName]);
+    }
 }

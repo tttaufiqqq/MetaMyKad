@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     ic_number VARCHAR(12) NOT NULL UNIQUE,
     matric_number VARCHAR(20) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) DEFAULT NULL,
     full_name VARCHAR(100) NOT NULL,
     phone VARCHAR(15) NOT NULL,
     email VARCHAR(100) NOT NULL,
@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS file_tags (
 CREATE TABLE IF NOT EXISTS registration_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
     ic_number VARCHAR(12) NOT NULL,
+    full_name VARCHAR(100) NOT NULL DEFAULT '',
     registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     files_uploaded INT NOT NULL DEFAULT 0,
     badge_at_time VARCHAR(20) NOT NULL,

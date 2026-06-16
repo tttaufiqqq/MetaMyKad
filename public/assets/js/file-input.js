@@ -60,10 +60,34 @@
         });
     }
 
+    function enhanceUploadBox(input) {
+        if (!input.id) { return; }
+        var label = document.querySelector('label.upload-box[for="' + input.id + '"]');
+        if (!label) { return; }
+
+        var nameEl = document.createElement('span');
+        nameEl.className = 'upload-box__filename';
+        label.appendChild(nameEl);
+
+        input.addEventListener('change', function () {
+            if (input.files && input.files.length > 0) {
+                nameEl.textContent = input.files[0].name;
+                label.classList.add('is-selected');
+            } else {
+                nameEl.textContent = '';
+                label.classList.remove('is-selected');
+            }
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         var inputs = document.querySelectorAll('input[type="file"]');
         for (var i = 0; i < inputs.length; i += 1) {
-            enhanceFileInput(inputs[i]);
+            if (inputs[i].classList.contains('hidden')) {
+                enhanceUploadBox(inputs[i]);
+            } else {
+                enhanceFileInput(inputs[i]);
+            }
         }
     });
 }());

@@ -39,15 +39,16 @@ final class UploadService
      * Returns an associative array keyed by file_type for each successfully uploaded file.
      * Missing or empty inputs are silently skipped.
      */
-    public function processAll(int $studentId, array $files): array
+    public function processAll(int $studentId, array $files, string $studentName = ''): array
     {
-        $results = [];
+        $nameSlug = $this->slugifyName($studentName ?: (string) $studentId);
+        $results  = [];
         foreach (array_keys(self::ALLOWED_MIME) as $fileType) {
             $entry = $files[$fileType] ?? null;
             if ($entry === null || ($entry['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
                 continue;
             }
-            $results[$fileType] = $this->processOne($studentId, $fileType, $entry);
+            $results[$fileType] = $this->processOne($studentId, $fileType, $entry, $nameSlug);
         }
         return $results;
     }
@@ -58,7 +59,7 @@ final class UploadService
      *
      * @throws RuntimeException on validation or move failure
      */
-    public function processOne(int $studentId, string $fileType, array $entry): array
+    public function processOne(int $studentId, string $fileType, array $entry, string $nameSlug = ''): array
     {
         if ($entry['error'] !== UPLOAD_ERR_OK) {
             throw new RuntimeException("Upload error for {$fileType} (code {$entry['error']}).");
@@ -82,10 +83,18 @@ final class UploadService
             throw new RuntimeException("File too large for {$fileType}. Limit is {$limitMb} MB.");
         }
 
-        $ext            = self::MIME_EXT[$mime];
-        $storedFilename = "{$studentId}_{$fileType}_" . time() . '_' . bin2hex(random_bytes(4)) . ".{$ext}";
+        $slug = $nameSlug ?: $this->slugifyName((string) $studentId);
+        $ext  = self::MIME_EXT[$mime];
+
+        $storedFilename = "{$slug}_{$fileType}_" . time() . '_' . bin2hex(random_bytes(4)) . ".{$ext}";
+        $displayName    = "{$slug}_{$fileType}.{$ext}";
         $relativePath   = "storage/uploads/{$fileType}/{$storedFilename}";
         $absolutePath   = base_path($relativePath);
+        $targetDirectory = dirname($absolutePath);
+
+        if (!is_dir($targetDirectory) && !mkdir($targetDirectory, 0775, true) && !is_dir($targetDirectory)) {
+            throw new RuntimeException("Failed to create upload directory for {$fileType}.");
+        }
 
         if (!move_uploaded_file($entry['tmp_name'], $absolutePath)) {
             throw new RuntimeException("Failed to store uploaded {$fileType} file.");
@@ -93,11 +102,34 @@ final class UploadService
 
         return [
             'file_type'       => $fileType,
-            'filename'        => $entry['name'],
+            'filename'        => $displayName,
             'stored_filename' => $storedFilename,
             'file_path'       => $relativePath,
             'file_size'       => $entry['size'],
             'mime_type'       => $mime,
         ];
+    }
+
+    /**
+     * Convert a full name into a short lowercase slug: first word + last word.
+     * e.g. "Muhammad Taufiq bin Mohd Arifin" → "muhammad_arifin"
+     *      "Nur Aisyah binti Ahmad"           → "nur_ahmad"
+     */
+    private function slugifyName(string $name): string
+    {
+        $name  = mb_strtolower(trim($name));
+        $words = (array) preg_split('/\s+/', $name, -1, PREG_SPLIT_NO_EMPTY);
+        $words = array_values(array_filter($words));
+
+        if (empty($words)) {
+            return 'student';
+        }
+
+        $slug = count($words) > 1
+            ? $words[0] . '_' . $words[count($words) - 1]
+            : $words[0];
+
+        $slug = (string) preg_replace('/[^a-z0-9_]+/', '', $slug);
+        return $slug ?: 'student';
     }
 }

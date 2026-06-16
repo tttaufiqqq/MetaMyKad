@@ -35,35 +35,49 @@ function getValidationMessage(field) {
 
 function clearFieldError(field) {
     var group = field.closest('.form-group');
-    if (!group) {
+    if (group) {
+        group.classList.remove('is-invalid');
+        var msg = group.querySelector('.field-error');
+        if (msg) { msg.remove(); }
         return;
     }
-
-    group.classList.remove('is-invalid');
-
-    var message = group.querySelector('.field-error');
-    if (message) {
-        message.remove();
+    var row = field.closest('.edit-field-row');
+    if (row) {
+        row.classList.remove('is-invalid');
+        var rowMsg = row.querySelector('.field-error');
+        if (rowMsg) { rowMsg.remove(); }
     }
 }
 
 function showFieldError(field, message) {
+    clearFieldError(field);
+
     var group = field.closest('.form-group');
-    if (!group) {
+    if (group) {
+        group.classList.add('is-invalid');
+        var bubble = document.createElement('div');
+        bubble.className = 'field-error';
+        bubble.setAttribute('role', 'alert');
+        bubble.innerHTML =
+            '<span class="field-error__icon" aria-hidden="true">!</span>' +
+            '<span class="field-error__text"></span>';
+        bubble.querySelector('.field-error__text').textContent = message;
+        group.appendChild(bubble);
         return;
     }
 
-    clearFieldError(field);
-    group.classList.add('is-invalid');
-
-    var bubble = document.createElement('div');
-    bubble.className = 'field-error';
-    bubble.setAttribute('role', 'alert');
-    bubble.innerHTML =
-        '<span class="field-error__icon" aria-hidden="true">!</span>' +
-        '<span class="field-error__text"></span>';
-    bubble.querySelector('.field-error__text').textContent = message;
-    group.appendChild(bubble);
+    var row = field.closest('.edit-field-row');
+    if (row) {
+        row.classList.add('is-invalid');
+        var rowBubble = document.createElement('div');
+        rowBubble.className = 'field-error field-error--inline';
+        rowBubble.setAttribute('role', 'alert');
+        rowBubble.innerHTML =
+            '<span class="field-error__icon" aria-hidden="true">!</span>' +
+            '<span class="field-error__text"></span>';
+        rowBubble.querySelector('.field-error__text').textContent = message;
+        row.appendChild(rowBubble);
+    }
 }
 
 function validateField(field) {
@@ -91,14 +105,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+function inValidateForm(field) {
+    var form = field.form || field.closest('form');
+    return !!(form && form.hasAttribute('data-validate'));
+}
+
 document.addEventListener(
     'invalid',
     function (event) {
         var field = event.target;
-        if (!field.closest('[data-validate]')) {
+        if (!inValidateForm(field)) {
             return;
         }
-
         event.preventDefault();
         validateField(field);
     },
@@ -107,37 +125,45 @@ document.addEventListener(
 
 document.addEventListener('input', function (event) {
     var field = event.target;
-    if (!field.closest('[data-validate]')) {
+    if (!inValidateForm(field)) {
         return;
     }
-
-    if (field.closest('.form-group.is-invalid')) {
+    if (field.closest('.form-group.is-invalid') || field.closest('.edit-field-row.is-invalid')) {
         validateField(field);
     }
 });
 
 document.addEventListener('change', function (event) {
     var field = event.target;
-    if (!field.closest('[data-validate]')) {
+    if (!inValidateForm(field)) {
         return;
     }
-
-    if (field.matches('select, input[type="file"], input[type="email"]') || field.closest('.form-group.is-invalid')) {
+    if (field.matches('select, input[type="file"], input[type="email"]') ||
+        field.closest('.form-group.is-invalid') ||
+        field.closest('.edit-field-row.is-invalid')) {
         validateField(field);
     }
 });
 
 document.addEventListener('submit', function (event) {
-    var form = event.target.closest('[data-validate]');
-    var fields;
-    var i;
-    var firstInvalid = null;
-
-    if (!form) {
+    var form = event.target;
+    if (!form.hasAttribute || !form.hasAttribute('data-validate')) {
         return;
     }
 
-    fields = form.querySelectorAll('input, select, textarea');
+    // Collect fields inside the form AND fields associated via form="id"
+    var fields = Array.from(form.querySelectorAll('input, select, textarea'));
+    if (form.id) {
+        var associated = Array.from(document.querySelectorAll(
+            'input[form="' + form.id + '"], select[form="' + form.id + '"], textarea[form="' + form.id + '"]'
+        ));
+        associated.forEach(function (el) {
+            if (fields.indexOf(el) === -1) { fields.push(el); }
+        });
+    }
+
+    var i;
+    var firstInvalid = null;
     for (i = 0; i < fields.length; i += 1) {
         if (fields[i].disabled) {
             continue;

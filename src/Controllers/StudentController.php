@@ -11,11 +11,47 @@ use MetaMyKad\Models\FileMetadata;
 use MetaMyKad\Models\RegistrationHistory;
 use MetaMyKad\Models\Student;
 use MetaMyKad\Models\StudentProfileSummaryView;
+use MetaMyKad\Services\AutoTagger;
 use MetaMyKad\Services\MetadataExtractor;
 use MetaMyKad\Services\UploadService;
 
 final class StudentController extends BaseController
 {
+    public function index(): void
+    {
+        $students = (new Student())->getAllFromCentral();
+
+        $name  = trim((string) ($_GET['name'] ?? ''));
+        $badge = trim((string) ($_GET['badge'] ?? ''));
+
+        if ($name !== '') {
+            $lower = strtolower($name);
+            $students = array_values(array_filter(
+                $students,
+                fn($s) => str_contains(strtolower((string) $s['full_name']), $lower)
+            ));
+        }
+
+        if ($badge === 'unregistered') {
+            $students = array_values(array_filter(
+                $students,
+                fn($s) => $s['metamykad_id'] === null
+            ));
+        } elseif ($badge !== '') {
+            $students = array_values(array_filter(
+                $students,
+                fn($s) => $s['badge'] === $badge
+            ));
+        }
+
+        $this->render('students', [
+            'pageTitle' => 'All Students',
+            'students'  => $students,
+            'name'      => $name,
+            'badge'     => $badge,
+        ]);
+    }
+
     public function show(): void
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -59,6 +95,45 @@ final class StudentController extends BaseController
             'files'     => $files,
             'history'   => $history,
         ]);
+    }
+
+    public function deleteAccount(): void
+    {
+        $loggedUser = Auth::user();
+        $studentId  = (int) ($_POST['student_id'] ?? 0);
+
+        if ($studentId < 1 || (int) $loggedUser['id'] !== $studentId) {
+            http_response_code(403);
+            require src_path('Views/errors/403.php');
+            exit;
+        }
+
+        $studentModel = new Student();
+        $student = $studentModel->find($studentId);
+
+        if ($student === false) {
+            $this->flash('error', 'Student record not found.');
+            $this->redirect('/dashboard');
+        }
+
+        // Delete physical files first
+        $fileModel = new FileMetadata();
+        $files     = $fileModel->findByStudentId($studentId);
+        foreach ($files as $file) {
+            $absPath = base_path((string) $file['file_path']);
+            if (file_exists($absPath)) {
+                unlink($absPath);
+            }
+        }
+
+        // Delete student record (CASCADE removes file_metadata, cbr_metadata, etc.)
+        $studentModel->delete($studentId);
+
+        // End session
+        \MetaMyKad\Core\Session::destroy();
+
+        $this->flash('success', 'Your account has been deleted.');
+        $this->redirect('/');
     }
 
     public function update(): void
@@ -115,6 +190,7 @@ final class StudentController extends BaseController
         $fileModel    = new FileMetadata();
         $uploadService = new UploadService();
         $extractor    = new MetadataExtractor();
+        $autoTagger   = new AutoTagger();
 
         try {
             $uploads = $uploadService->processAll($studentId, $_FILES);
@@ -139,6 +215,9 @@ final class StudentController extends BaseController
             }
 
             // Insert new file record
+            $rawDate      = trim((string) ($_POST['original_date_' . $fileType] ?? ''));
+            $originalDate = preg_match('/^\d{4}-\d{2}-\d{2}$/', $rawDate) ? $rawDate : null;
+
             $fileId = $fileModel->insert([
                 'student_id'      => $studentId,
                 'file_type'       => $fileType,
@@ -147,6 +226,7 @@ final class StudentController extends BaseController
                 'file_path'       => $uploadData['file_path'],
                 'file_size'       => $uploadData['file_size'],
                 'mime_type'       => $uploadData['mime_type'],
+                'original_date'   => $originalDate,
             ]);
 
             try {
@@ -154,6 +234,15 @@ final class StudentController extends BaseController
             } catch (\Throwable $e) {
                 error_log("Metadata extraction failed for file {$fileId}: " . $e->getMessage());
             }
+
+            if (in_array($fileType, ['audio', 'video'], true)) {
+                $browserDuration = (int) ($_POST['duration_sec_' . $fileType] ?? 0);
+                if ($browserDuration > 0) {
+                    (new CbrMetadata())->updateDuration($fileId, $fileType, $browserDuration);
+                }
+            }
+
+            $autoTagger->tag($fileId, $fileType);
         }
 
         // Recompute badge

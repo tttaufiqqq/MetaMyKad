@@ -21,7 +21,6 @@ $currentPath = current_path();
         <ul class="topnav__links" id="topnav-links">
             <li><a href="<?= e(url('/dashboard')) ?>" class="topnav__link">Dashboard</a></li>
             <li><a href="<?= e(url('/register')) ?>" class="topnav__link">Register</a></li>
-            <li><a href="<?= e(url('/re-register')) ?>" class="topnav__link">Re-Register</a></li>
             <li class="topnav__dropdown-wrap">
                 <button class="topnav__link topnav__dropdown-btn" id="topnav-search-btn" type="button">
                     Search <span class="topnav__caret">&#x25BE;</span>
@@ -29,19 +28,19 @@ $currentPath = current_path();
                 <ul class="topnav__dropdown" id="topnav-search-dd">
                     <li>
                         <a href="<?= e(url('/search-attribute')) ?>" class="topnav__dropdown-link topnav__dropdown-link--icon">
-                            <img src="<?= e(asset('images/nav/abr.png')) ?>" alt="" aria-hidden="true" class="topnav__dropdown-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="topnav__dropdown-icon"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/><line x1="11" y1="8" x2="11" y2="14"/></svg>
                             <span>ABR Search</span>
                         </a>
                     </li>
                     <li>
                         <a href="<?= e(url('/search-text')) ?>" class="topnav__dropdown-link topnav__dropdown-link--icon">
-                            <img src="<?= e(asset('images/nav/tbr.png')) ?>" alt="" aria-hidden="true" class="topnav__dropdown-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="topnav__dropdown-icon"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="9" x2="14" y2="9"/><line x1="8" y1="13" x2="12" y2="13"/></svg>
                             <span>TBR Search</span>
                         </a>
                     </li>
                     <li>
                         <a href="<?= e(url('/search-content')) ?>" class="topnav__dropdown-link topnav__dropdown-link--icon">
-                            <img src="<?= e(asset('images/nav/cbr.png')) ?>" alt="" aria-hidden="true" class="topnav__dropdown-icon">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="topnav__dropdown-icon"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><rect x="7" y="8" width="3" height="3" rx="0.5"/><polyline points="11 14 13 12 15 14"/></svg>
                             <span>CBR Search</span>
                         </a>
                     </li>
@@ -53,14 +52,19 @@ $currentPath = current_path();
         <div class="topnav__user">
             <?php if (Auth::check()): ?>
                 <a href="<?= e(url('/student-detail?id=' . Auth::user()['id'])) ?>" class="topnav__user-link">
-                    &#x1F464; <?= e(Auth::user()['full_name']) ?>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:middle;margin-right:0.35rem;opacity:0.85;flex-shrink:0;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    <?= e(strtoupper(Auth::user()['full_name'])) ?>
                 </a>
                 <form action="<?= e(url('/logout')) ?>" method="post" style="display:inline;margin:0;">
                     <?php require src_path('Views/partials/csrf.php'); ?>
-                    <button type="submit" class="topnav__btn topnav__btn--ghost">Sign Out</button>
+                    <button type="submit" class="topnav__btn topnav__btn--ghost">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:middle;margin-right:0.3rem;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out
+                    </button>
                 </form>
             <?php else: ?>
-                <a href="<?= e(url('/login')) ?>" class="topnav__btn">Student Login</a>
+                <a href="<?= e(url('/login')) ?>" class="topnav__btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:middle;margin-right:0.3rem;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Student Login
+                </a>
             <?php endif; ?>
         </div>
 
@@ -75,14 +79,11 @@ $currentPath = current_path();
     </main>
 
     <footer class="status-footer home-footer">
-        <div class="status-footer__group">
-            <span>SYSTEM STATUS: <span class="status-online">OPERATIONAL</span></span>
-            <span>STACK: PURE PHP + MYSQL</span>
-        </div>
         <div>METAMYKAD | BITP3353 MULTIMEDIA DATABASE</div>
     </footer>
 
 </div>
+<?php require src_path('Views/partials/badge-guide-modal.php'); ?>
 <?php require src_path('Views/partials/confirm-dialog.php'); ?>
 <div class="page-spinner" id="page-spinner" aria-hidden="true" role="status" aria-label="Loading">
     <div class="page-spinner__ring"></div>

@@ -6,22 +6,34 @@
 ?>
 <section class="search-panel">
     <h2>Text-Based Retrieval</h2>
+    <p class="muted">
+        Search across all file types by <strong>tag</strong> (photo, audio, PDF, video),
+        or search within <strong>extracted text</strong> content using a keyword.
+        You can use either or both fields.
+    </p>
     <form class="form-grid" method="get" action="<?= e(url('/search-text')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">
-            <label for="keyword">Keyword Or Phrase</label>
             <input id="keyword" name="keyword" type="text"
                    value="<?= e($keyword ?? '') ?>"
-                   placeholder="Search in extracted PDF text...">
+                   placeholder="e.g. resume, project, report...">
+            <label for="keyword">Keyword (searches extracted text)</label>
         </div>
         <div class="form-group">
-            <label for="tag">Tag (optional)</label>
             <input id="tag" name="tag" type="text"
                    value="<?= e($tag ?? '') ?>"
-                   placeholder="Filter by tag name">
+                   placeholder="e.g. formal, audio, long, neutral...">
+            <label for="tag">Tag (searches all file types)</label>
         </div>
         <div class="form-actions">
-            <button class="button" type="submit">Search PDF Text</button>
+            <button class="button" type="submit">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Search
+            </button>
+            <a class="button secondary" href="<?= e(url('/search-text')) ?>">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Clear
+            </a>
         </div>
     </form>
 </section>
@@ -29,12 +41,14 @@
 <section class="table-card">
     <h3>Results</h3>
     <?php if (!($submitted ?? false)): ?>
-        <p class="muted" style="padding:1rem;">Enter a keyword to search.</p>
-    <?php elseif (($keyword ?? '') === ''): ?>
-        <p class="muted" style="padding:1rem;">Enter a keyword to search.</p>
+        <p class="muted">Enter a keyword or tag to search.</p>
+    <?php elseif (($keyword ?? '') === '' && ($tag ?? '') === ''): ?>
+        <p class="muted">Enter a keyword or tag to search.</p>
     <?php elseif (empty($results)): ?>
-        <p class="muted" style="padding:1rem;">
-            No matching records found for keyword: <strong><?= e($keyword ?? '') ?></strong>
+        <p class="muted">
+            No results found
+            <?php if (($keyword ?? '') !== ''): ?>for keyword <strong><?= e($keyword) ?></strong><?php endif; ?>
+            <?php if (($tag ?? '') !== ''): ?>with tag <strong><?= e($tag) ?></strong><?php endif; ?>.
         </p>
     <?php else: ?>
         <table>
@@ -42,8 +56,7 @@
             <tr>
                 <th>Student</th>
                 <th>File</th>
-                <th>File Type</th>
-                <th>MIME Type</th>
+                <th>Type</th>
                 <th>Tags</th>
                 <th>Upload Date</th>
                 <th></th>
@@ -51,13 +64,21 @@
             </thead>
             <tbody>
             <?php foreach ($results as $row): ?>
-            <tr>
+            <tr data-student-row
+                data-name="<?= e($row['full_name']) ?>"
+                data-file-type="<?= e($row['file_type']) ?>"
+                data-href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">
                 <td><?= e($row['full_name']) ?></td>
                 <td><?= e($row['filename']) ?></td>
-                <td><?= e($row['file_type']) ?></td>
-                <td><?= e($row['mime_type']) ?></td>
-                <td><?= e($row['tag_list'] ?? '—') ?></td>
-                <td><?= e($row['upload_date']) ?></td>
+                <td><span class="fc-type-badge"><?= e(strtoupper($row['file_type'])) ?></span></td>
+                <td>
+                    <?php if (!empty($row['tag_list'])): ?>
+                        <?php foreach (explode(',', $row['tag_list']) as $t): ?>
+                            <span class="tag-pill"><?= e(trim($t)) ?></span>
+                        <?php endforeach; ?>
+                    <?php else: ?>—<?php endif; ?>
+                </td>
+                <td><?= fmt_date($row['upload_date']) ?></td>
                 <td>
                     <a class="button" href="<?= e(url('/student-detail?id=' . $row['student_id'])) ?>">View</a>
                 </td>
