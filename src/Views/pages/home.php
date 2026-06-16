@@ -6,8 +6,8 @@
             <span class="home-hero__accent">Student Registry</span>
         </h1>
         <p class="home-hero__desc">
-            Register students using IC numbers, upload multimedia files, and search
-            the registry with attribute-based, text-based, and content-based retrieval.
+            Get metadata about students from their IC numbers and explore the metadata about the multimedia files they've uploaded.
+            Search the registry with attribute-based, text-based, and content-based retrieval.
         </p>
         <div class="home-hero__ctas">
             <a href="<?= e(url('/register')) ?>" class="button">Register Now</a>
@@ -21,9 +21,9 @@
     </div>
 
     <div class="home-hero__visual">
-        <?php if (file_exists(public_path('assets/img/group-photo.jpg'))): ?>
+        <?php if (file_exists(public_path('assets/images/group-photo.jpg'))): ?>
             <img
-                src="<?= e(asset('img/group-photo.jpg')) ?>"
+                src="<?= e(asset('images/group-photo.jpg')) ?>"
                 class="home-hero__photo"
                 alt="Our Group"
                 loading="lazy"
@@ -32,7 +32,7 @@
             <div class="home-hero__placeholder">
                 <span class="home-hero__placeholder-icon" aria-hidden="true"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
                 <span>Group photo</span>
-                <code>public/assets/img/group-photo.jpg</code>
+                <code>public/assets/images/group-photo.jpg</code>
             </div>
         <?php endif; ?>
     </div>
