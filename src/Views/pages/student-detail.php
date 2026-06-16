@@ -50,7 +50,7 @@ foreach ($files as $f) {
     <div class="card-header-row">
         <div>
             <h2 class="detail-name-heading"><?= e($student['full_name']) ?></h2>
-            <p class="muted">IC: <?= $isOwner ? e($student['ic_number']) : '—' ?> &nbsp;|&nbsp; Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
+            <p class="muted">Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
         </div>
         <div class="owner-actions">
             <?php if ($isOwner): ?>
@@ -82,7 +82,7 @@ foreach ($files as $f) {
             </div>
             <div class="edit-field-row">
                 <dt>IC Number</dt>
-                <dd><?= $isOwner ? e($student['ic_number']) : '—' ?></dd>
+                <dd><?= $isOwner ? e($student['ic_number']) : e($student['ic_masked']) ?></dd>
             </div>
             <div class="edit-field-row">
                 <dt>Phone</dt>

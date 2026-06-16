@@ -71,7 +71,9 @@ final class RegistrationController extends BaseController
         }
 
         // --- 3. IC parse ---
+        // Derive from the raw IC first (needs plain digits), then hash for storage.
         $derived = null;
+        $icHash  = null;
         if ($icProvided) {
             try {
                 $derived = $student->deriveFromIc((string) $_POST['ic_number']);
@@ -79,11 +81,12 @@ final class RegistrationController extends BaseController
                 $this->flash('error', $e->getMessage());
                 $this->redirect($mode === 'update' ? '/re-register' : '/register');
             }
+            $icHash = hash('sha256', preg_replace('/\D+/', '', (string) $_POST['ic_number']));
         }
         $emailCategory = $student->classifyEmail((string) $_POST['email']);
 
         // --- 4. Detect existing student (by IC for re-registration logic) ---
-        $existing = $icProvided ? $student->findByIc((string) $_POST['ic_number']) : false;
+        $existing = $icProvided ? $student->findByIc((string) $icHash) : false;
 
         if ($mode === 'update' && !Auth::check()) {
             $this->flash('error', 'You must be logged in to re-register.');
@@ -135,7 +138,7 @@ final class RegistrationController extends BaseController
         $passwordHash = $existing !== false ? ($existing['password'] ?? null) : null;
 
         $result = (new Student())->callProcedure('sp_register_student', [
-            $_POST['ic_number'] ?? '',
+            $icHash ?? '',
             $existing !== false ? null : $_POST['matric_number'],
             $existing !== false ? null : $passwordHash,
             $_POST['full_name'],

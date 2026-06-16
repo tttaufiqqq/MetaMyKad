@@ -84,7 +84,7 @@ final class Student extends BaseModel
     {
         $stmt = \MetaMyKad\Core\Database::connection()->prepare(
             'SELECT id, matric_no, full_name, phone_no, password
-               FROM mmdb2026.stu WHERE LOWER(matric_no) = LOWER(:m) LIMIT 1'
+               FROM mmdb2026.vstu WHERE LOWER(matric_no) = LOWER(:m) LIMIT 1'
         );
         $stmt->execute(['m' => $matric]);
         return $stmt->fetch();
@@ -141,7 +141,7 @@ final class Student extends BaseModel
                     m.id   AS metamykad_id,
                     m.badge,
                     fm.id  AS photo_id
-               FROM mmdb2026.stu c
+               FROM mmdb2026.vstu c
                LEFT JOIN students m ON m.matric_number = c.matric_no
                LEFT JOIN file_metadata fm
                  ON fm.student_id = m.id

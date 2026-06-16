@@ -2,8 +2,21 @@ DROP FUNCTION IF EXISTS fn_badge_by_file_count;
 DROP FUNCTION IF EXISTS fn_email_category;
 DROP FUNCTION IF EXISTS fn_age_from_dob;
 DROP FUNCTION IF EXISTS fn_state_from_ic;
+DROP FUNCTION IF EXISTS fn_mask_ic;
 
 DELIMITER $$
+
+-- Masks an IC number for display: shows only the last 4 digits.
+-- Example: '020304050607' → 'XXXXXX-XX-0607'
+CREATE FUNCTION fn_mask_ic(p_ic VARCHAR(255))
+RETURNS VARCHAR(20) CHARSET utf8mb4 COLLATE utf8mb4_0900_ai_ci
+DETERMINISTIC
+BEGIN
+    IF p_ic IS NULL OR CHAR_LENGTH(p_ic) < 12 THEN
+        RETURN 'XXXXXXXXXXXX';
+    END IF;
+    RETURN CONCAT('XXXXXX-XX-', RIGHT(p_ic, 4));
+END $$
 
 CREATE FUNCTION fn_badge_by_file_count(p_file_count INT)
 RETURNS VARCHAR(20) CHARSET utf8mb4 COLLATE utf8mb4_0900_ai_ci

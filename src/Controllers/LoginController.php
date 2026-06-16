@@ -29,7 +29,7 @@ final class LoginController extends BaseController
         // Passwords in that table are plain text — no hashing.
         $central = (new Student())->findInCentral($matric);
 
-        if ($central === false || (string) $central['password'] !== $password) {
+        if ($central === false || (string) $central['password'] !== hash('sha256', $password)) {
             $this->flash('error', 'Invalid matric number or password.');
             $this->redirect('/login');
         }
