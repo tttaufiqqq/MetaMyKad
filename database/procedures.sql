@@ -31,7 +31,7 @@ BEGIN
     WHERE student_id = p_student_id;
 END $$
 
-CREATE PROCEDURE sp_write_registration_history(IN p_ic_number VARCHAR(12), IN p_action VARCHAR(10))
+CREATE PROCEDURE sp_write_registration_history(IN p_ic_number VARCHAR(64), IN p_action VARCHAR(10))
 BEGIN
     DECLARE v_student_id INT DEFAULT NULL;
     DECLARE v_full_name VARCHAR(100) DEFAULT '';
@@ -61,7 +61,7 @@ BEGIN
     WHERE id = LAST_INSERT_ID();
 END $$
 
-CREATE PROCEDURE sp_get_student_history(IN p_ic_number VARCHAR(12))
+CREATE PROCEDURE sp_get_student_history(IN p_ic_number VARCHAR(64))
 BEGIN
     SELECT *
     FROM registration_history
@@ -223,7 +223,7 @@ END $$
 -- matric_number and password are ignored on re-registration (pass NULL).
 -- -------------------------------------------------------------------------
 CREATE PROCEDURE sp_register_student(
-    IN p_ic          VARCHAR(12),
+    IN p_ic          VARCHAR(64),
     IN p_matric      VARCHAR(20),
     IN p_password    VARCHAR(255),
     IN p_name        VARCHAR(100),
