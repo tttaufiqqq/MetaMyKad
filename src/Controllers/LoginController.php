@@ -25,28 +25,15 @@ final class LoginController extends BaseController
         $matric   = trim((string) ($_POST['matric_number'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
 
-        // Step 1: authenticate against the lecturer's centralized DB (mmdb2026.stu).
-        // Passwords in that table are plain text — no hashing.
-        $central = (new Student())->findInCentral($matric);
-
-        if ($central === false || (string) $central['password'] !== hash('sha256', $password)) {
-            $this->flash('error', 'Invalid matric number or password.');
-            $this->redirect('/login');
-        }
-
-        // Step 2: check if this student has a MetaMyKad profile yet.
+        // Authenticate against the local students table.
+        // Password hash is copied from mmdb2026.vstu during registration.
         $studentModel = new Student();
         $student      = $studentModel->findByMatric($matric);
 
-        if ($student === false) {
-            // Fallback: student registered before matric_number was tracked — match by full_name.
-            $student = $studentModel->findByFullName((string) ($central['full_name'] ?? ''));
-        }
-
-        if ($student === false) {
-            // Identity confirmed but no project profile — send to registration.
-            $this->flash('info', 'Your identity was verified. Please complete your MetaMyKad profile to continue.');
-            $this->redirect('/register?matric=' . urlencode($matric));
+        if ($student === false || $student['password'] === null ||
+            (string) $student['password'] !== hash('sha256', $password)) {
+            $this->flash('error', 'Invalid matric number or password.');
+            $this->redirect('/login');
         }
 
         Session::put('user', [

@@ -137,20 +137,19 @@ final class Student extends BaseModel
     {
         $pdo = \MetaMyKad\Core\Database::connection();
         return $pdo->query(
-            'SELECT c.matric_no, c.full_name, c.group_no,
-                    m.id   AS metamykad_id,
-                    m.badge,
+            'SELECT s.matric_number AS matric_no, s.full_name, NULL AS group_no,
+                    s.id   AS metamykad_id,
+                    s.badge,
                     fm.id  AS photo_id
-               FROM mmdb2026.vstu c
-               LEFT JOIN students m ON m.matric_number = c.matric_no
+               FROM students s
                LEFT JOIN file_metadata fm
-                 ON fm.student_id = m.id
+                 ON fm.student_id = s.id
                 AND fm.file_type = \'photo\'
                 AND fm.id = (
                     SELECT MAX(id) FROM file_metadata
-                    WHERE student_id = m.id AND file_type = \'photo\'
+                    WHERE student_id = s.id AND file_type = \'photo\'
                 )
-              ORDER BY c.full_name'
+              ORDER BY s.full_name'
         )->fetchAll();
     }
 

@@ -133,14 +133,16 @@ final class RegistrationController extends BaseController
         }
 
         // --- 5. Call sp_register_student → get student_id ---
-        // Password is NULL for new registrations — auth is delegated to mmdb2026.stu.
-        // Re-registration carries the existing value forward (also NULL for newer accounts).
-        $passwordHash = $existing !== false ? ($existing['password'] ?? null) : null;
+        // For new registrations: copy the SHA-256 password hash from mmdb2026.vstu.
+        // For re-registration: carry the existing password forward.
+        $passwordHash = $existing !== false
+            ? ($existing['password'] ?? null)
+            : ($central['password'] ?? null);
 
         $result = (new Student())->callProcedure('sp_register_student', [
             $icHash ?? '',
             $existing !== false ? null : $_POST['matric_number'],
-            $existing !== false ? null : $passwordHash,
+            $passwordHash,
             $_POST['full_name'],
             $_POST['phone'],
             $_POST['email'],
