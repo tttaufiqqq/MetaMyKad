@@ -12,10 +12,7 @@ CREATE FUNCTION fn_mask_ic(p_ic VARCHAR(255))
 RETURNS VARCHAR(20) CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci
 DETERMINISTIC
 BEGIN
-    IF p_ic IS NULL OR CHAR_LENGTH(p_ic) < 12 THEN
-        RETURN 'XXXXXXXXXXXX';
-    END IF;
-    RETURN CONCAT('XXXXXX-XX-', RIGHT(p_ic, 4));
+    RETURN 'XXXXXX-XX-XXXX';
 END $$
 
 CREATE FUNCTION fn_badge_by_file_count(p_file_count INT)

@@ -118,6 +118,11 @@
             <input id="video" name="video" type="file" accept=".mp4,.mov,.avi"  class="hidden">
         </div>
 
+        <div class="feedback-box" style="margin-top:1rem; display:flex; align-items:flex-start; gap:0.55rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;opacity:0.7;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Upload your multimedia files to enable metadata extraction — photo properties, audio duration, document text content, and video resolution will be automatically analysed and stored for search and retrieval.</span>
+        </div>
+
         <button class="register-submit-btn" type="submit">Register Student</button>
     </form>
 
