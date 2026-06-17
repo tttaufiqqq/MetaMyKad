@@ -82,7 +82,7 @@ foreach ($files as $f) {
             </div>
             <div class="edit-field-row">
                 <dt>IC Number</dt>
-                <dd><?= $isOwner ? e($student['ic_number']) : e($student['ic_masked']) ?></dd>
+                <dd><?= e($student['ic_masked']) ?></dd>
             </div>
             <div class="edit-field-row">
                 <dt>Phone</dt>
