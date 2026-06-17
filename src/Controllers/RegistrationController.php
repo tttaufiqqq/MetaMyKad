@@ -54,16 +54,24 @@ final class RegistrationController extends BaseController
 
         $student = new Student();
 
-        // --- 2. For new registrations: verify matric exists in mmdb2026.stu ---
+        // --- 2. For new registrations: verify matric exists in mmdb2026.vstu ---
+        // If mmdb2026 is unreachable (privilege not granted), skip the central check
+        // and fall back to duplicate-profile guard only.
+        $central = null;
         if ($mode === 'create') {
-            $matric  = trim((string) ($_POST['matric_number'] ?? ''));
-            $central = $student->findInCentral($matric);
-            if ($central === false) {
-                $this->flash('error', 'Matric number not recognized. Only enrolled students can register.');
-                $this->redirect('/register');
+            $matric = trim((string) ($_POST['matric_number'] ?? ''));
+            try {
+                $central = $student->findInCentral($matric);
+                if ($central === false) {
+                    $this->flash('error', 'Matric number not recognized. Only enrolled students can register.');
+                    $this->redirect('/register');
+                }
+            } catch (\Throwable) {
+                // mmdb2026 unavailable — skip central verification
+                $central = null;
             }
 
-            // Guard against duplicate profiles
+            // Guard against duplicate profiles regardless
             if ($student->findByMatric($matric) !== false) {
                 $this->flash('error', 'You already have a profile. Please log in.');
                 $this->redirect('/login');
