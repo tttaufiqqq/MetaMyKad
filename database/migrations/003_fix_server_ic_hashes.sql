@@ -12,12 +12,11 @@ UPDATE registration_history
 SET ic_number = SHA2('040605011607', 256)
 WHERE ic_number = LEFT(SHA2('040605011607', 256), 12);
 
--- B032310253 — MUHAMMAD HALAL BIN ACHIM
--- TODO: replace 000000000000 with the actual 12-digit IC number
+-- B032310253 — MUHAMMAD HALAL BIN ACHIM (IC: 020920100599)
 UPDATE students
-SET ic_number = SHA2('000000000000', 256)
+SET ic_number = SHA2('020920100599', 256)
 WHERE matric_number = 'B032310253';
 
 UPDATE registration_history
-SET ic_number = SHA2('000000000000', 256)
-WHERE ic_number = LEFT(SHA2('000000000000', 256), 12);
+SET ic_number = SHA2('020920100599', 256)
+WHERE ic_number = LEFT(SHA2('020920100599', 256), 12);
