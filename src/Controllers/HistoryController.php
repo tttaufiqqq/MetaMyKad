@@ -11,7 +11,7 @@ final class HistoryController extends BaseController
     public function index(): void
     {
         $rows = Database::connection()->query(
-            'SELECT rh.id, rh.ic_number, rh.action, rh.files_uploaded,
+            'SELECT rh.id, fn_mask_ic(rh.ic_number) AS ic_number, rh.action, rh.files_uploaded,
                     rh.badge_at_time, rh.registered_at,
                     COALESCE(NULLIF(rh.full_name, \'\'), s.full_name) AS full_name,
                     s.id AS student_id

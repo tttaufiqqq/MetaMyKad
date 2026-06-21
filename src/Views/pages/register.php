@@ -19,10 +19,14 @@
 <?php endif; ?>
 
 <div class="register-card">
-    <h1 class="register-title">Student Registration</h1>
+    <h1 class="register-title"><?= ($isStubCompletion ?? false) ? 'Complete Your Profile' : 'Student Registration' ?></h1>
     <p class="muted" style="margin-bottom:1.5rem; text-align:center;">
-        Create a new student profile. Fill in your personal details and upload your multimedia files —
-        photo, audio, PDF, and video. IC number is used to derive your birthdate, gender, and state automatically.
+        <?php if ($isStubCompletion ?? false): ?>
+            Your basic account was created when you signed in. Add your IC number, email, and multimedia files to fully activate your MetaMyKad profile.
+        <?php else: ?>
+            Create a new student profile. Fill in your personal details and upload your multimedia files —
+            photo, audio, PDF, and video. IC number is used to derive your birthdate, gender, and state automatically.
+        <?php endif; ?>
     </p>
 
     <form action="<?= e(url('/register')) ?>" method="post" enctype="multipart/form-data" data-validate>
@@ -66,6 +70,7 @@
                        value="<?= e((string) old('ic_number')) ?>">
                 <label for="ic_number">Malaysian IC Number (12 Digits)</label>
             </div>
+            <?php if (!($isStubCompletion ?? false)): ?>
             <div class="id-or-divider">or</div>
             <div class="form-group" style="flex:1;">
                 <input id="passport_number" name="passport_number" type="text"
@@ -76,6 +81,7 @@
                        value="<?= e((string) old('passport_number')) ?>">
                 <label for="passport_number">Passport Number (International)</label>
             </div>
+            <?php endif; ?>
         </div>
 
         <div class="feedback-box" style="margin-bottom:0.6rem; display:flex; align-items:flex-start; gap:0.55rem;">
@@ -86,6 +92,20 @@
             DOB, gender, state of birth, and age are derived from the IC number automatically.
             Email is classified as personal, student, or work.
         </div>
+
+        <?php if (!($isStubCompletion ?? false)): ?>
+        <div class="feedback-box" style="margin-top:0.75rem; margin-bottom:0.25rem;">
+            <strong>Enrolled students</strong> leave the password field blank — your system password will be used automatically.
+            If you are registering independently (not in the student system), set a password below.
+        </div>
+        <div class="form-grid two-col" style="margin-bottom:0.5rem;">
+            <div class="form-group">
+                <input id="password" name="password" type="password" autocomplete="new-password"
+                       value="">
+                <label for="password">Password <span class="field-note">(independent accounts only)</span></label>
+            </div>
+        </div>
+        <?php endif; ?>
 
         <hr class="register-divider">
 
@@ -116,6 +136,11 @@
             <input id="audio" name="audio" type="file" accept=".mp3,.wav"       class="hidden">
             <input id="pdf"   name="pdf"   type="file" accept=".pdf"            class="hidden">
             <input id="video" name="video" type="file" accept=".mp4,.mov,.avi"  class="hidden">
+        </div>
+
+        <div class="feedback-box" style="margin-top:1rem; display:flex; align-items:flex-start; gap:0.55rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;opacity:0.7;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Upload your multimedia files to enable metadata extraction — photo properties, audio duration, document text content, and video resolution will be automatically analysed and stored for search and retrieval.</span>
         </div>
 
         <button class="register-submit-btn" type="submit">Register Student</button>

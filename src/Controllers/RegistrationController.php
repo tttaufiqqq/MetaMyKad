@@ -20,7 +20,10 @@ final class RegistrationController extends BaseController
     public function store(): void
     {
         $_SESSION['_old'] = $_POST;
-        $mode = ($_POST['mode'] ?? 'create') === 'update' ? 'update' : 'create';
+        $mode             = ($_POST['mode'] ?? 'create') === 'update' ? 'update' : 'create';
+        $isStubCompletion = false;
+        $existingByMatric = null;
+        $central          = null;
 
         // --- 1. Base validation ---
         $icProvided       = trim((string) ($_POST['ic_number'] ?? '')) !== '';
@@ -54,24 +57,43 @@ final class RegistrationController extends BaseController
 
         $student = new Student();
 
-        // --- 2. For new registrations: verify matric exists in mmdb2026.stu ---
+        // --- 2. For new registrations: stub completion check + open registration ---
         if ($mode === 'create') {
-            $matric  = trim((string) ($_POST['matric_number'] ?? ''));
-            $central = $student->findInCentral($matric);
-            if ($central === false) {
-                $this->flash('error', 'Matric number not recognized. Only enrolled students can register.');
-                $this->redirect('/register');
+            $matric = trim((string) ($_POST['matric_number'] ?? ''));
+
+            // Stub completion: logged-in user whose local account has no ic_number yet.
+            // The stub was auto-created on their first login via mmdb2026.vstu.
+            // We bypass the duplicate-matric guard and the SP for this path.
+            $existingByMatric = $student->findByMatric($matric);
+            if ($existingByMatric !== false) {
+                if (Auth::check()
+                    && (int) Auth::user()['id'] === (int) $existingByMatric['id']
+                    && $existingByMatric['ic_number'] === null) {
+                    $isStubCompletion = true;
+                } else {
+                    $this->flash('error', 'You already have a profile. Please log in.');
+                    $this->redirect('/login');
+                }
             }
 
-            // Guard against duplicate profiles
-            if ($student->findByMatric($matric) !== false) {
-                $this->flash('error', 'You already have a profile. Please log in.');
-                $this->redirect('/login');
+            // Central check: sources password for enrolled students.
+            // Not found in central = open registration (allowed — student sets own password).
+            if (!$isStubCompletion) {
+                try {
+                    $central = $student->findInCentral($matric);
+                    if ($central === false) {
+                        $central = null; // allow open registration
+                    }
+                } catch (\Throwable) {
+                    $central = null;
+                }
             }
         }
 
         // --- 3. IC parse ---
+        // Derive from the raw IC first (needs plain digits), then hash for storage.
         $derived = null;
+        $icHash  = null;
         if ($icProvided) {
             try {
                 $derived = $student->deriveFromIc((string) $_POST['ic_number']);
@@ -79,11 +101,12 @@ final class RegistrationController extends BaseController
                 $this->flash('error', $e->getMessage());
                 $this->redirect($mode === 'update' ? '/re-register' : '/register');
             }
+            $icHash = hash('sha256', preg_replace('/\D+/', '', (string) $_POST['ic_number']));
         }
         $emailCategory = $student->classifyEmail((string) $_POST['email']);
 
         // --- 4. Detect existing student (by IC for re-registration logic) ---
-        $existing = $icProvided ? $student->findByIc((string) $_POST['ic_number']) : false;
+        $existing = $icProvided ? $student->findByIc((string) $icHash) : false;
 
         if ($mode === 'update' && !Auth::check()) {
             $this->flash('error', 'You must be logged in to re-register.');
@@ -129,29 +152,62 @@ final class RegistrationController extends BaseController
             }
         }
 
-        // --- 5. Call sp_register_student → get student_id ---
-        // Password is NULL for new registrations — auth is delegated to mmdb2026.stu.
-        // Re-registration carries the existing value forward (also NULL for newer accounts).
-        $passwordHash = $existing !== false ? ($existing['password'] ?? null) : null;
+        // --- 5. Create/update student record ---
+        if ($isStubCompletion) {
+            // Stub completion: direct UPDATE + history INSERT.
+            // Cannot use sp_register_student — it would attempt INSERT and hit a
+            // DUPLICATE KEY on matric_number (the stub row already exists).
+            $stubId = (int) $existingByMatric['id'];
+            (new Student())->completeStub($stubId, [
+                'ic_number'      => $icHash,
+                'full_name'      => (string) ($_POST['full_name'] ?? ''),
+                'phone'          => (string) ($_POST['phone'] ?? ''),
+                'email'          => (string) ($_POST['email'] ?? ''),
+                'email_category' => $emailCategory,
+                'date_of_birth'  => $derived['date_of_birth'] ?? null,
+                'gender'         => $derived['gender'] ?? null,
+                'state_of_birth' => $derived['state_of_birth'] ?? null,
+                'age'            => $derived['age'] ?? null,
+            ]);
+            \MetaMyKad\Core\Database::connection()->prepare(
+                'INSERT INTO registration_history (ic_number, full_name, files_uploaded, badge_at_time, action)
+                 VALUES (:ic, :name, 0, \'Pendaftar\', \'new\')'
+            )->execute(['ic' => $icHash ?? '', 'name' => (string) ($_POST['full_name'] ?? '')]);
+            $studentId = $stubId;
+        } else {
+            // Normal new registration or re-registration via stored procedure.
+            // For open registrations (no central match), password comes from the form.
+            if ($mode === 'create' && $central === null &&
+                trim((string) ($_POST['password'] ?? '')) === '') {
+                $this->flash('error', 'Please set a password for your account.');
+                $this->redirect('/register');
+            }
 
-        $result = (new Student())->callProcedure('sp_register_student', [
-            $_POST['ic_number'] ?? '',
-            $existing !== false ? null : $_POST['matric_number'],
-            $existing !== false ? null : $passwordHash,
-            $_POST['full_name'],
-            $_POST['phone'],
-            $_POST['email'],
-            $emailCategory,
-            $derived['date_of_birth'] ?? null,
-            $derived['gender'] ?? null,
-            $derived['state_of_birth'] ?? null,
-            $derived['age'] ?? null,
-        ]);
+            $passwordHash = $existing !== false
+                ? ($existing['password'] ?? null)
+                : ($central !== null
+                    ? $central['password']
+                    : hash('sha256', (string) ($_POST['password'] ?? '')));
 
-        $studentId = (int) ($result[0]['student_id'] ?? 0);
-        if ($studentId === 0) {
-            $this->flash('error', 'Registration failed. Please try again.');
-            $this->redirect($mode === 'update' ? '/re-register' : '/register');
+            $result = (new Student())->callProcedure('sp_register_student', [
+                $icHash ?? '',
+                $existing !== false ? null : $_POST['matric_number'],
+                $passwordHash,
+                $_POST['full_name'],
+                $_POST['phone'],
+                $_POST['email'],
+                $emailCategory,
+                $derived['date_of_birth'] ?? null,
+                $derived['gender'] ?? null,
+                $derived['state_of_birth'] ?? null,
+                $derived['age'] ?? null,
+            ]);
+
+            $studentId = (int) ($result[0]['student_id'] ?? 0);
+            if ($studentId === 0) {
+                $this->flash('error', 'Registration failed. Please try again.');
+                $this->redirect($mode === 'update' ? '/re-register' : '/register');
+            }
         }
 
         // --- 6-8. Upload, insert file_metadata, extract metadata ---
@@ -234,7 +290,10 @@ final class RegistrationController extends BaseController
             }
         }
 
-        $this->flash('success', $existing !== false ? 'Re-registration successful.' : 'Registration successful. Welcome to MetaMyKad!');
+        $successMsg = $existing !== false
+            ? 'Re-registration successful.'
+            : ($isStubCompletion ? 'Profile completed! Welcome to MetaMyKad.' : 'Registration successful. Welcome to MetaMyKad!');
+        $this->flash('success', $successMsg);
         $this->redirect('/student-detail?id=' . $studentId);
     }
 

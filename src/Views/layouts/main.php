@@ -94,8 +94,19 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
     <div class="main-content">
         <header class="site-header">
             <div class="header-copy">
-                <p class="eyebrow">BITP3353 Multimedia Database</p>
+                <p class="eyebrow">BITP3353 Multimedia Database &nbsp;|&nbsp; GS02 Project</p>
                 <h1 class="page-title"><?= e($pageTitle) ?></h1>
+                <?php if ($currentPath !== '/'): ?>
+                <button type="button" class="back-btn" id="global-back-btn"
+                        data-fallback="<?= e(url('/')) ?>"
+                        aria-label="Go back to previous page">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="15 18 9 12 15 6"/>
+                    </svg>
+                    Back
+                </button>
+                <?php endif; ?>
             </div>
         </header>
         <main class="content">
@@ -113,6 +124,19 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
 <div class="page-spinner" id="page-spinner" aria-hidden="true" role="status" aria-label="Loading">
     <div class="page-spinner__ring"></div>
 </div>
+<script>
+(function () {
+    var btn = document.getElementById('global-back-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = btn.getAttribute('data-fallback');
+        }
+    });
+}());
+</script>
 <script src="<?= e(asset('js/fetch.js')) ?>"></script>
 <script src="<?= e(asset('js/validate.js')) ?>"></script>
 <script src="<?= e(asset('js/file-input.js')) ?>"></script>

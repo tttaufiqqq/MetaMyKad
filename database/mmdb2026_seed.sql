@@ -1,6 +1,11 @@
 -- Local seed for mmdb2026 (lecturer's centralized DB)
 -- Seeded from screenshot — 11 visible rows out of 101 total
--- Used for Option C cross-DB auth testing only
+-- Used for cross-DB auth testing only.
+--
+-- Passwords are SHA-256 hashed to match the server's vstu view.
+-- Plain-text → hash mappings for local test accounts:
+--   '123'    → a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3
+--   'qwerty' → 65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5
 
 CREATE DATABASE IF NOT EXISTS mmdb2026
     CHARACTER SET utf8mb4
@@ -35,8 +40,9 @@ INSERT INTO stu (id, matric_no, full_name, phone_no, group_no, life_motto, passw
      'uploads/1778249245_WhatsApp_Image_2026-04-28.jpg', NULL,
      'uploads/1778249245_Lens_and_Algorithm.pdf', NULL),
 
+-- password: qwerty
 (5,  'B0231241',   'Wadi',                             '0178246',     'GR01', NULL,
-     'qwerty',
+     '65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5',
      'uploads/B0231241/B0231241_20260518_184121_Gemini_G.jpg', NULL,
      'uploads/1778746010_Surah_Al_Fil.pdf', NULL),
 
@@ -44,38 +50,49 @@ INSERT INTO stu (id, matric_no, full_name, phone_no, group_no, life_motto, passw
      NULL,
      'uploads/1778751144_hidayah_floweryTul.png', NULL, NULL, NULL),
 
+-- password: 123
 (9,  'P02165',     'Norlizam',                         '065465',      'GR02', 'sabar_syukur_taqwa',
-     '123',
+     'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
      'uploads/1779151585_Gemini_Generated.jpg', NULL,
      'uploads/1779024156_PRESENTATION_SCHEDULE.pdf', NULL),
 
+-- password: 123
 (10, 'B032420099', 'MUHAMMAD TAUFIQ BIN MOHD ARIFIN',  '0138742846',  'GS02', NULL,
-     '123',
+     'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
      'uploads/1779151173_gambaq.jpg', '2025-03-07',
      'uploads/1779151173_syair-taufiq.pdf', '2026-04-04'),
 
+-- password: 123
 (11, 'B032420121', 'NUR SAJIDAH BINTI ZANIAN',         '0147480610',  'GS04', NULL,
-     '123',
+     'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
      'uploads/1779151265_gambar.jpg', '2026-05-19',
      'uploads/1779151265_lagu.pdf', '2026-04-05'),
 
+-- password: 123
 (13, 'B032510300', 'NADIA BINTI SHAHRUL AZMEE',        '013-7918004', 'GS05', NULL,
-     '123',
+     'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
      'uploads/1779151315_2.jpg', '2026-04-10',
      'uploads/1779151315_Lab_Activity_Sound_of_Ma.pdf', '2026-03-24'),
 
+-- password: 123
 (14, 'B032410202', 'MUHAMMAD AFIQ HAZIM BIN ABD AZIZ', '01117964487', 'GR01',
      'HIDUP MESTI DITERUSKAN WALAU APA JUA SEKALIPON',
-     '123',
+     'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
      'uploads/1779151585_WhatsApp_Image_2026-05-19.jpg', '2026-05-19',
      'uploads/1779151585_Poem_Afiq.pdf', '2026-03-24'),
 
+-- password: 123
 (15, 'B032420087', 'MUHAMMAD HAIKAL BIN JOHARI',       '0175969369',  'GS05', NULL,
-     '123',
+     'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
      'uploads/1779151786_plpicture.jpg', '2025-07-01',
      'uploads/1779151786_LAB_2_MDB.docx', '2026-03-29'),
 
+-- password: 123
 (16, 'B032410815', 'HUDA NAJIHAH BINTI SUHAIMI',       '010-8423611', 'GR01', NULL,
-     '123',
+     'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3',
      'uploads/1779151815_PHOTO_B032410815_HUDA_NAJIHAH.jpg', '2026-04-13',
      'uploads/1779151815_POEM_B032410815_HUDA_NAJIHAH.pdf', '2026-03-26');
+
+-- Create vstu as a view of stu to mirror the server structure.
+-- The app queries mmdb2026.vstu — this makes local and server behaviour identical.
+CREATE OR REPLACE VIEW vstu AS SELECT * FROM stu;

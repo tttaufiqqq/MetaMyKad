@@ -25,28 +25,39 @@ final class LoginController extends BaseController
         $matric   = trim((string) ($_POST['matric_number'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
 
-        // Step 1: authenticate against the lecturer's centralized DB (mmdb2026.stu).
-        // Passwords in that table are plain text — no hashing.
-        $central = (new Student())->findInCentral($matric);
+        $studentModel = new Student();
+        $student      = $studentModel->findByMatric($matric);
 
-        if ($central === false || (string) $central['password'] !== $password) {
+        // No local account — try central DB fallback to auto-create a stub row
+        if ($student === false) {
+            $central = false;
+            try {
+                $central = $studentModel->findInCentral($matric);
+            } catch (\Throwable) {
+                // central DB unreachable — fall through to invalid-credentials error
+            }
+
+            if ($central !== false && $central['password'] !== null &&
+                (string) $central['password'] === hash('sha256', $password)) {
+                $stubId = $studentModel->createStub($central);
+                Session::put('user', [
+                    'id'            => $stubId,
+                    'full_name'     => $central['full_name'],
+                    'matric_number' => $central['matric_no'],
+                ]);
+                $this->flash('warning', 'Welcome! Your account has been created from the student system. Please complete your profile by adding your IC number and uploading your multimedia files.');
+                $this->redirect('/student-detail?id=' . $stubId);
+            }
+
             $this->flash('error', 'Invalid matric number or password.');
             $this->redirect('/login');
         }
 
-        // Step 2: check if this student has a MetaMyKad profile yet.
-        $studentModel = new Student();
-        $student      = $studentModel->findByMatric($matric);
-
-        if ($student === false) {
-            // Fallback: student registered before matric_number was tracked — match by full_name.
-            $student = $studentModel->findByFullName((string) ($central['full_name'] ?? ''));
-        }
-
-        if ($student === false) {
-            // Identity confirmed but no project profile — send to registration.
-            $this->flash('info', 'Your identity was verified. Please complete your MetaMyKad profile to continue.');
-            $this->redirect('/register?matric=' . urlencode($matric));
+        // Local account exists — verify password
+        if ($student['password'] === null ||
+            (string) $student['password'] !== hash('sha256', $password)) {
+            $this->flash('error', 'Invalid matric number or password.');
+            $this->redirect('/login');
         }
 
         Session::put('user', [

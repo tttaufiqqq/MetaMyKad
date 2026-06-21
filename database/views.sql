@@ -23,6 +23,7 @@ CREATE VIEW vw_student_profile_summary AS
 SELECT
     s.id AS student_id,
     s.ic_number,
+    fn_mask_ic(s.ic_number) AS ic_masked,
     s.full_name,
     s.phone,
     s.email,

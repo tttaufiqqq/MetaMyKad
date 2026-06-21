@@ -39,6 +39,23 @@ foreach ($files as $f) {
 }
 ?>
 
+<?php
+// A stub account has ic_number === null (auto-created from mmdb2026.vstu on first login).
+$isStub = $isOwner && $student['ic_number'] === null;
+?>
+<?php if ($isStub): ?>
+<section class="card" style="border-left:4px solid #f97316; background:rgba(249,115,22,.06);">
+    <div style="display:flex; align-items:flex-start; gap:0.75rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+            <strong>Profile incomplete.</strong>
+            Your account was created from the student system but still needs your IC number, email, and multimedia files.
+            <a href="<?= e(url('/register')) ?>" class="button" style="margin-left:1rem; font-size:.85rem; padding:.3rem .8rem;">Complete Registration &rarr;</a>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <?php if ($isOwner): ?>
 <form id="student-update-form" action="<?= e(url('/student-update')) ?>" method="post" enctype="multipart/form-data" data-validate>
     <?php require src_path('Views/partials/csrf.php'); ?>
@@ -50,7 +67,7 @@ foreach ($files as $f) {
     <div class="card-header-row">
         <div>
             <h2 class="detail-name-heading"><?= e($student['full_name']) ?></h2>
-            <p class="muted">IC: <?= $isOwner ? e($student['ic_number']) : '—' ?> &nbsp;|&nbsp; Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
+            <p class="muted">Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
         </div>
         <div class="owner-actions">
             <?php if ($isOwner): ?>
@@ -82,7 +99,7 @@ foreach ($files as $f) {
             </div>
             <div class="edit-field-row">
                 <dt>IC Number</dt>
-                <dd><?= $isOwner ? e($student['ic_number']) : '—' ?></dd>
+                <dd><?= e($student['ic_masked']) ?></dd>
             </div>
             <div class="edit-field-row">
                 <dt>Phone</dt>
@@ -94,16 +111,16 @@ foreach ($files as $f) {
             </div>
             <div class="edit-field-row">
                 <dt>Email Type</dt>
-                <dd><span class="tag-pill"><?= e($student['email_category']) ?></span></dd>
+                <dd><?= $student['email_category'] !== null ? '<span class="tag-pill">' . e($student['email_category']) . '</span>' : '—' ?></dd>
             </div>
         </dl>
     </article>
     <article>
         <h3>Derived Attributes</h3>
         <p>Date of Birth: <?= fmt_date($student['date_of_birth']) ?></p>
-        <p>Age: <?= e((string) $student['current_age']) ?> years</p>
-        <p>Gender: <?= $student['gender'] === 'M' ? 'Male' : 'Female' ?></p>
-        <p>State of Birth: <?= e($student['state_of_birth']) ?></p>
+        <p>Age: <?= ($student['date_of_birth'] !== null && (int) $student['current_age'] > 0) ? e((string) $student['current_age']) . ' years' : '—' ?></p>
+        <p>Gender: <?= $student['gender'] === 'M' ? 'Male' : ($student['gender'] === 'F' ? 'Female' : '—') ?></p>
+        <p>State of Birth: <?= e($student['state_of_birth'] ?? '—') ?></p>
         <p>Badge: <strong><?= badge_icon($student['stored_badge']) ?></strong></p>
     </article>
     <article>
