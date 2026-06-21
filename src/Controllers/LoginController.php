@@ -25,12 +25,36 @@ final class LoginController extends BaseController
         $matric   = trim((string) ($_POST['matric_number'] ?? ''));
         $password = (string) ($_POST['password'] ?? '');
 
-        // Authenticate against the local students table.
-        // Password hash is copied from mmdb2026.vstu during registration.
         $studentModel = new Student();
         $student      = $studentModel->findByMatric($matric);
 
-        if ($student === false || $student['password'] === null ||
+        // No local account — try central DB fallback to auto-create a stub row
+        if ($student === false) {
+            $central = false;
+            try {
+                $central = $studentModel->findInCentral($matric);
+            } catch (\Throwable) {
+                // central DB unreachable — fall through to invalid-credentials error
+            }
+
+            if ($central !== false && $central['password'] !== null &&
+                (string) $central['password'] === hash('sha256', $password)) {
+                $stubId = $studentModel->createStub($central);
+                Session::put('user', [
+                    'id'            => $stubId,
+                    'full_name'     => $central['full_name'],
+                    'matric_number' => $central['matric_no'],
+                ]);
+                $this->flash('warning', 'Welcome! Your account has been created from the student system. Please complete your profile by adding your IC number and uploading your multimedia files.');
+                $this->redirect('/student-detail?id=' . $stubId);
+            }
+
+            $this->flash('error', 'Invalid matric number or password.');
+            $this->redirect('/login');
+        }
+
+        // Local account exists — verify password
+        if ($student['password'] === null ||
             (string) $student['password'] !== hash('sha256', $password)) {
             $this->flash('error', 'Invalid matric number or password.');
             $this->redirect('/login');

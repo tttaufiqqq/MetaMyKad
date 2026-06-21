@@ -13,21 +13,46 @@ final class PageController extends BaseController
 
     public function register(): void
     {
-        $matric  = trim((string) ($_GET['matric'] ?? ''));
-        $prefill = [];
+        $matric           = trim((string) ($_GET['matric'] ?? ''));
+        $prefill          = [];
+        $isStubCompletion = false;
 
-        if ($matric !== '') {
-            $central = (new \MetaMyKad\Models\Student())->findInCentral($matric);
-            if ($central !== false) {
+        // If the logged-in user has a stub account (ic_number IS NULL), pre-fill from
+        // their existing row and switch to stub-completion mode (IC required, no passport).
+        if (\MetaMyKad\Core\Auth::check()) {
+            $loggedIn = \MetaMyKad\Core\Auth::user();
+            $existing = (new \MetaMyKad\Models\Student())->find((int) $loggedIn['id']);
+            if ($existing !== false && $existing['ic_number'] === null) {
+                $isStubCompletion = true;
                 $prefill = [
-                    'matric'    => $central['matric_no'],
-                    'full_name' => $central['full_name'],
-                    'phone'     => $central['phone_no'],
+                    'matric'    => $existing['matric_number'],
+                    'full_name' => $existing['full_name'],
+                    'phone'     => $existing['phone'] ?? '',
                 ];
             }
         }
 
-        $this->render('register', ['pageTitle' => 'Registration', 'prefill' => $prefill]);
+        // Prefill from central if ?matric= provided and not already doing stub completion
+        if (!$isStubCompletion && $matric !== '') {
+            try {
+                $central = (new \MetaMyKad\Models\Student())->findInCentral($matric);
+                if ($central !== false) {
+                    $prefill = [
+                        'matric'    => $central['matric_no'],
+                        'full_name' => $central['full_name'],
+                        'phone'     => $central['phone_no'],
+                    ];
+                }
+            } catch (\Throwable) {
+                // central unavailable — no prefill
+            }
+        }
+
+        $this->render('register', [
+            'pageTitle'        => $isStubCompletion ? 'Complete Your Profile' : 'Registration',
+            'prefill'          => $prefill,
+            'isStubCompletion' => $isStubCompletion,
+        ]);
     }
 
     public function reRegister(): void
