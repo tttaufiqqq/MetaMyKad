@@ -22,6 +22,7 @@ GROUP BY s.id, s.ic_number;
 CREATE VIEW vw_student_profile_summary AS
 SELECT
     s.id AS student_id,
+    s.matric_number,
     s.ic_number,
     fn_mask_ic(s.ic_number) AS ic_masked,
     s.full_name,

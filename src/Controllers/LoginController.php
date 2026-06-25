@@ -17,13 +17,17 @@ final class LoginController extends BaseController
             $this->redirect('/student-detail?id=' . $user['id']);
         }
 
-        $this->render('login', ['pageTitle' => 'Student Login']);
+        $this->render('login', [
+            'pageTitle'     => 'Student Login',
+            'prefillMatric' => trim((string) ($_GET['matric'] ?? '')),
+        ]);
     }
 
     public function store(): void
     {
-        $matric   = trim((string) ($_POST['matric_number'] ?? ''));
-        $password = (string) ($_POST['password'] ?? '');
+        $matric        = trim((string) ($_POST['matric_number'] ?? ''));
+        $password      = (string) ($_POST['password'] ?? '');
+        $postRedirect  = trim((string) ($_POST['redirect'] ?? ''));
 
         $studentModel = new Student();
         $student      = $studentModel->findByMatric($matric);
@@ -46,7 +50,7 @@ final class LoginController extends BaseController
                     'matric_number' => $central['matric_no'],
                 ]);
                 $this->flash('warning', 'Welcome! Your account has been created from the student system. Please complete your profile by adding your IC number and uploading your multimedia files.');
-                $this->redirect('/student-detail?id=' . $stubId);
+                $this->redirectAfterLogin($stubId, $postRedirect);
             }
 
             $this->flash('error', 'Invalid matric number or password.');
@@ -66,7 +70,21 @@ final class LoginController extends BaseController
             'matric_number' => $student['matric_number'],
         ]);
 
-        $this->redirect('/student-detail?id=' . $student['id']);
+        $this->redirectAfterLogin((int) $student['id'], $postRedirect);
+    }
+
+    /**
+     * Redirect to $postRedirect if it is a safe relative path, otherwise fall back
+     * to the student's own detail page.
+     */
+    private function redirectAfterLogin(int $userId, string $postRedirect): never
+    {
+        if ($postRedirect !== ''
+            && str_starts_with($postRedirect, '/')
+            && !str_starts_with($postRedirect, '//')) {
+            $this->redirect($postRedirect);
+        }
+        $this->redirect('/student-detail?id=' . $userId);
     }
 
     public function logout(): void

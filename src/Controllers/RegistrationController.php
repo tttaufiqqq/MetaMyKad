@@ -87,6 +87,14 @@ final class RegistrationController extends BaseController
                 } catch (\Throwable) {
                     $central = null;
                 }
+
+                // Guard: central students must authenticate via mmdb2026.vstu before
+                // completing their profile. If they bypassed the /register gate and
+                // posted directly, reject the submission here.
+                if ($central !== null && !Auth::check()) {
+                    $this->flash('error', 'Please sign in with your VSTU credentials before completing your profile.');
+                    $this->redirect('/register');
+                }
             }
         }
 

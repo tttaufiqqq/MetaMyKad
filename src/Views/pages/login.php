@@ -14,7 +14,7 @@
                         type="text"
                         id="matric_number"
                         name="matric_number"
-                        value="<?= e(old('matric_number', '')) ?>"
+                        value="<?= e(old('matric_number', $prefillMatric ?? '')) ?>"
                         autocomplete="username"
                         required
                     >

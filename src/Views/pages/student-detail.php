@@ -82,7 +82,7 @@ $isStub = $isOwner && $student['ic_number'] === null;
                     Delete Account
                 </button>
             <?php else: ?>
-                <a class="button" href="<?= e(url('/login')) ?>">Login to Edit</a>
+                <a class="button" href="<?= e(url('/login?matric=' . urlencode($student['matric_number'] ?? ''))) ?>">Login to Edit</a>
             <?php endif; ?>
         </div>
     </div>
