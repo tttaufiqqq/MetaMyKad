@@ -13,23 +13,37 @@ final class PageController extends BaseController
 
     public function register(): void
     {
+        // Unauthenticated users must verify their identity via mmdb2026.vstu before they
+        // can complete a profile. The ?open=1 param is an escape hatch for students who
+        // are not in the central system and need to register independently.
+        if (!\MetaMyKad\Core\Auth::check()) {
+            $openMode   = ($_GET['open'] ?? '') === '1';
+            $vstuMatric = trim((string) ($_GET['matric'] ?? ''));
+            $this->render('register', [
+                'pageTitle'        => $vstuMatric !== '' ? 'Profile Completion' : 'Student Registration',
+                'vstuGate'         => !$openMode,
+                'vstuMatric'       => $vstuMatric,
+                'prefill'          => [],
+                'isStubCompletion' => false,
+            ]);
+            return;
+        }
+
         $matric           = trim((string) ($_GET['matric'] ?? ''));
         $prefill          = [];
         $isStubCompletion = false;
 
         // If the logged-in user has a stub account (ic_number IS NULL), pre-fill from
         // their existing row and switch to stub-completion mode (IC required, no passport).
-        if (\MetaMyKad\Core\Auth::check()) {
-            $loggedIn = \MetaMyKad\Core\Auth::user();
-            $existing = (new \MetaMyKad\Models\Student())->find((int) $loggedIn['id']);
-            if ($existing !== false && $existing['ic_number'] === null) {
-                $isStubCompletion = true;
-                $prefill = [
-                    'matric'    => $existing['matric_number'],
-                    'full_name' => $existing['full_name'],
-                    'phone'     => $existing['phone'] ?? '',
-                ];
-            }
+        $loggedIn = \MetaMyKad\Core\Auth::user();
+        $existing = (new \MetaMyKad\Models\Student())->find((int) $loggedIn['id']);
+        if ($existing !== false && $existing['ic_number'] === null) {
+            $isStubCompletion = true;
+            $prefill = [
+                'matric'    => $existing['matric_number'],
+                'full_name' => $existing['full_name'],
+                'phone'     => $existing['phone'] ?? '',
+            ];
         }
 
         // Prefill from central if ?matric= provided and not already doing stub completion
@@ -50,6 +64,7 @@ final class PageController extends BaseController
 
         $this->render('register', [
             'pageTitle'        => $isStubCompletion ? 'Complete Your Profile' : 'Registration',
+            'vstuGate'         => false,
             'prefill'          => $prefill,
             'isStubCompletion' => $isStubCompletion,
         ]);
