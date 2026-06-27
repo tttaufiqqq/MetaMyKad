@@ -55,12 +55,6 @@
             return;
         }
 
-        // Click outside the panel while modal is open
-        if (!modal.classList.contains('hidden') && !e.target.closest('.student-modal__panel')) {
-            closeModal();
-            return;
-        }
-
         // Row click — ignore clicks on interactive children (buttons, links)
         var row = e.target.closest('[data-student-row]');
         if (!row) return;

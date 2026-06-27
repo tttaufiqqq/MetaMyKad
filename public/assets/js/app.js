@@ -117,8 +117,7 @@
 
     document.addEventListener('click', function (e) {
         if (e.target.closest('[data-badge-guide-open]')) { openBadgeGuide(); return; }
-        if (e.target.closest('#badge-guide-close') || e.target.closest('#badge-guide-cancel')) { closeBadgeGuide(); return; }
-        if (badgeModal && !badgeModal.classList.contains('hidden') && !e.target.closest('.badge-guide-modal__panel')) { closeBadgeGuide(); }
+        if (e.target.closest('#badge-guide-close') || e.target.closest('#badge-guide-cancel')) { closeBadgeGuide(); }
     });
 
     document.addEventListener('keydown', function (e) {
