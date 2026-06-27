@@ -120,6 +120,7 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
 </div>
 <?php require src_path('Views/partials/student-modal.php'); ?>
 <?php require src_path('Views/partials/badge-guide-modal.php'); ?>
+<?php require src_path('Views/partials/onboarding-modal.php'); ?>
 <?php require src_path('Views/partials/confirm-dialog.php'); ?>
 <div class="page-spinner" id="page-spinner" aria-hidden="true" role="status" aria-label="Loading">
     <div class="page-spinner__ring"></div>

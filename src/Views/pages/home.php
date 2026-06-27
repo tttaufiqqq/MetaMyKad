@@ -13,6 +13,14 @@
             <a href="<?= e(url('/register')) ?>" class="button">Register Now</a>
             <a href="<?= e(url('/dashboard')) ?>" class="button secondary">View Dashboard</a>
         </div>
+        <button type="button" id="onboard-trigger" class="badge-guide-trigger" style="margin-top:1.25rem;">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <circle cx="6" cy="6" r="5.5" stroke="currentColor"/>
+                <path d="M4.2 4.5a1.8 1.8 0 0 1 3.6 0c0 1.2-1.8 1.5-1.8 2.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                <path d="M6 9h.01" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            How to use this?
+        </button>
         <p class="home-hero__notice">
             Already registered in <strong>Madam Hidayah's system</strong>?
             <a href="<?= e(url('/login')) ?>">Log in to edit your profile</a> or

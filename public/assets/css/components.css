@@ -3234,3 +3234,186 @@ tr[data-student-row] {
     margin-top: -0.2rem;
 }
 
+/* =========================================================
+   MOBILE ENHANCEMENTS
+   Fills gaps not covered by existing media queries.
+   Breakpoints: 640px (phone landscape), 480px (phone portrait)
+   ========================================================= */
+
+/* ── Topnav: show Student Login inside the open hamburger menu ── */
+@media (max-width: 640px) {
+    /* make topnav a wrapping flex container so user row can appear below */
+    .topnav {
+        flex-wrap: wrap;
+    }
+
+    /* ensure brand stays left, toggle stays right on the first row */
+    .topnav__brand  { order: 0; flex: 1; }
+    .topnav__toggle { order: 1; }
+    .topnav__links  { order: 2; }
+
+    /* when menu is open, reveal the user/login section as a full row */
+    .topnav.is-open .topnav__user {
+        order: 3;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        width: 100%;
+        padding: 0.6rem 0 0.25rem;
+        border-top: 1px solid var(--color-line);
+        margin: 0;
+    }
+
+    .topnav.is-open .topnav__user .topnav__btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .topnav.is-open .topnav__user .topnav__btn--ghost {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .topnav.is-open .topnav__user .topnav__user-link {
+        display: block;
+        padding: 0.6rem 0.75rem;
+        border-radius: 10px;
+        background: rgba(57, 197, 255, 0.06);
+        text-align: center;
+    }
+
+    .topnav.is-open .topnav__user form {
+        display: contents;
+    }
+
+    /* CTA buttons stack and fill full width on small phones */
+    .home-hero__ctas {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .home-hero__ctas .button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* ── Very small phones (portrait, < 480px) ─────────────────── */
+@media (max-width: 480px) {
+    /* Feature cards: single column */
+    .home-features__grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Hero: tighter vertical rhythm */
+    .home-hero {
+        padding: 2rem 0 1.5rem;
+        gap: 1.75rem;
+    }
+
+    .home-hero__desc {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .home-hero__notice {
+        font-size: 0.82rem;
+    }
+
+    /* Sidebar nav: compact row layout on very small screens */
+    .nav-link {
+        flex: 1 1 160px;
+        font-size: 0.82rem;
+        padding: 0.55rem 0.65rem;
+    }
+
+    .nav-icon {
+        display: none;
+    }
+
+    /* Page header: prevent title overflow */
+    .page-title {
+        font-size: clamp(1.1rem, 5vw, 1.5rem);
+        word-break: break-word;
+    }
+
+    /* Header-copy row wraps cleanly */
+    .header-copy {
+        width: 100%;
+    }
+
+    /* Metric cards: 2-up on small screens */
+    .metric-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    /* Search panels: remove excess horizontal padding */
+    .search-panel {
+        padding: 1rem;
+    }
+
+    /* Form inputs: always full-width, larger touch targets */
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 1rem; /* prevents iOS auto-zoom */
+    }
+
+    /* Upload grid: single column */
+    .upload-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Student detail: make meta-row wrap */
+    .student-modal__meta {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    /* Badge guide modal: allow scroll on tiny screens */
+    .badge-guide-modal__panel {
+        max-height: 92vh;
+        padding: 1.25rem 1rem;
+    }
+
+    /* Table scroll hint: show scrollbar visibly on mobile */
+    .table-card,
+    .table-container {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    /* Toast: full-width */
+    .toast-wrap {
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: 0.75rem;
+    }
+}
+
+/* ── Ultra-narrow phones (< 380px) ─────────────────────────── */
+@media (max-width: 380px) {
+    .home-hero__title {
+        font-size: 2rem;
+    }
+
+    .metric-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .home-features__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topnav__wordmark {
+        font-size: 0.9rem;
+    }
+
+    .topnav__divider,
+    .topnav__subtitle {
+        display: none;
+    }
+}
+
