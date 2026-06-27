@@ -23,7 +23,7 @@
                 // In embed mode: break out of iframe. If not logged in, route via login first.
                 $target = Auth::check()
                     ? url('/student-detail?id=' . $student['metamykad_id'])
-                    : url('/login?redirect=' . urlencode('/student-detail?id=' . $student['metamykad_id']));
+                    : url('/login?matric=' . urlencode($student['matric_no']) . '&redirect=' . urlencode('/student-detail?id=' . $student['metamykad_id']));
                 $cardHref  = 'href="' . e($target) . '"';
                 $cardExtra = 'data-embed-out';
             } else {
