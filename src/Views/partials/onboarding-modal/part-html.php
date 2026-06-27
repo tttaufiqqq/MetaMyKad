@@ -178,13 +178,13 @@
                 <p class="onboard-step__desc">Use the Search Hub to find students and files. Each method targets something different.</p>
                 <div class="onboard-search-triplet">
                     <a href="<?= e(url('/search-attribute')) ?>" class="onboard-search-chip onboard-search-chip--cyan">
-                        <strong>ABR</strong><span>Filter by name, badge level, or file type.</span>
+                        <strong>ABR</strong><span>Search based on metadata extracted from your IC number.</span>
                     </a>
                     <a href="<?= e(url('/search-text')) ?>" class="onboard-search-chip onboard-search-chip--green">
-                        <strong>TBR</strong><span>Search keywords inside uploaded files.</span>
+                        <strong>TBR</strong><span>Search by typing a file type — auto-assigned to every uploaded file.</span>
                     </a>
                     <a href="<?= e(url('/search-content')) ?>" class="onboard-search-chip onboard-search-chip--orange">
-                        <strong>CBR</strong><span>Find files by technical properties.</span>
+                        <strong>CBR</strong><span>Search based on metadata extracted from uploaded multimedia files.</span>
                     </a>
                 </div>
             </div>
