@@ -23,8 +23,13 @@
         </button>
         <p class="home-hero__notice">
             Already registered in <strong>Madam Hidayah's system</strong>?
-            <a href="<?= e(url('/login')) ?>">Log in to edit your profile</a> or
-            <a href="<?= e(url('/students')) ?>">browse the student list</a>.
+            <?php if (\MetaMyKad\Core\Auth::check()): ?>
+                <?php $__u = \MetaMyKad\Core\Auth::user(); ?>
+                <a href="<?= e(url('/student-detail?id=' . $__u['id'])) ?>" class="home-notice-link"><strong>Go to your profile</strong></a> or
+            <?php else: ?>
+                <a href="<?= e(url('/login')) ?>" data-home-embed class="home-notice-link"><strong>Log in to edit your profile</strong></a> or
+            <?php endif; ?>
+            <a href="<?= e(url('/students')) ?>" data-home-embed class="home-notice-link"><strong>Browse the student list</strong></a>.
         </p>
     </div>
 
@@ -95,3 +100,74 @@
 
     </div>
 </section>
+
+<div id="home-embed-modal" class="home-embed-modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="home-embed-modal__bar">
+        <span class="home-embed-modal__label" id="home-embed-label"></span>
+        <button type="button" id="home-embed-fullpage" class="home-embed-modal__fullpage">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Full Page
+        </button>
+        <button type="button" id="home-embed-close" class="home-embed-modal__close" aria-label="Close">&times;</button>
+    </div>
+    <iframe id="home-embed-frame" class="home-embed-modal__frame" src="" title="Page content" frameborder="0"></iframe>
+</div>
+<style>
+.home-embed-modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
+.home-embed-modal.hidden { display: none; }
+.home-embed-modal__bar { width: min(960px,100%); display: flex; align-items: center; padding-bottom: 0.5rem; gap: 0.6rem; }
+.home-embed-modal__label { flex: 1; font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.home-embed-modal__fullpage { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.7); border-radius: 6px; padding: 0 0.65rem; height: 2rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; cursor: pointer; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.home-embed-modal__fullpage:hover { background: rgba(255,255,255,0.13); color: #fff; }
+.home-embed-modal__close { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #fff; border-radius: 6px; width: 2rem; height: 2rem; font-size: 1.3rem; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.home-embed-modal__close:hover { background: rgba(255,255,255,0.16); }
+.home-embed-modal__frame { width: min(960px,100%); height: min(780px,88vh); border: none; border-radius: 12px; background: var(--color-bg,#080e21); }
+.home-notice-link { font-weight: 700; color: var(--color-brand); text-decoration: underline; text-underline-offset: 3px; }
+.home-notice-link:hover { color: #fff; }
+.home-notice-link strong { font-weight: 800; }
+</style>
+<script>
+(function () {
+    var modal       = document.getElementById('home-embed-modal');
+    var frame       = document.getElementById('home-embed-frame');
+    var closeBtn    = document.getElementById('home-embed-close');
+    var fullPageBtn = document.getElementById('home-embed-fullpage');
+    var label       = document.getElementById('home-embed-label');
+    if (!modal || !frame) return;
+    var baseHref = '/';
+
+    function openEmbed(url, title, base) {
+        baseHref = base || url;
+        frame.src = url;
+        if (label) label.textContent = title || '';
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeEmbed() {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        frame.src = '';
+        document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeEmbed);
+    if (fullPageBtn) fullPageBtn.addEventListener('click', function () { closeEmbed(); window.location.href = baseHref; });
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeEmbed(); });
+
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('[data-home-embed]');
+        if (!link) return;
+        e.preventDefault();
+        var href = link.getAttribute('href') || '';
+        openEmbed(href + (href.indexOf('?') === -1 ? '?' : '&') + 'embed=1', link.textContent.trim(), href);
+    });
+    window.addEventListener('message', function (e) {
+        if (!e.data || e.data.type !== 'embed-redirect') return;
+        closeEmbed(); window.location.href = e.data.url;
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeEmbed();
+    });
+}());
+</script>

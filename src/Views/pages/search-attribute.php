@@ -10,10 +10,17 @@
 ?>
 <section class="search-panel">
     <h2>Attribute-Based Retrieval</h2>
-    <p class="muted">
+    <p class="muted" style="margin-bottom:0.75rem;">
         Filter students by structured profile attributes — gender, state of birth, email category,
         badge level, and uploaded file type. All filters are optional and can be combined freely.
     </p>
+    <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.25rem;">
+        <span style="font-size:0.72rem; font-weight:600; color:var(--color-muted); background:rgba(57,197,255,0.07); border:1px solid rgba(57,197,255,0.18); border-radius:99px; padding:0.2rem 0.65rem;">Gender &mdash; Male or Female</span>
+        <span style="font-size:0.72rem; font-weight:600; color:var(--color-muted); background:rgba(57,197,255,0.07); border:1px solid rgba(57,197,255,0.18); border-radius:99px; padding:0.2rem 0.65rem;">State of Birth &mdash; derived from IC</span>
+        <span style="font-size:0.72rem; font-weight:600; color:var(--color-muted); background:rgba(57,197,255,0.07); border:1px solid rgba(57,197,255,0.18); border-radius:99px; padding:0.2rem 0.65rem;">Email Category &mdash; Personal / Student / Work</span>
+        <span style="font-size:0.72rem; font-weight:600; color:var(--color-muted); background:rgba(57,197,255,0.07); border:1px solid rgba(57,197,255,0.18); border-radius:99px; padding:0.2rem 0.65rem;">Badge &mdash; profile completion level</span>
+        <span style="font-size:0.72rem; font-weight:600; color:var(--color-muted); background:rgba(57,197,255,0.07); border:1px solid rgba(57,197,255,0.18); border-radius:99px; padding:0.2rem 0.65rem;">File Type &mdash; photo / audio / PDF / video</span>
+    </div>
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-attribute')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">

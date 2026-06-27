@@ -3,7 +3,7 @@
 <?php if (empty($students)): ?>
 <section class="card">
     <p class="muted">No students found.
-        <?php if ($name === '' && $badge === ''): ?>
+        <?php if ($name === '' && $badge === '' && !Auth::check()): ?>
         <a href="<?= e(url('/register')) ?>">Register the first student.</a>
         <?php endif; ?>
     </p>
@@ -17,7 +17,8 @@
         // Only anonymous visitors get the self-registration link for unregistered cards.
         if ($isRegistered) {
             $cardTag  = 'a';
-            $cardHref = 'href="' . e(url('/student-detail?id=' . $student['metamykad_id'])) . '"';
+            $embedParam = ($embed ?? false) ? '&embed=1' : '';
+            $cardHref = 'href="' . e(url('/student-detail?id=' . $student['metamykad_id'] . $embedParam)) . '"';
         } elseif (!Auth::check()) {
             $cardTag  = 'a';
             $cardHref = 'href="' . e(url('/register?matric=' . urlencode($student['matric_no']))) . '"';

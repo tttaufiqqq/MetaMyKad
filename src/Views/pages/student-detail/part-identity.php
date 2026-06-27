@@ -9,7 +9,18 @@
             </div>
             <div class="edit-field-row">
                 <dt>IC Number</dt>
-                <dd><?= e($student['ic_masked']) ?></dd>
+                <dd>
+                    <?php if ($isStub): ?>
+                    <input type="text" name="ic_number" class="inline-input"
+                           form="student-update-form"
+                           placeholder="e.g. 991231071234"
+                           maxlength="14"
+                           title="Enter your 12-digit IC number (dashes optional)">
+                    <small style="display:block;margin-top:0.25rem;font-size:0.7rem;color:var(--color-dim);">12 digits — stored as a one-way hash, never in plain text.</small>
+                    <?php else: ?>
+                    <?= e($student['ic_masked']) ?>
+                    <?php endif; ?>
+                </dd>
             </div>
             <div class="edit-field-row">
                 <dt>Phone</dt>

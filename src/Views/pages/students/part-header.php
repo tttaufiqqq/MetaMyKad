@@ -11,9 +11,7 @@
                 Badge Guide
             </button>
         </div>
-        <?php if (\MetaMyKad\Core\Auth::check()): ?>
-        <button type="button" class="button" disabled title="You're already registered">Register Student</button>
-        <?php else: ?>
+        <?php if (!\MetaMyKad\Core\Auth::check()): ?>
         <a class="button" href="<?= e(url('/register')) ?>">Register Student</a>
         <?php endif; ?>
     </div>

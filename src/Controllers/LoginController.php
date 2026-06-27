@@ -17,9 +17,12 @@ final class LoginController extends BaseController
             $this->redirect('/student-detail?id=' . $user['id']);
         }
 
+        $embed = ($_GET['embed'] ?? '') === '1';
         $this->render('login', [
             'pageTitle'     => 'Student Login',
             'prefillMatric' => trim((string) ($_GET['matric'] ?? '')),
+            'embed'         => $embed,
+            'layout'        => $embed ? 'embed' : 'main',
         ]);
     }
 
@@ -28,6 +31,8 @@ final class LoginController extends BaseController
         $matric        = trim((string) ($_POST['matric_number'] ?? ''));
         $password      = (string) ($_POST['password'] ?? '');
         $postRedirect  = trim((string) ($_POST['redirect'] ?? ''));
+        $embedMode     = ($_POST['_embed'] ?? '') === '1';
+        $loginRoute    = '/login' . ($embedMode ? '?embed=1' : '');
 
         $studentModel = new Student();
         $student      = $studentModel->findByMatric($matric);
@@ -54,14 +59,14 @@ final class LoginController extends BaseController
             }
 
             $this->flash('error', 'Invalid matric number or password.');
-            $this->redirect('/login');
+            $this->redirect($loginRoute);
         }
 
         // Local account exists — verify password
         if ($student['password'] === null ||
             (string) $student['password'] !== hash('sha256', $password)) {
             $this->flash('error', 'Invalid matric number or password.');
-            $this->redirect('/login');
+            $this->redirect($loginRoute);
         }
 
         Session::put('user', [
@@ -82,9 +87,21 @@ final class LoginController extends BaseController
         if ($postRedirect !== ''
             && str_starts_with($postRedirect, '/')
             && !str_starts_with($postRedirect, '//')) {
-            $this->redirect($postRedirect);
+            $targetUrl = $postRedirect;
+        } else {
+            $targetUrl = '/student-detail?id=' . $userId;
         }
-        $this->redirect('/student-detail?id=' . $userId);
+
+        if (($_POST['_embed'] ?? '') === '1') {
+            http_response_code(200);
+            $encoded = json_encode(url($targetUrl), JSON_HEX_TAG | JSON_HEX_AMP);
+            echo '<!DOCTYPE html><html><head></head><body>';
+            echo '<script>window.parent.postMessage({type:"embed-redirect",url:' . $encoded . '},"*");</script>';
+            echo '</body></html>';
+            exit;
+        }
+
+        $this->redirect($targetUrl);
     }
 
     public function logout(): void

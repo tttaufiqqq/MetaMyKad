@@ -1,5 +1,5 @@
 <section class="search-panel">
-    <form method="get" action="<?= e(url('/students')) ?>" style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:flex-end;">
+    <form method="get" action="<?= e(url('/students' . (($embed ?? false) ? '?embed=1' : ''))) ?>" style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:flex-end;">
         <div class="form-group" style="flex:1; min-width:200px;">
             <input type="text" id="name" name="name" value="<?= e($name) ?>" placeholder="Search by name">
             <label for="name">Name</label>
@@ -19,7 +19,7 @@
             Search
         </button>
         <?php if ($name !== '' || $badge !== ''): ?>
-        <a class="button secondary" href="<?= e(url('/students')) ?>">Clear</a>
+        <a class="button secondary" href="<?= e(url('/students' . (($embed ?? false) ? '?embed=1' : ''))) ?>">Clear</a>
         <?php endif; ?>
     </form>
 </section>

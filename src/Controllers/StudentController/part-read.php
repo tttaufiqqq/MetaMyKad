@@ -39,11 +39,14 @@ trait StudentControllerReadTrait
             ));
         }
 
+        $embed = ($_GET['embed'] ?? '') === '1';
         $this->render('students', [
             'pageTitle' => 'All Students',
             'students'  => $students,
             'name'      => $name,
             'badge'     => $badge,
+            'embed'     => $embed,
+            'layout'    => $embed ? 'embed' : 'main',
         ]);
     }
 
@@ -84,11 +87,13 @@ trait StudentControllerReadTrait
         $historyModel = new RegistrationHistory();
         $history      = $historyModel->getByIc((string) $student['ic_number']);
 
+        $embed = ($_GET['embed'] ?? '') === '1';
         $this->render('student-detail', [
             'pageTitle' => 'Student Detail',
             'student'   => $student,
             'files'     => $files,
             'history'   => $history,
+            'layout'    => $embed ? 'embed' : 'main',
         ]);
     }
 }

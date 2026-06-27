@@ -6,13 +6,15 @@
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: var(--space-2);
     z-index: 70;
 }
 .onboard-modal.hidden { display: none; }
 
 .onboard-modal__panel {
-    width: min(560px, 100%);
+    width: min(700px, 100%);
     max-height: 90vh;
     overflow-y: auto;
     background: linear-gradient(160deg, rgba(15, 24, 50, 0.99), rgba(8, 14, 33, 0.98));

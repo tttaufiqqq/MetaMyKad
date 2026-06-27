@@ -62,6 +62,33 @@ trait StudentControllerWriteTrait
             exit;
         }
 
+        // IC number — can only be set once, when the account was created without one
+        $icRaw = trim((string) ($_POST['ic_number'] ?? ''));
+        if ($icRaw !== '') {
+            $icModel   = new Student();
+            $current   = $icModel->find($studentId);
+            if ($current !== false && $current['ic_number'] === null) {
+                $icDigits = preg_replace('/\D+/', '', $icRaw) ?? '';
+                if (strlen($icDigits) !== 12) {
+                    $this->flash('error', 'IC number must be exactly 12 digits.');
+                    $this->redirect('/student-detail?id=' . $studentId);
+                }
+                try {
+                    $derived = $icModel->deriveFromIc($icDigits);
+                } catch (\InvalidArgumentException $e) {
+                    $this->flash('error', $e->getMessage());
+                    $this->redirect('/student-detail?id=' . $studentId);
+                }
+                $icHash = hash('sha256', $icDigits);
+                $clash  = $icModel->findByIc($icHash);
+                if ($clash !== false && (int) $clash['id'] !== $studentId) {
+                    $this->flash('error', 'This IC number is already linked to another account.');
+                    $this->redirect('/student-detail?id=' . $studentId);
+                }
+                $icModel->updateIcAndDerived($studentId, $icHash, $derived);
+            }
+        }
+
         $errors = Validator::validate($_POST, [
             'full_name' => ['required'],
             'phone'     => ['required', 'phone'],

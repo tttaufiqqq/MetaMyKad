@@ -166,7 +166,7 @@
         font-size: 1.05rem;
         margin-bottom: 1rem;
     }
-    .onboard-steps { min-height: 210px; }
+    .onboard-steps { min-height: 220px; }
     .onboard-step__title { font-size: 1rem; }
     .onboard-step__desc { font-size: 0.82rem; }
     .onboard-nav { margin-top: 1.25rem; padding-top: 0.85rem; }
@@ -204,23 +204,18 @@
 }
 .onboard-ic-preview__row:last-child { border-bottom: none; }
 
-/* Search guide footer trigger */
-.onboard-footer-hint {
-    text-align: center;
-    font-size: 0.74rem;
-    color: var(--color-dim);
-    margin: 0.85rem 0 0;
+/* Step 6: search triplet */
+.onboard-search-triplet { display: flex; flex-direction: column; gap: 0.45rem; }
+.onboard-search-chip {
+    display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.55rem 0.75rem; border-radius: 8px;
+    text-decoration: none; border: 1px solid transparent;
+    font-size: 0.82rem; transition: filter 0.15s;
 }
-.onboard-footer-link {
-    background: none;
-    border: none;
-    color: var(--color-brand);
-    font-size: inherit;
-    cursor: pointer;
-    font-family: inherit;
-    padding: 0;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-}
-.onboard-footer-link:hover { color: var(--color-brand-bright); }
+.onboard-search-chip strong { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.05em; min-width: 2.4rem; }
+.onboard-search-chip span  { color: var(--color-muted); }
+.onboard-search-chip--cyan   { background: rgba(57,197,255,0.07);  border-color: rgba(57,197,255,0.2);  color: #39c5ff; }
+.onboard-search-chip--green  { background: rgba(113,239,192,0.07); border-color: rgba(113,239,192,0.2); color: #71efc0; }
+.onboard-search-chip--orange { background: rgba(255,179,92,0.07);  border-color: rgba(255,179,92,0.2);  color: #ffb35c; }
+.onboard-search-chip:hover   { filter: brightness(1.2); }
 </style>

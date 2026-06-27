@@ -60,6 +60,21 @@ trait StudentQueriesTrait
         ]);
     }
 
+    public function updateIcAndDerived(int $id, string $icHash, array $derived): void
+    {
+        Database::connection()->prepare(
+            'UPDATE students
+             SET ic_number = :ic, date_of_birth = :dob, gender = :gender, state_of_birth = :state
+             WHERE id = :id AND ic_number IS NULL'
+        )->execute([
+            'ic'     => $icHash,
+            'dob'    => $derived['date_of_birth'],
+            'gender' => $derived['gender'],
+            'state'  => $derived['state_of_birth'],
+            'id'     => $id,
+        ]);
+    }
+
     public function updatePassword(int $id, string $newHash): void
     {
         Database::connection()->prepare(
