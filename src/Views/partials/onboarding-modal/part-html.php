@@ -13,6 +13,7 @@
             <span class="onboard-dot"></span>
             <span class="onboard-dot"></span>
             <span class="onboard-dot"></span>
+            <span class="onboard-dot"></span>
         </div>
 
         <div class="onboard-steps">
@@ -28,7 +29,7 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 1 of 5</span>
+                    <span class="onboard-step__num">Step 1 of 6</span>
                     <h4 class="onboard-step__title">Find your profile</h4>
                 </div>
                 <p class="onboard-step__desc">
@@ -51,7 +52,7 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 2 of 5</span>
+                    <span class="onboard-step__num">Step 2 of 6</span>
                     <h4 class="onboard-step__title">Prove it's you</h4>
                 </div>
                 <p class="onboard-step__desc">
@@ -75,7 +76,7 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 3 of 5</span>
+                    <span class="onboard-step__num">Step 3 of 6</span>
                     <h4 class="onboard-step__title">Complete your profile</h4>
                 </div>
                 <p class="onboard-step__desc">
@@ -114,13 +115,13 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 4 of 5</span>
+                    <span class="onboard-step__num">Step 4 of 6</span>
                     <h4 class="onboard-step__title">Your IC stays private</h4>
                 </div>
                 <p class="onboard-step__desc">
                     When you enter your IC number, we hash it before saving anything.
                     Nobody can read the real number from the database or anywhere on screen.
-                    This is what it looks like stored in our system:
+                    This is what it looks like stored in the <code>ic_number</code> column of the <code>students</code> table in our database:
                 </p>
                 <div class="onboard-ic-preview" aria-label="Example of masked IC numbers in the database">
                     <div class="onboard-ic-preview__header">ic_number</div>
@@ -145,7 +146,7 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 5 of 5</span>
+                    <span class="onboard-step__num">Step 5 of 6</span>
                     <h4 class="onboard-step__title">Explore your metadata</h4>
                 </div>
                 <p class="onboard-step__desc">
@@ -165,17 +166,35 @@
                 </div>
             </div>
 
+            <!-- Step 6: Search Guide -->
+            <div class="onboard-step" data-step="5">
+                <div class="onboard-step__icon-wrap onboard-step__icon-wrap--cyan">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#39c5ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <div class="onboard-step__meta">
+                    <span class="onboard-step__num">Step 6 of 6</span>
+                    <h4 class="onboard-step__title">3 Ways to Search</h4>
+                </div>
+                <p class="onboard-step__desc">Use the Search Hub to find students and files. Each method targets something different.</p>
+                <div class="onboard-search-triplet">
+                    <a href="<?= e(url('/search-attribute')) ?>" class="onboard-search-chip onboard-search-chip--cyan">
+                        <strong>ABR</strong><span>Filter by name, badge level, or file type.</span>
+                    </a>
+                    <a href="<?= e(url('/search-text')) ?>" class="onboard-search-chip onboard-search-chip--green">
+                        <strong>TBR</strong><span>Search keywords inside uploaded files.</span>
+                    </a>
+                    <a href="<?= e(url('/search-content')) ?>" class="onboard-search-chip onboard-search-chip--orange">
+                        <strong>CBR</strong><span>Find files by technical properties.</span>
+                    </a>
+                </div>
+            </div>
+
         </div><!-- /.onboard-steps -->
 
         <div class="onboard-nav">
             <button type="button" class="button secondary" id="onboard-prev" disabled>Back</button>
             <button type="button" class="button" id="onboard-next">Next</button>
         </div>
-
-        <p class="onboard-footer-hint">
-            Not sure how to use the search features?
-            <button type="button" class="onboard-footer-link" id="onboard-open-search-guide">Open the Search Guide</button>
-        </p>
 
     </div><!-- /.onboard-modal__panel -->
 </div>
