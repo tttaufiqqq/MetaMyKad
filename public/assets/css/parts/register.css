@@ -1,0 +1,80 @@
+/* ── Register Page ───────────────────────────────────────── */
+
+.register-card {
+    background: linear-gradient(180deg, rgba(13, 21, 46, 0.98), rgba(7, 12, 28, 0.96));
+    border: 1px solid rgba(121, 166, 255, 0.14);
+    border-radius: 24px;
+    padding: 2.5rem 2.25rem 2rem;
+    box-shadow: var(--shadow-panel);
+}
+
+.register-title {
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-brand);
+    margin-bottom: 1.75rem;
+}
+
+.register-divider {
+    border: none;
+    border-top: 1px solid rgba(121, 166, 255, 0.1);
+    margin: 1.75rem 0;
+}
+
+.reg-id-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: var(--space-2);
+}
+
+.reg-id-row .id-or-divider {
+    flex-shrink: 0;
+    width: auto;
+    padding: 0 0.25rem;
+}
+
+.register-submit-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1.75rem;
+    padding: 0.95rem;
+    background: var(--color-brand);
+    color: #000e1a;
+    border: none;
+    border-radius: 14px;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-submit-btn:hover {
+    background: var(--color-brand-bright);
+    box-shadow: 0 0 0 4px rgba(57, 197, 255, 0.18);
+}
+
+.register-cancel {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.register-cancel:hover {
+    color: var(--color-text);
+}
+
+.register-card .form-grid {
+    margin-bottom: var(--space-2);
+}

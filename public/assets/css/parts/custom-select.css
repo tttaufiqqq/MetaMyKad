@@ -1,0 +1,95 @@
+/* ── Custom Select Component  (.cs-) ─────────────────────── */
+
+.cs-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.cs-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0.15rem 0 0;
+    color: var(--color-text);
+    font: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    min-height: 1.6rem;
+}
+
+.cs-trigger:focus {
+    outline: none;
+}
+
+.cs-value {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+}
+
+.cs-panel {
+    position: fixed;
+    z-index: 9999;
+    background: rgba(8, 13, 30, 0.98);
+    border: 1px solid rgba(100, 223, 255, 0.22);
+    border-radius: 18px;
+    padding: 0.45rem;
+    box-shadow:
+        0 24px 64px rgba(2, 6, 23, 0.72),
+        0 0 0 1px rgba(57, 197, 255, 0.06);
+    backdrop-filter: blur(24px);
+    animation: cs-open 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: min(18rem, calc(100vh - 8rem));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 223, 255, 0.5) rgba(9, 18, 40, 0.9);
+}
+
+.cs-panel::-webkit-scrollbar        { width: 0.6rem; }
+.cs-panel::-webkit-scrollbar-track  { background: rgba(9, 18, 40, 0.9); border-radius: 999px; }
+
+.cs-panel::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(100, 223, 255, 0.62), rgba(57, 197, 255, 0.38));
+    border-radius: 999px;
+    border: 2px solid rgba(9, 18, 40, 0.9);
+}
+
+.cs-panel::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(143, 235, 255, 0.78), rgba(57, 197, 255, 0.5));
+}
+
+.cs-option {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: var(--color-muted);
+    font: inherit;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s;
+    letter-spacing: 0.01em;
+}
+
+.cs-option:hover,
+.cs-option:focus {
+    background: rgba(57, 197, 255, 0.1);
+    color: var(--color-text);
+    outline: none;
+}
+
+.cs-option.is-selected {
+    background: rgba(57, 197, 255, 0.14);
+    color: var(--color-brand-bright);
+    font-weight: 600;
+}

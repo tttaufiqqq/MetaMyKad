@@ -1,0 +1,35 @@
+/* ── Login Page ──────────────────────────────────────────── */
+
+.login-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+}
+
+.login-header {
+    margin-bottom: 1.75rem;
+}
+
+.login-header h2 {
+    margin-bottom: 0.4rem;
+}
+
+.login-footer-note {
+    margin-top: 1.25rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.login-footer-note a {
+    color: var(--color-brand-cyan);
+}
+
+.login-card .form-actions {
+    margin-top: 1.5rem;
+}

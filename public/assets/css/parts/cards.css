@@ -1,0 +1,110 @@
+/* ── Cards & Surfaces ────────────────────────────────────── */
+
+/* Shared surface background */
+.hero,
+.card,
+.table-card,
+.search-panel,
+.metric-grid article,
+.detail-grid article,
+.form-grid {
+    background: linear-gradient(180deg, rgba(18, 27, 54, 0.88), rgba(8, 14, 33, 0.8));
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(18px);
+}
+
+/* Padding + stacking for content cards */
+.hero,
+.card,
+.search-panel,
+.table-card {
+    padding: 1.4rem;
+    margin-bottom: var(--space-3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Reveal overflow when a custom-select panel is open */
+.hero:has(.cs-wrap.is-open),
+.card:has(.cs-wrap.is-open),
+.search-panel:has(.cs-wrap.is-open),
+.table-card:has(.cs-wrap.is-open) {
+    overflow: visible;
+    z-index: 40;
+}
+
+.form-grid,
+.form-card-layout {
+    position: relative;
+}
+
+.form-grid:has(.cs-wrap.is-open),
+.form-card-layout:has(.cs-wrap.is-open) {
+    z-index: 30;
+}
+
+/* Entrance animation */
+.hero,
+.card,
+.table-card,
+.search-panel,
+.metric-grid article,
+.detail-grid article {
+    animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Top-edge shine line */
+.hero::before,
+.card::before,
+.search-panel::before,
+.table-card::before,
+.metric-grid article::before,
+.detail-grid article::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(143, 235, 255, 0.55), transparent);
+    pointer-events: none;
+}
+
+/* Typography inside cards */
+.hero h2,
+.card h2,
+.search-panel h2,
+.table-card h2 {
+    margin-bottom: 0.7rem;
+    color: #fff;
+    font-size: clamp(1.3rem, 2vw, 1.9rem);
+}
+
+.hero p,
+.card p,
+.search-panel p,
+.table-card p,
+.detail-grid p {
+    max-width: 72ch;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+/* Adjacent search panels */
+.search-panel + .search-panel {
+    margin-top: -0.35rem;
+}
+
+/* Card header row: title left, actions right */
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+}

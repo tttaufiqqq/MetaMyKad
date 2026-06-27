@@ -116,3 +116,12 @@ project's decision log.
 
 Dont add co author by claude in the commit.
 
+
+
+\## Rule 14 — File Length Limit
+
+No file may exceed 200 lines.
+
+If a file would exceed 200 lines, split it into focused part files before writing.
+
+Each part file covers one concern only (e.g. one component, one page, one feature).
