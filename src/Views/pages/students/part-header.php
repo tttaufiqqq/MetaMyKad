@@ -11,8 +11,5 @@
                 Badge Guide
             </button>
         </div>
-        <?php if (!\MetaMyKad\Core\Auth::check()): ?>
-        <a class="button" href="<?= e(url('/register')) ?>">Register Student</a>
-        <?php endif; ?>
     </div>
 </section>
