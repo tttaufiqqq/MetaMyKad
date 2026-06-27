@@ -5,9 +5,11 @@
 
         <p class="student-modal__eyebrow">Getting Started</p>
         <h3 id="onboard-title" class="onboard-modal__title">How to use MetaMyKad</h3>
+        <p class="onboard-modal__intro">Take a minute to go through this before jumping in — it'll save you a lot of guessing.</p>
 
         <div class="onboard-dots" aria-hidden="true">
             <span class="onboard-dot is-active"></span>
+            <span class="onboard-dot"></span>
             <span class="onboard-dot"></span>
             <span class="onboard-dot"></span>
             <span class="onboard-dot"></span>
@@ -26,7 +28,7 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 1 of 4</span>
+                    <span class="onboard-step__num">Step 1 of 5</span>
                     <h4 class="onboard-step__title">Find your profile</h4>
                 </div>
                 <p class="onboard-step__desc">
@@ -49,7 +51,7 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 2 of 4</span>
+                    <span class="onboard-step__num">Step 2 of 5</span>
                     <h4 class="onboard-step__title">Prove it's you</h4>
                 </div>
                 <p class="onboard-step__desc">
@@ -73,12 +75,15 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 3 of 4</span>
+                    <span class="onboard-step__num">Step 3 of 5</span>
                     <h4 class="onboard-step__title">Complete your profile</h4>
                 </div>
                 <p class="onboard-step__desc">
-                    Fill in your <strong>IC number</strong> and upload your multimedia files.
-                    You'll need all four types, so have them ready. Sorry for making you gather everything!
+                    Fill in your <strong>IC number</strong> and <strong>email address</strong>,
+                    then upload your multimedia files. We use your email to figure out what kind
+                    of account it is — student, personal, or work. You'll need all four file types
+                    ready as well, so sorry for the inconvenience of reuploading back what you
+                    already uploaded in Madam's system!
                 </p>
                 <div class="onboard-step__file-chips">
                     <span class="onboard-chip onboard-chip--photo">
@@ -100,8 +105,38 @@
                 </div>
             </div>
 
-            <!-- Step 4: View metadata -->
+            <!-- Step 4: IC Privacy -->
             <div class="onboard-step" data-step="3">
+                <div class="onboard-step__icon-wrap onboard-step__icon-wrap--cyan">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#39c5ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <div class="onboard-step__meta">
+                    <span class="onboard-step__num">Step 4 of 5</span>
+                    <h4 class="onboard-step__title">Your IC stays private</h4>
+                </div>
+                <p class="onboard-step__desc">
+                    When you enter your IC number, we hash it before saving anything.
+                    Nobody can read the real number from the database or anywhere on screen.
+                    This is what it looks like stored in our system:
+                </p>
+                <div class="onboard-ic-preview" aria-label="Example of masked IC numbers in the database">
+                    <div class="onboard-ic-preview__header">ic_number</div>
+                    <div class="onboard-ic-preview__row">94c68884246b7f08bb54d98e1c175582c3b6f7f98a66ec1e8b...</div>
+                    <div class="onboard-ic-preview__row">5873c4aca414efffd6602f42b252e3e367a72fa472766cb1be...</div>
+                    <div class="onboard-ic-preview__row">f9ade36fd850</div>
+                    <div class="onboard-ic-preview__row">81d674a57ed3</div>
+                </div>
+                <p class="onboard-step__note" style="margin-top:0.75rem;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    Hashing is one-way. Your real IC can never be recovered from what's stored.
+                </p>
+            </div>
+
+            <!-- Step 5: View metadata -->
+            <div class="onboard-step" data-step="4">
                 <div class="onboard-step__icon-wrap onboard-step__icon-wrap--purple">
                     <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M12 3l1.8 5.4L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.6L12 3z"/>
@@ -110,7 +145,7 @@
                     </svg>
                 </div>
                 <div class="onboard-step__meta">
-                    <span class="onboard-step__num">Step 4 of 4</span>
+                    <span class="onboard-step__num">Step 5 of 5</span>
                     <h4 class="onboard-step__title">Explore your metadata</h4>
                 </div>
                 <p class="onboard-step__desc">
@@ -136,6 +171,11 @@
             <button type="button" class="button secondary" id="onboard-prev" disabled>Back</button>
             <button type="button" class="button" id="onboard-next">Next</button>
         </div>
+
+        <p class="onboard-footer-hint">
+            Not sure how to use the search features?
+            <button type="button" class="onboard-footer-link" id="onboard-open-search-guide">Open the Search Guide</button>
+        </p>
 
     </div><!-- /.onboard-modal__panel -->
 </div>

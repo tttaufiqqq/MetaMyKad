@@ -1,4 +1,13 @@
 <style>
+/* Intro subtitle */
+.onboard-modal__intro {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    margin: -0.5rem 0 1rem;
+    line-height: 1.5;
+}
+
 /* Icon wrap */
 .onboard-step__icon-wrap {
     width: 72px;
@@ -167,4 +176,51 @@
     .onboard-step.is-active { animation: none; }
     .onboard-dot { transition: none; }
 }
+
+/* IC hash preview table (step 4) */
+.onboard-ic-preview {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    border: 1px solid rgba(121, 166, 255, 0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+.onboard-ic-preview__header {
+    background: rgba(121, 166, 255, 0.1);
+    color: var(--color-dim);
+    padding: 0.38rem 0.75rem;
+    font-weight: 700;
+    font-size: 0.62rem;
+    border-bottom: 1px solid rgba(121, 166, 255, 0.12);
+}
+.onboard-ic-preview__row {
+    padding: 0.38rem 0.75rem;
+    color: var(--color-brand);
+    border-bottom: 1px solid rgba(121, 166, 255, 0.07);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.onboard-ic-preview__row:last-child { border-bottom: none; }
+
+/* Search guide footer trigger */
+.onboard-footer-hint {
+    text-align: center;
+    font-size: 0.74rem;
+    color: var(--color-dim);
+    margin: 0.85rem 0 0;
+}
+.onboard-footer-link {
+    background: none;
+    border: none;
+    color: var(--color-brand);
+    font-size: inherit;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.onboard-footer-link:hover { color: var(--color-brand-bright); }
 </style>

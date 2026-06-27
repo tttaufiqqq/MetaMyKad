@@ -51,6 +51,9 @@
             cancel.addEventListener('click', function () {
                 pendingForm = null;
                 pendingHref = null;
+                if (dialog.contains(document.activeElement)) {
+                    document.activeElement.blur();
+                }
                 dialog.classList.add('hidden');
                 dialog.setAttribute('aria-hidden', 'true');
             });
@@ -111,6 +114,9 @@
 
     function closeBadgeGuide() {
         if (!badgeModal) return;
+        if (badgeModal.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
         badgeModal.classList.add('hidden');
         badgeModal.setAttribute('aria-hidden', 'true');
     }

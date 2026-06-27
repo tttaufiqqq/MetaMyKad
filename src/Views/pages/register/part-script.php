@@ -55,6 +55,9 @@
     modal.classList.remove('hidden');
     modal.setAttribute('aria-hidden', 'false');
     document.getElementById('welcome-modal-close').addEventListener('click', function () {
+        if (modal.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
         modal.classList.add('hidden');
         modal.setAttribute('aria-hidden', 'true');
     });
