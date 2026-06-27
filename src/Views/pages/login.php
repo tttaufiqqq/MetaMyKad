@@ -7,6 +7,12 @@
 
         <form action="<?= e(url('/login')) ?>" method="post" novalidate>
             <?php require src_path('Views/partials/csrf.php'); ?>
+            <?php if ($embed ?? false): ?>
+            <input type="hidden" name="_embed" value="1">
+            <?php endif; ?>
+            <?php if (!empty($_GET['redirect'])): ?>
+            <input type="hidden" name="redirect" value="<?= e($_GET['redirect']) ?>">
+            <?php endif; ?>
 
             <div class="form-grid">
                 <div class="form-group">

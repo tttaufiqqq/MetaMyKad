@@ -1,0 +1,69 @@
+/* ── Inline Edit Mode (student-detail owner edit) ────────── */
+
+.inline-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(57, 197, 255, 0.45);
+    color: var(--color-text);
+    font-size: 0.88rem;
+    font-family: inherit;
+    font-weight: inherit;
+    padding: 0 0 2px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+}
+
+.inline-input:focus {
+    border-bottom-color: var(--color-brand-bright);
+}
+
+.inline-input::placeholder {
+    color: var(--color-dim);
+    font-style: italic;
+}
+
+/* Label/value rows in edit mode */
+
+.edit-field-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.edit-field-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0.15rem 0.6rem;
+}
+
+.edit-field-row dt {
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    white-space: nowrap;
+}
+
+.edit-field-row dd {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--color-text);
+}
+
+.edit-field-row.is-invalid .inline-input {
+    border-bottom-color: var(--color-danger-text);
+}
+
+.field-error--inline {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+    color: var(--color-danger-text);
+    margin-top: -0.2rem;
+}

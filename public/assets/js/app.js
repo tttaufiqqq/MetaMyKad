@@ -51,6 +51,9 @@
             cancel.addEventListener('click', function () {
                 pendingForm = null;
                 pendingHref = null;
+                if (dialog.contains(document.activeElement)) {
+                    document.activeElement.blur();
+                }
                 dialog.classList.add('hidden');
                 dialog.setAttribute('aria-hidden', 'true');
             });
@@ -111,14 +114,16 @@
 
     function closeBadgeGuide() {
         if (!badgeModal) return;
+        if (badgeModal.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
         badgeModal.classList.add('hidden');
         badgeModal.setAttribute('aria-hidden', 'true');
     }
 
     document.addEventListener('click', function (e) {
         if (e.target.closest('[data-badge-guide-open]')) { openBadgeGuide(); return; }
-        if (e.target.closest('#badge-guide-close') || e.target.closest('#badge-guide-cancel')) { closeBadgeGuide(); return; }
-        if (badgeModal && !badgeModal.classList.contains('hidden') && !e.target.closest('.badge-guide-modal__panel')) { closeBadgeGuide(); }
+        if (e.target.closest('#badge-guide-close') || e.target.closest('#badge-guide-cancel')) { closeBadgeGuide(); }
     });
 
     document.addEventListener('keydown', function (e) {

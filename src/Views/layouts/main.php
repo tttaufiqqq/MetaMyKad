@@ -120,6 +120,8 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
 </div>
 <?php require src_path('Views/partials/student-modal.php'); ?>
 <?php require src_path('Views/partials/badge-guide-modal.php'); ?>
+<?php require src_path('Views/partials/onboarding-modal.php'); ?>
+<?php require src_path('Views/partials/search-guide-modal.php'); ?>
 <?php require src_path('Views/partials/confirm-dialog.php'); ?>
 <div class="page-spinner" id="page-spinner" aria-hidden="true" role="status" aria-label="Loading">
     <div class="page-spinner__ring"></div>
@@ -139,6 +141,7 @@ $currentBadge = $currentBadge ?? 'Pendaftar';
 </script>
 <script src="<?= e(asset('js/fetch.js')) ?>"></script>
 <script src="<?= e(asset('js/validate.js')) ?>"></script>
+<script src="<?= e(asset('js/validate-mutex.js')) ?>"></script>
 <script src="<?= e(asset('js/file-input.js')) ?>"></script>
 <script src="<?= e(asset('js/app.js')) ?>"></script>
 <script src="<?= e(asset('js/player.js')) ?>"></script>

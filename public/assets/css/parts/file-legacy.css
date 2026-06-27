@@ -1,0 +1,74 @@
+/* ── Metadata Grid & Legacy File Cards ───────────────────── */
+
+.metadata-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    align-items: start;
+}
+
+.file-card {
+    background: rgba(15, 24, 50, 0.82);
+    border: 1px solid var(--color-line);
+    border-radius: 18px;
+    padding: 0.9rem;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.3s ease;
+}
+
+.file-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(143, 235, 255, 0.52);
+    box-shadow: 0 12px 32px rgba(57, 197, 255, 0.1);
+}
+
+.file-preview {
+    height: 88px;
+    border-radius: 14px;
+    border: 1px solid rgba(100, 223, 255, 0.2);
+    background: var(--color-input);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.45rem;
+    margin-bottom: 0.75rem;
+}
+
+.file-preview img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+    display: block;
+}
+
+.file-name {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.file-data {
+    font-size: 0.74rem;
+    color: var(--color-dim);
+    margin-top: 0.35rem;
+    line-height: 1.45;
+}
+
+/* Photo thumbnail inside a file card */
+.file-photo-thumb {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+    max-height: 200px;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Edit-mode file replacement label */
+.file-replace-label {
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted, rgba(255,255,255,0.45));
+    margin-bottom: 0.3rem;
+}

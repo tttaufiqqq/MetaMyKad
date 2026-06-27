@@ -1,0 +1,66 @@
+/* ── Page Header & Status ────────────────────────────────── */
+
+.page-title {
+    font-size: clamp(1.55rem, 3vw, 2.15rem);
+    font-weight: 800;
+    color: #fff;
+}
+
+.header-copy {
+    min-width: 0;
+}
+
+.header-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.badge-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.15;
+    padding: 0.8rem 1rem;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(14, 24, 51, 0.92), rgba(9, 15, 34, 0.82));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.badge-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-brand-warm);
+    font-weight: 800;
+    font-family: var(--font-mono);
+}
+
+.current-badge {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.status-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 2.75rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-pill);
+    background: rgba(113, 239, 192, 0.1);
+    border: 1px solid rgba(113, 239, 192, 0.14);
+    color: var(--color-secondary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+}
+
+.owner-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}

@@ -9,10 +9,25 @@
 ?>
 <section class="search-panel">
     <h2>Content-Based Retrieval</h2>
-    <p class="muted">
+    <p class="muted" style="margin-bottom:0.75rem;">
         Search files by their analysed multimedia content — photo category and facial expression,
-        audio duration tier, or video resolution tier. Select one or more filters to find matching files.
+        audio duration tier, or video resolution tier. These values are extracted automatically
+        when files are uploaded. Select one or more filters to find matching files.
     </p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:0.5rem; margin-bottom:1.25rem;">
+        <div style="background:rgba(57,197,255,0.06); border:1px solid rgba(57,197,255,0.15); border-radius:8px; padding:0.55rem 0.75rem;">
+            <p style="font-size:0.62rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#39c5ff; margin:0 0 0.25rem;">Photo</p>
+            <p style="font-size:0.72rem; color:var(--color-muted); margin:0; line-height:1.4;">Category (formal / non-formal) and dominant facial expression detected in the image.</p>
+        </div>
+        <div style="background:rgba(113,239,192,0.06); border:1px solid rgba(113,239,192,0.15); border-radius:8px; padding:0.55rem 0.75rem;">
+            <p style="font-size:0.62rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#71efc0; margin:0 0 0.25rem;">Audio</p>
+            <p style="font-size:0.72rem; color:var(--color-muted); margin:0; line-height:1.4;">Duration tier — Short (&lt;30s), Medium (30s–2m), or Long (&gt;2m).</p>
+        </div>
+        <div style="background:rgba(192,132,252,0.06); border:1px solid rgba(192,132,252,0.15); border-radius:8px; padding:0.55rem 0.75rem;">
+            <p style="font-size:0.62rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#c084fc; margin:0 0 0.25rem;">Video</p>
+            <p style="font-size:0.72rem; color:var(--color-muted); margin:0; line-height:1.4;">Resolution tier — SD (≤480p), HD (720p), FHD (1080p), or UHD (4K).</p>
+        </div>
+    </div>
     <form class="form-grid two-col" method="get" action="<?= e(url('/search-content')) ?>">
         <input type="hidden" name="_search" value="1">
         <div class="form-group">

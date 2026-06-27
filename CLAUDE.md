@@ -116,3 +116,22 @@ project's decision log.
 
 Dont add co author by claude in the commit.
 
+
+
+\## Rule 14 — File Length Limit
+
+No file may exceed 200 lines.
+
+**For new files:** If a file would exceed 200 lines, split it into focused part
+files before writing. Each part file covers one concern only (e.g. one
+component, one page, one feature).
+
+**For existing files that already exceed 200 lines:** Refactor using the
+orchestration pattern — convert the file into a thin orchestrator that imports
+and composes focused part files. Do not rewrite the file in place. Instead:
+
+1. Identify logical concerns in the file (state, UI sections, handlers, helpers)
+2. Extract each concern into its own part file
+3. Replace the original file's content with an orchestrator that imports and
+   composes those parts
+4. Each part file must itself stay under 200 lines

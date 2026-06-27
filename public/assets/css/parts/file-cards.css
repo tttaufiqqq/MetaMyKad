@@ -1,0 +1,131 @@
+/* ── File Cards  (.fc-) ──────────────────────────────────── */
+
+.fc {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background: linear-gradient(135deg, rgba(15, 24, 50, 0.9), rgba(8, 14, 33, 0.85));
+    border: 1px solid var(--color-line);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.fc:hover {
+    border-color: rgba(100, 223, 255, 0.35);
+    box-shadow: 0 4px 24px rgba(57, 197, 255, 0.08);
+}
+
+/* Media thumbnail (left panel) */
+
+.fc-media {
+    width: 180px;
+    min-width: 180px;
+    background: rgba(5, 9, 21, 0.7);
+    border-right: 1px solid var(--color-line);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fc-media__img {
+    width: 180px;
+    height: 100%;
+    min-height: 120px;
+    max-height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.fc-media__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 2rem 0;
+}
+
+.fc-media__icon img {
+    width: 2.8rem;
+    height: 2.8rem;
+    object-fit: contain;
+    opacity: 0.55;
+}
+
+/* Body */
+
+.fc-body {
+    padding: 0.85rem 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+}
+
+.fc-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.fc-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+}
+
+.fc-type-badge {
+    flex-shrink: 0;
+    font-size: 0.58rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 0.18rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(57, 197, 255, 0.1);
+    border: 1px solid rgba(57, 197, 255, 0.2);
+    color: var(--color-brand-bright);
+    text-transform: uppercase;
+    align-self: flex-start;
+}
+
+.fc-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    margin: 0;
+}
+
+.fc-meta__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.fc-meta__row dt {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-dim);
+    flex-shrink: 0;
+}
+
+.fc-meta__row dd {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    text-align: right;
+    word-break: break-word;
+}
+

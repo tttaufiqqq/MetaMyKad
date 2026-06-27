@@ -1,0 +1,107 @@
+/* ── Home Main Content & Hero ────────────────────────────── */
+
+.home-main {
+    flex: 1;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+    box-sizing: border-box;
+}
+
+.home-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+    padding: 5rem 0 4rem;
+}
+
+.home-hero__eyebrow {
+    display: inline-block;
+    margin-bottom: 1.1rem;
+    padding: 0.28rem 0.8rem;
+    border-radius: var(--radius-pill);
+    background: rgba(57, 197, 255, 0.1);
+    border: 1px solid rgba(57, 197, 255, 0.22);
+    color: var(--color-brand);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+}
+
+.home-hero__title {
+    font-size: clamp(2.4rem, 5vw, 3.75rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.06;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+}
+
+.home-hero__accent {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.home-hero__desc {
+    font-size: 1.05rem;
+    color: var(--color-muted);
+    line-height: 1.72;
+    margin-bottom: 2.25rem;
+    max-width: 460px;
+}
+
+.home-hero__ctas {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.home-hero__notice {
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+.home-hero__notice a {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+.home-hero__photo {
+    width: 100%;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--color-line);
+    box-shadow: var(--shadow-panel);
+    display: block;
+}
+
+.home-hero__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    border: 2px dashed rgba(121, 166, 255, 0.2);
+    background: var(--color-surface-muted);
+    color: var(--color-dim);
+    font-size: 0.87rem;
+    text-align: center;
+    padding: 2rem;
+}
+
+.home-hero__placeholder-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: contain;
+    display: block;
+}

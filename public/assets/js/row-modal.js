@@ -44,6 +44,9 @@
     }
 
     function closeModal() {
+        if (modal.contains(document.activeElement)) {
+            document.activeElement.blur();
+        }
         modal.classList.add('hidden');
         modal.setAttribute('aria-hidden', 'true');
     }
@@ -51,12 +54,6 @@
     document.addEventListener('click', function (e) {
         // Close via buttons
         if (e.target.closest('#student-modal-close') || e.target.closest('#student-modal-cancel')) {
-            closeModal();
-            return;
-        }
-
-        // Click outside the panel while modal is open
-        if (!modal.classList.contains('hidden') && !e.target.closest('.student-modal__panel')) {
             closeModal();
             return;
         }

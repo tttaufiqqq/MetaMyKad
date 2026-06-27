@@ -1,0 +1,108 @@
+/* ── Sidebar & Logo ──────────────────────────────────────── */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 2rem;
+}
+
+.logo-mark {
+    width: 58px;
+    height: 58px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.logo-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+}
+
+.logo-wordmark {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.04em;
+}
+
+.logo-subtitle {
+    font-size: 0.63rem;
+    color: var(--color-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    line-height: 1.35;
+}
+
+.sidebar-panel {
+    background: var(--color-sidebar);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    min-height: calc(100vh - 2rem);
+    box-shadow: var(--shadow-panel);
+    backdrop-filter: blur(24px);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-kicker {
+    margin-bottom: 0.8rem;
+    color: var(--color-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+}
+
+.sidebar-note {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(17, 28, 57, 0.92), rgba(9, 15, 34, 0.82));
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-note strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.95rem;
+    color: #fff;
+}
+
+.sidebar-note p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+}
+
+.sidebar-note__label {
+    display: inline-flex;
+    margin-bottom: 0.65rem;
+    padding: 0.24rem 0.55rem;
+    border-radius: var(--radius-pill);
+    background: rgba(113, 239, 192, 0.1);
+    color: var(--color-secondary);
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+}

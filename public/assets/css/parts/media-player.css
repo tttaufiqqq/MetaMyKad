@@ -1,0 +1,173 @@
+/* ── Custom Media Player ─────────────────────────────────── */
+
+.custom-player {
+    background: var(--color-surface-1, rgba(255,255,255,0.04));
+    border: 1px solid rgba(57,197,255,0.18);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+}
+
+.custom-player--audio {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.custom-player--video {
+    display: block;
+    position: relative;
+}
+
+.custom-player--video video {
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    background: #000;
+    max-height: 180px;
+    object-fit: contain;
+}
+
+.custom-player--video .cp-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    padding-top: 0.6rem;
+}
+
+/* Play / Pause */
+.cp-play {
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-brand-cyan, #39c5ff);
+    background: transparent;
+    color: var(--color-brand-cyan, #39c5ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+    font-size: 0.8rem;
+    padding: 0;
+}
+
+.cp-play:hover,
+.cp-play.is-playing {
+    background: var(--gradient-brand, linear-gradient(135deg,#39c5ff,#1d8cff));
+    color: #fff;
+    border-color: transparent;
+}
+
+/* Time labels */
+.cp-current,
+.cp-duration {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.78rem;
+    color: var(--color-text-muted, rgba(255,255,255,0.45));
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Sliders */
+.cp-seek  { flex: 1 1 100px; min-width: 60px; }
+.cp-volume { flex: 0 1 90px;  min-width: 60px; }
+
+.cp-seek,
+.cp-volume {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(57,197,255,0.15);
+    outline: none;
+    cursor: pointer;
+}
+
+.cp-seek::-webkit-slider-thumb,
+.cp-volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-brand-cyan, #39c5ff);
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+
+.cp-seek::-webkit-slider-thumb:hover,
+.cp-volume::-webkit-slider-thumb:hover { transform: scale(1.25); }
+
+.cp-seek::-moz-range-thumb,
+.cp-volume::-moz-range-thumb {
+    width: 14px; height: 14px;
+    border-radius: 50%; border: none;
+    background: var(--color-brand-cyan, #39c5ff);
+    cursor: pointer;
+}
+
+.cp-seek::-moz-range-track,
+.cp-volume::-moz-range-track {
+    background: rgba(57,197,255,0.15);
+    height: 4px; border-radius: 4px;
+}
+
+/* Fullscreen button */
+.cp-fullscreen {
+    flex-shrink: 0;
+    width: 2rem; height: 2rem;
+    border-radius: 6px;
+    border: 1px solid rgba(57,197,255,0.3);
+    background: transparent;
+    color: var(--color-text-muted, rgba(255,255,255,0.45));
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 0.8rem; padding: 0;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.cp-fullscreen:hover,
+.cp-fullscreen.is-fullscreen {
+    color: var(--color-brand-cyan, #39c5ff);
+    border-color: var(--color-brand-cyan, #39c5ff);
+}
+
+/* Mute button */
+.cp-mute {
+    flex-shrink: 0;
+    width: 2rem; height: 2rem;
+    border-radius: 6px;
+    border: 1px solid rgba(57,197,255,0.3);
+    background: transparent;
+    color: var(--color-text-muted, rgba(255,255,255,0.45));
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 0.85rem; padding: 0;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.cp-mute:hover {
+    color: var(--color-brand-cyan, #39c5ff);
+    border-color: var(--color-brand-cyan, #39c5ff);
+}
+
+/* Fullscreen mode overrides */
+.custom-player--video:fullscreen,
+.custom-player--video:-webkit-full-screen {
+    background: #000; border-radius: 0;
+    display: flex; flex-direction: column;
+    justify-content: center; padding: 0;
+}
+
+.custom-player--video:fullscreen video,
+.custom-player--video:-webkit-full-screen video {
+    max-height: calc(100vh - 64px); border-radius: 0;
+}
+
+.custom-player--video:fullscreen .cp-controls,
+.custom-player--video:-webkit-full-screen .cp-controls {
+    background: rgba(0,0,0,0.6); padding: 0.75rem 1rem;
+}
