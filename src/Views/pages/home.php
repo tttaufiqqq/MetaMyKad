@@ -163,8 +163,10 @@
         openEmbed(href + (href.indexOf('?') === -1 ? '?' : '&') + 'embed=1', link.textContent.trim(), href);
     });
     window.addEventListener('message', function (e) {
-        if (!e.data || e.data.type !== 'embed-redirect') return;
-        closeEmbed(); window.location.href = e.data.url;
+        if (!e.data) return;
+        if (e.data.type === 'embed-redirect' || e.data.type === 'embed-navigate') {
+            closeEmbed(); window.location.href = e.data.url;
+        }
     });
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeEmbed();

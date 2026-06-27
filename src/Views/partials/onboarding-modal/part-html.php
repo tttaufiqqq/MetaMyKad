@@ -181,7 +181,7 @@
                         <strong>ABR</strong><span>Search based on metadata extracted from your IC number.</span>
                     </a>
                     <a href="<?= e(url('/search-text')) ?>" class="onboard-search-chip onboard-search-chip--green">
-                        <strong>TBR</strong><span>Search by typing a file type — auto-assigned to every uploaded file.</span>
+                        <strong>TBR</strong><span>Search by typing a file type in the Tags field — tags are auto-assigned to all multimedia files during profile completion.</span>
                     </a>
                     <a href="<?= e(url('/search-content')) ?>" class="onboard-search-chip onboard-search-chip--orange">
                         <strong>CBR</strong><span>Search based on metadata extracted from uploaded multimedia files.</span>
