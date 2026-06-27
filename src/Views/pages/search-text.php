@@ -30,7 +30,7 @@
                 <span class="tbr-card__type">Tag Search</span>
                 <span class="tbr-card__status">Working</span>
             </div>
-            <p class="tbr-card__sub">Searches across <strong>all file types</strong> — photo, audio, PDF, and video. Type any tag that was added to a file, e.g. <strong>formal</strong>, <strong>long</strong>, <strong>neutral</strong>.</p>
+            <p class="tbr-card__sub">Searches across <strong>all file types</strong>. Type a file type as the tag — e.g. <strong>photo</strong>, <strong>audio</strong>, <strong>pdf</strong>, <strong>video</strong>.</p>
         </div>
         <div class="tbr-card tbr-card--warn">
             <div class="tbr-card__head">
@@ -57,7 +57,7 @@
             <span class="tbr-field-label">Tag &mdash; searches all file types</span>
             <input id="tag" name="tag" type="text"
                    value="<?= e($tag ?? '') ?>"
-                   placeholder="e.g. formal, audio, long, neutral...">
+                   placeholder="e.g. photo, audio, pdf, video">
             <label for="tag" style="display:none">Tag</label>
         </div>
         <div class="form-actions">
